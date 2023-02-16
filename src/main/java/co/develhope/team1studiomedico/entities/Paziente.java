@@ -1,42 +1,47 @@
 package co.develhope.team1studiomedico.entities;
 
 import jakarta.persistence.*;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "paziente")
 public class Paziente {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(nullable = false)
     private String nome;
+    @Column(nullable = false)
     private String cognome;
+    @Column(nullable = false)
+    private LocalDate dataNascita;
+    @Column(nullable = false)
     private String telefono;
-
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
-
+    @Column(nullable = false, unique = true)
     private String codiceFiscale;
-
     @OneToMany(mappedBy = "paziente",fetch = FetchType.LAZY)
     private List<Prenotazione> prenotazioni;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
     private Medico medico;
 
     public Paziente(){}
 
-    public Paziente(Long id, String nome, String cognome, String telefono, String email, String codiceFiscale, List<Prenotazione> prenotazioni, Medico medico) {
+    public Paziente(Long id, String nome, String cognome, LocalDate dataNascita, String telefono, String email, String codiceFiscale, List<Prenotazione> prenotazioni, Medico medico) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
+        this.dataNascita = dataNascita;
         this.telefono = telefono;
         this.email = email;
         this.codiceFiscale = codiceFiscale;
-        //this.prenotazioni = prenotazioni;
+        this.prenotazioni = prenotazioni;
         this.medico = medico;
     }
 
@@ -62,6 +67,14 @@ public class Paziente {
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
+    }
+
+    public LocalDate getDataNascita() {
+        return dataNascita;
+    }
+
+    public void setDataNascita(LocalDate dataNascita) {
+        this.dataNascita = dataNascita;
     }
 
     public String getTelefono() {
@@ -103,4 +116,5 @@ public class Paziente {
     public void setMedico(Medico medico) {
         this.medico = medico;
     }
+
 }

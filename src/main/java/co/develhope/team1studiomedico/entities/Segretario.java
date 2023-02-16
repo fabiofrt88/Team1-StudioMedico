@@ -5,17 +5,18 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "segretario")
 public class Segretario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(nullable = false)
     private String nome;
+    @Column(nullable = false)
     private String cognome;
+    @Column(nullable = false)
     private String telefono;
-
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
     private Medico medico;
@@ -78,4 +79,5 @@ public class Segretario {
     public void setMedico(Medico medico) {
         this.medico = medico;
     }
+
 }

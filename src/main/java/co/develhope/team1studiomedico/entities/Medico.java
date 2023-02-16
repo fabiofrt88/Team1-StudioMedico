@@ -6,21 +6,20 @@ import java.util.List;
 @Entity
 @Table(name = "medico")
 public class Medico {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(nullable = false)
     private String nome;
+    @Column(nullable = false)
     private String cognome;
-
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String email;
-
+    @Column(nullable = false)
     private String telefono;
-
     @OneToMany(mappedBy = "medico",fetch = FetchType.LAZY)
     private List<Prenotazione> prenotazioni;
-
     @OneToMany(mappedBy = "medico",fetch = FetchType.LAZY)
     private List<Paziente> pazienti;
 
@@ -92,4 +91,5 @@ public class Medico {
     public void setPazienti(List<Paziente> pazienti) {
         this.pazienti = pazienti;
     }
+
 }

@@ -9,20 +9,19 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "prenotazione")
 public class Prenotazione {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(nullable = false)
     private String bookedAt;
-
+    @Column(nullable = false)
     private LocalDate dataPrenotazione;
-
+    @Column(nullable = false)
     private LocalTime oraPrenotazione;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paziente_id")
     private Paziente paziente;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
     private Medico medico;
@@ -85,4 +84,5 @@ public class Prenotazione {
     public void setMedico(Medico medico) {
         this.medico = medico;
     }
+
 }

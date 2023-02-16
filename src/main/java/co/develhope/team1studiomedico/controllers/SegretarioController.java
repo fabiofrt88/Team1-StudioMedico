@@ -1,6 +1,6 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.repositories.SegretarioRepository;
+import co.develhope.team1studiomedico.services.SegretarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,5 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class SegretarioController {
 
     @Autowired
-    SegretarioRepository segretarioRepository;
+    private SegretarioService segretarioService;
+
 }
