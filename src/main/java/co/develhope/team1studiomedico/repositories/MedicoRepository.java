@@ -1,9 +1,10 @@
 package co.develhope.team1studiomedico.repositories;
 
-import co.develhope.team1studiomedico.entities.Segretario;
+
+import co.develhope.team1studiomedico.entities.Medico;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RepositorySegretario extends JpaRepository<Segretario, Long> {
+public interface MedicoRepository extends JpaRepository<Medico, Long> {
 }
