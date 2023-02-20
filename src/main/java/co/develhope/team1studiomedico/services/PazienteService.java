@@ -1,13 +1,13 @@
 package co.develhope.team1studiomedico.services;
 
-import co.develhope.team1studiomedico.entities.Paziente;
+import co.develhope.team1studiomedico.entities.EntityStatusEnum;
+import co.develhope.team1studiomedico.entities.PazienteEntity;
 import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.PazienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PazienteService {
@@ -15,25 +15,26 @@ public class PazienteService {
     @Autowired
     private PazienteRepository pazienteRepository;
 
-    public void createPaziente(Paziente paziente) {
+    public void createPaziente(PazienteEntity paziente) {
         paziente.setId(null);
+        paziente.setStatus(EntityStatusEnum.ACTIVE);
         pazienteRepository.saveAndFlush(paziente);
     }
 
-    public List<Paziente> getPazienti() {
+    public List<PazienteEntity> getPazienti() {
         return pazienteRepository.findAll();
     }
 
-    public Paziente getPazienteById(Long id) {
+    public PazienteEntity getPazienteById(Long id) {
         if(!pazienteRepository.existsById(id)) throw new NotFoundException();
         return pazienteRepository.findById(id).get();
     }
 
-    public void updatePazienteById(Paziente pazienteEdit, Long id) {
+    public void updatePazienteById(PazienteEntity pazienteEdit, Long id) {
         if(pazienteEdit == null) throw new IllegalArgumentException();
         if(!pazienteRepository.existsById(id)) throw new NotFoundException();
 
-        Paziente paziente = pazienteRepository.findById(id).get();
+        PazienteEntity paziente = pazienteRepository.findById(id).get();
         /*Paziente paziente = new Paziente();
         Optional<Paziente> pazienteOptional = pazienteRepository.findById(id);
         if(pazienteOptional.isPresent()) paziente = pazienteOptional.get();*/
@@ -50,7 +51,9 @@ public class PazienteService {
 
     public void deletePazienteById(Long id) {
         if(!pazienteRepository.existsById(id)) throw new NotFoundException();
-        pazienteRepository.deleteById(id);
+        PazienteEntity paziente = pazienteRepository.findById(id).get();
+        paziente.setStatus(EntityStatusEnum.DELETED);
+        pazienteRepository.saveAndFlush(paziente);
     }
 
     public void deletePazienti() {

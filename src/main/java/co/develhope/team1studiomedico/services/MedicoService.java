@@ -1,7 +1,6 @@
 package co.develhope.team1studiomedico.services;
 
-import co.develhope.team1studiomedico.entities.Medico;
-import co.develhope.team1studiomedico.entities.Paziente;
+import co.develhope.team1studiomedico.entities.MedicoEntity;
 import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,26 +15,26 @@ public class MedicoService {
     private MedicoRepository medicoRepository;
 
 
-    public void createMedico(Medico medico) {
+    public void createMedico(MedicoEntity medico) {
         medico.setId(null);
         medicoRepository.saveAndFlush(medico);
     }
 
-    public List<Medico> getMedici() {
+    public List<MedicoEntity> getMedici() {
         return medicoRepository.findAll();
     }
 
 
-    public Medico getMedicoById(Long id) {
+    public MedicoEntity getMedicoById(Long id) {
         if(!medicoRepository.existsById(id)) throw new NotFoundException();
         return medicoRepository.findById(id).get();
     }
 
-    public void updateMedicoById(Medico medicoEdit, Long id) {
+    public void updateMedicoById(MedicoEntity medicoEdit, Long id) {
         if(medicoEdit == null) throw new IllegalArgumentException();
         if(!medicoRepository.existsById(id)) throw new NotFoundException();
 
-        Medico medico = medicoRepository.findById(id).get();
+        MedicoEntity medico = medicoRepository.findById(id).get();
 
         if(medicoEdit.getNome() != null) medico.setNome(medicoEdit.getNome());
         if(medicoEdit.getCognome() != null) medico.setCognome(medicoEdit.getCognome());

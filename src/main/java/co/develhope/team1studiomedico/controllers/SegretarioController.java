@@ -1,6 +1,6 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.entities.Segretario;
+import co.develhope.team1studiomedico.entities.SegretarioEntity;
 import co.develhope.team1studiomedico.services.SegretarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,37 +17,36 @@ public class SegretarioController {
     private SegretarioService segretarioService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createSegretario(@RequestBody Segretario segretario){
+    public ResponseEntity<String> createSegretario(@RequestBody SegretarioEntity segretario){
         if(segretario == null) throw new IllegalArgumentException();
         segretarioService.createSegretario(segretario);
         return ResponseEntity.status(HttpStatus.CREATED).body("Segretario creato correttamente");
     }
 
     @GetMapping("/{id}")
-    public Segretario getSegretarioById(@PathVariable Long id) {
+    public SegretarioEntity getSegretarioById(@PathVariable Long id) {
         if(id == null) throw new IllegalArgumentException();
         return segretarioService.getSegretarioById(id);
     }
 
     @GetMapping({"", "/"})
-    public List<Segretario> getSegretari(){
+    public List<SegretarioEntity> getSegretari(){
         return segretarioService.getSegretari();
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updateSegretarioById(@RequestBody Segretario segretarioEdit, @PathVariable Long id) {
+    public ResponseEntity<String> updateSegretarioById(@RequestBody SegretarioEntity segretarioEdit, @PathVariable Long id) {
         if(segretarioEdit == null || id == null) throw new IllegalArgumentException();
         segretarioService.updateSegretarioById(segretarioEdit, id);
         return ResponseEntity.status(200).body("Segretario modificato correttamente");
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteSegreatrioById(@PathVariable Long id) {
+    public ResponseEntity<String> deleteSegretarioById(@PathVariable Long id) {
 
         if(id == null) throw new IllegalArgumentException();
         segretarioService.deleteSegretarioById(id);
         return ResponseEntity.status(200).body("Segretario cancellato correttamente");
-
     }
 
     @DeleteMapping("/delete")
@@ -55,8 +54,4 @@ public class SegretarioController {
         segretarioService.deleteSegretari();
         return ResponseEntity.status(200).body("Segretari cancellati correttamente");
     }
-
-
-
-
 }

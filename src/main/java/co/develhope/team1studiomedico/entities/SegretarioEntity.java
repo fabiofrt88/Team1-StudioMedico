@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "segretario")
-public class Segretario {
+public class SegretarioEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,11 +19,11 @@ public class Segretario {
     private String email;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
-    private Medico medico;
+    private MedicoEntity medico;
 
-    public Segretario (){}
+    public SegretarioEntity(){}
 
-    public Segretario(Long id, String nome, String cognome, String telefono, String email, Medico medico) {
+    public SegretarioEntity(Long id, String nome, String cognome, String telefono, String email, MedicoEntity medico) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -72,11 +72,11 @@ public class Segretario {
         this.email = email;
     }
 
-    public Medico getMedico() {
+    public MedicoEntity getMedico() {
         return medico;
     }
 
-    public void setMedico(Medico medico) {
+    public void setMedico(MedicoEntity medico) {
         this.medico = medico;
     }
 

@@ -8,7 +8,7 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "prenotazione")
-public class Prenotazione {
+public class PrenotazioneEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,14 +21,14 @@ public class Prenotazione {
     private LocalTime oraPrenotazione;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paziente_id")
-    private Paziente paziente;
+    private PazienteEntity paziente;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
-    private Medico medico;
+    private MedicoEntity medico;
 
-    public Prenotazione(){}
+    public PrenotazioneEntity(){}
 
-    public Prenotazione(Long id, String bookedAt, LocalDate dataPrenotazione, LocalTime oraPrenotazione, Paziente paziente, Medico medico) {
+    public PrenotazioneEntity(Long id, String bookedAt, LocalDate dataPrenotazione, LocalTime oraPrenotazione, PazienteEntity paziente, MedicoEntity medico) {
         this.id = id;
         this.bookedAt = bookedAt;
         this.dataPrenotazione = dataPrenotazione;
@@ -69,19 +69,19 @@ public class Prenotazione {
         this.oraPrenotazione = oraPrenotazione;
     }
 
-    public Paziente getPaziente() {
+    public PazienteEntity getPaziente() {
         return paziente;
     }
 
-    public void setPaziente(Paziente paziente) {
+    public void setPaziente(PazienteEntity paziente) {
         this.paziente = paziente;
     }
 
-    public Medico getMedico() {
+    public MedicoEntity getMedico() {
         return medico;
     }
 
-    public void setMedico(Medico medico) {
+    public void setMedico(MedicoEntity medico) {
         this.medico = medico;
     }
 

@@ -1,6 +1,6 @@
 package co.develhope.team1studiomedico.services;
 
-import co.develhope.team1studiomedico.entities.Segretario;
+import co.develhope.team1studiomedico.entities.SegretarioEntity;
 import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.SegretarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,32 +13,32 @@ public class SegretarioService {
     @Autowired
     private SegretarioRepository segretarioRepository;
 
-    public void createSegretario(Segretario segretario) {
+    public void createSegretario(SegretarioEntity segretario) {
 
         segretario.setId(null);
         segretarioRepository.saveAndFlush(segretario);
 
     }
 
-    public Segretario getSegretarioById(Long id) {
+    public SegretarioEntity getSegretarioById(Long id) {
 
         if (!segretarioRepository.existsById(id)) throw new NotFoundException();
         return segretarioRepository.findById(id).get();
 
     }
 
-    public List<Segretario> getSegretari() {
+    public List<SegretarioEntity> getSegretari() {
 
         return segretarioRepository.findAll();
 
     }
 
-    public void updateSegretarioById(Segretario segretarioEdit, Long id) {
+    public void updateSegretarioById(SegretarioEntity segretarioEdit, Long id) {
 
         if (segretarioEdit == null) throw new IllegalArgumentException();
         if (!segretarioRepository.existsById(id)) throw new NotFoundException();
 
-        Segretario segretario = segretarioRepository.findById(id).get();
+        SegretarioEntity segretario = segretarioRepository.findById(id).get();
 
         if (segretarioEdit.getNome() != null) segretario.setNome(segretarioEdit.getNome());
         if (segretarioEdit.getCognome() != null) segretario.setCognome(segretarioEdit.getCognome());

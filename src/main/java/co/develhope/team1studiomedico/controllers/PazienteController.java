@@ -1,6 +1,6 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.entities.Paziente;
+import co.develhope.team1studiomedico.entities.PazienteEntity;
 import co.develhope.team1studiomedico.services.PazienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,19 +17,19 @@ public class PazienteController {
     private PazienteService pazienteService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> createPaziente(@RequestBody Paziente paziente){
+    public ResponseEntity<String> createPaziente(@RequestBody PazienteEntity paziente){
         if(paziente == null) throw new IllegalArgumentException();
         pazienteService.createPaziente(paziente);
         return ResponseEntity.status(HttpStatus.CREATED).body("Paziente creato correttamente");
     }
 
     @GetMapping({"", "/"})
-    public List<Paziente> getPazienti(){
+    public List<PazienteEntity> getPazienti(){
         return pazienteService.getPazienti();
     }
 
     @GetMapping("/{id}")
-    public Paziente getPazienteById(@PathVariable Long id) {
+    public PazienteEntity getPazienteById(@PathVariable Long id) {
         /*Optional<Paziente> paziente = pazienteService.getPazienteById(id);
         if(paziente.isPresent()) {
             return paziente.get();
@@ -40,7 +40,7 @@ public class PazienteController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updatePazienteById(@RequestBody Paziente pazienteEdit, @PathVariable Long id) {
+    public ResponseEntity<String> updatePazienteById(@RequestBody PazienteEntity pazienteEdit, @PathVariable Long id) {
         if(pazienteEdit == null || id == null) throw new IllegalArgumentException();
         pazienteService.updatePazienteById(pazienteEdit, id);
         return ResponseEntity.status(200).body("Paziente modificato correttamente");

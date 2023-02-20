@@ -1,14 +1,13 @@
 package co.develhope.team1studiomedico.entities;
 
 import jakarta.persistence.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "paziente")
-public class Paziente {
+public class PazienteEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +25,15 @@ public class Paziente {
     @Column(nullable = false, unique = true)
     private String codiceFiscale;
     @OneToMany(mappedBy = "paziente",fetch = FetchType.LAZY)
-    private List<Prenotazione> prenotazioni;
+    private List<PrenotazioneEntity> prenotazioni;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
-    private Medico medico;
+    private MedicoEntity medico;
+    private EntityStatusEnum status;
 
-    public Paziente(){}
+    public PazienteEntity(){}
 
-    public Paziente(Long id, String nome, String cognome, LocalDate dataNascita, String telefono, String email, String codiceFiscale, List<Prenotazione> prenotazioni, Medico medico) {
+    public PazienteEntity(Long id, String nome, String cognome, LocalDate dataNascita, String telefono, String email, String codiceFiscale, List<PrenotazioneEntity> prenotazioni, MedicoEntity medico) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -43,6 +43,7 @@ public class Paziente {
         this.codiceFiscale = codiceFiscale;
         this.prenotazioni = prenotazioni;
         this.medico = medico;
+        this.status = EntityStatusEnum.ACTIVE;
     }
 
     public Long getId() {
@@ -101,20 +102,27 @@ public class Paziente {
         this.codiceFiscale = codiceFiscale;
     }
 
-    public List<Prenotazione> getPrenotazioni() {
+    public List<PrenotazioneEntity> getPrenotazioni() {
         return prenotazioni;
     }
 
-    public void setPrenotazioni(List<Prenotazione> prenotazioni) {
+    public void setPrenotazioni(List<PrenotazioneEntity> prenotazioni) {
         this.prenotazioni = prenotazioni;
     }
 
-    public Medico getMedico() {
+    public MedicoEntity getMedico() {
         return medico;
     }
 
-    public void setMedico(Medico medico) {
+    public void setMedico(MedicoEntity medico) {
         this.medico = medico;
     }
 
+    public EntityStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(EntityStatusEnum status) {
+        this.status = status;
+    }
 }

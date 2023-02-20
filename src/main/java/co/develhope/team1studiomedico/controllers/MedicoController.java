@@ -1,7 +1,6 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.entities.Medico;
-import co.develhope.team1studiomedico.entities.Paziente;
+import co.develhope.team1studiomedico.entities.MedicoEntity;
 import co.develhope.team1studiomedico.services.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,25 +18,25 @@ public class MedicoController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<String> createMedico(@RequestBody Medico medico){
+    public ResponseEntity<String> createMedico(@RequestBody MedicoEntity medico){
         if(medico == null) throw new IllegalArgumentException();
         medicoService.createMedico(medico);
         return ResponseEntity.status(HttpStatus.CREATED).body("Medico creato correttamente");
     }
 
     @GetMapping({"", "/"})
-    public List<Medico> getMedici(){
+    public List<MedicoEntity> getMedici(){
         return medicoService.getMedici();
     }
 
     @GetMapping("/{id}")
-    public Medico getMedicoById(@PathVariable Long id) {
+    public MedicoEntity getMedicoById(@PathVariable Long id) {
         if(id == null) throw new IllegalArgumentException();
         return medicoService.getMedicoById(id);
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updateMedicoById(@RequestBody Medico medicoEdit, @PathVariable Long id) {
+    public ResponseEntity<String> updateMedicoById(@RequestBody MedicoEntity medicoEdit, @PathVariable Long id) {
         if(medicoEdit == null || id == null) throw new IllegalArgumentException();
         medicoService.updateMedicoById(medicoEdit, id);
         return ResponseEntity.status(200).body("Medico modificato correttamente");

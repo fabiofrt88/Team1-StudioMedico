@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "medico")
-public class Medico {
+public class MedicoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,14 +19,14 @@ public class Medico {
     @Column(nullable = false)
     private String telefono;
     @OneToMany(mappedBy = "medico",fetch = FetchType.LAZY)
-    private List<Prenotazione> prenotazioni;
+    private List<PrenotazioneEntity> prenotazioni;
     @OneToMany(mappedBy = "medico",fetch = FetchType.LAZY)
-    private List<Paziente> pazienti;
+    private List<PazienteEntity> pazienti;
 
 
-    public Medico(){}
+    public MedicoEntity(){}
 
-    public Medico(Long id, String nome, String cognome, String email, String telefono, List<Prenotazione> prenotazioni, List<Paziente> pazienti) {
+    public MedicoEntity(Long id, String nome, String cognome, String email, String telefono, List<PrenotazioneEntity> prenotazioni, List<PazienteEntity> pazienti) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -76,19 +76,19 @@ public class Medico {
         this.telefono = telefono;
     }
 
-    public List<Prenotazione> getPrenotazioni() {
+    public List<PrenotazioneEntity> getPrenotazioni() {
         return prenotazioni;
     }
 
-    public void setPrenotazioni(List<Prenotazione> prenotazioni) {
+    public void setPrenotazioni(List<PrenotazioneEntity> prenotazioni) {
         this.prenotazioni = prenotazioni;
     }
 
-    public List<Paziente> getPazienti() {
+    public List<PazienteEntity> getPazienti() {
         return pazienti;
     }
 
-    public void setPazienti(List<Paziente> pazienti) {
+    public void setPazienti(List<PazienteEntity> pazienti) {
         this.pazienti = pazienti;
     }
 
