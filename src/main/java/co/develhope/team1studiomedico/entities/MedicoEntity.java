@@ -1,18 +1,19 @@
 package co.develhope.team1studiomedico.entities;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity(name = "medico")
 @Table(name = "medico")
+@JsonPropertyOrder({"id", "nome", "cognome", "telefono",
+        "email", "prenotazioni", "pazienti", "status"})
 public class MedicoEntity extends PersonaEntity{
 
     @OneToMany(mappedBy = "medico",fetch = FetchType.LAZY)
     private List<PrenotazioneEntity> prenotazioni;
     @OneToMany(mappedBy = "medico",fetch = FetchType.LAZY)
     private List<PazienteEntity> pazienti;
-    @Enumerated(EnumType.ORDINAL)
-    private EntityStatusEnum status;
 
     public MedicoEntity(){}
 
@@ -20,7 +21,6 @@ public class MedicoEntity extends PersonaEntity{
         super(id, nome, cognome, telefono, email);
         this.prenotazioni = prenotazioni;
         this.pazienti = pazienti;
-        this.status = EntityStatusEnum.ACTIVE;
     }
 
     public List<PrenotazioneEntity> getPrenotazioni() {
@@ -37,14 +37,6 @@ public class MedicoEntity extends PersonaEntity{
 
     public void setPazienti(List<PazienteEntity> pazienti) {
         this.pazienti = pazienti;
-    }
-
-    public EntityStatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(EntityStatusEnum status) {
-        this.status = status;
     }
 
 }

@@ -1,5 +1,6 @@
 package co.develhope.team1studiomedico.entities;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -7,6 +8,8 @@ import java.util.List;
 
 @Entity(name = "paziente")
 @Table(name = "paziente")
+@JsonPropertyOrder({"id", "nome", "cognome", "telefono",
+        "email", "dataNascita", "codiceFiscale", "prenotazioni", "medico", "status"})
 public class PazienteEntity extends PersonaEntity{
 
     @Column(nullable = false)
@@ -18,18 +21,15 @@ public class PazienteEntity extends PersonaEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
     private MedicoEntity medico;
-    @Enumerated(EnumType.ORDINAL)
-    private EntityStatusEnum status;
 
     public PazienteEntity(){}
 
-    public PazienteEntity(Long id, String nome, String cognome, String telefono, String email, LocalDate dataNascita, String codiceFiscale, List<PrenotazioneEntity> prenotazioni, MedicoEntity medico, EntityStatusEnum status) {
+    public PazienteEntity(Long id, String nome, String cognome, String telefono, String email, LocalDate dataNascita, String codiceFiscale, List<PrenotazioneEntity> prenotazioni, MedicoEntity medico) {
         super(id, nome, cognome, telefono, email);
         this.dataNascita = dataNascita;
         this.codiceFiscale = codiceFiscale;
         this.prenotazioni = prenotazioni;
         this.medico = medico;
-        this.status = status;
     }
 
     public LocalDate getDataNascita() {
@@ -62,14 +62,6 @@ public class PazienteEntity extends PersonaEntity{
 
     public void setMedico(MedicoEntity medico) {
         this.medico = medico;
-    }
-
-    public EntityStatusEnum getStatus() {
-        return status;
-    }
-
-    public void setStatus(EntityStatusEnum status) {
-        this.status = status;
     }
 
 }

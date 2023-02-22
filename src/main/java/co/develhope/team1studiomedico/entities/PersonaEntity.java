@@ -19,6 +19,8 @@ public abstract class PersonaEntity {
     private String telefono;
     @Column(nullable = false, unique = true)
     private String email;
+    @Enumerated(EnumType.ORDINAL)
+    private EntityStatusEnum status;
 
     public PersonaEntity (){}
 
@@ -28,6 +30,7 @@ public abstract class PersonaEntity {
         this.cognome = cognome;
         this.telefono = telefono;
         this.email = email;
+        this.status = EntityStatusEnum.ACTIVE;
     }
 
     public Long getId() {
@@ -68,6 +71,14 @@ public abstract class PersonaEntity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public EntityStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(EntityStatusEnum status) {
+        this.status = status;
     }
 
 }
