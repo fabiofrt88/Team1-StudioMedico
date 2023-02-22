@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "medico")
-public class MedicoEntity {
+public class MedicoEntity extends PersonaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

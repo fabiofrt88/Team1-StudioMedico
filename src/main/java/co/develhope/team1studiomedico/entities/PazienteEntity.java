@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity(name = "paziente")
 @Table(name = "paziente")
-public class PazienteEntity {
+public class PazienteEntity extends PersonaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
