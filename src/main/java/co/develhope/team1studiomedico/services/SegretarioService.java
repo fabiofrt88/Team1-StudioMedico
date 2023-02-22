@@ -1,5 +1,6 @@
 package co.develhope.team1studiomedico.services;
 
+import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.SegretarioEntity;
 import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.SegretarioRepository;
@@ -15,6 +16,7 @@ public class SegretarioService {
 
     public void createSegretario(SegretarioEntity segretario) {
         segretario.setId(null);
+        segretario.setStatus(EntityStatusEnum.ACTIVE);
         segretarioRepository.saveAndFlush(segretario);
     }
 

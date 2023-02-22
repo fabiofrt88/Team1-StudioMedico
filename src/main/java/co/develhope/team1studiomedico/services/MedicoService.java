@@ -1,5 +1,6 @@
 package co.develhope.team1studiomedico.services;
 
+import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.MedicoEntity;
 import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.MedicoRepository;
@@ -17,6 +18,7 @@ public class MedicoService {
 
     public void createMedico(MedicoEntity medico) {
         medico.setId(null);
+        medico.setStatus(EntityStatusEnum.ACTIVE);
         medicoRepository.saveAndFlush(medico);
     }
 

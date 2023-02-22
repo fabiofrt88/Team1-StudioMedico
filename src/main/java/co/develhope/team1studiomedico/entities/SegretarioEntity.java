@@ -2,7 +2,7 @@ package co.develhope.team1studiomedico.entities;
 
 import jakarta.persistence.*;
 
-@Entity
+@Entity(name = "segretario")
 @Table(name = "segretario")
 public class SegretarioEntity extends PersonaEntity {
 
@@ -20,6 +20,8 @@ public class SegretarioEntity extends PersonaEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
     private MedicoEntity medico;
+    @Enumerated(EnumType.ORDINAL)
+    private EntityStatusEnum status;
 
     public SegretarioEntity(){}
 
@@ -30,6 +32,7 @@ public class SegretarioEntity extends PersonaEntity {
         this.telefono = telefono;
         this.email = email;
         this.medico = medico;
+        this.status = EntityStatusEnum.ACTIVE;
     }
 
     public Long getId() {
@@ -78,6 +81,14 @@ public class SegretarioEntity extends PersonaEntity {
 
     public void setMedico(MedicoEntity medico) {
         this.medico = medico;
+    }
+
+    public EntityStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(EntityStatusEnum status) {
+        this.status = status;
     }
 
 }

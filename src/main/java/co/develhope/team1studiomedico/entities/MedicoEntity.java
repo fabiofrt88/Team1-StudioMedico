@@ -3,7 +3,7 @@ package co.develhope.team1studiomedico.entities;
 import jakarta.persistence.*;
 import java.util.List;
 
-@Entity
+@Entity(name = "medico")
 @Table(name = "medico")
 public class MedicoEntity extends PersonaEntity {
 
@@ -22,6 +22,8 @@ public class MedicoEntity extends PersonaEntity {
     private List<PrenotazioneEntity> prenotazioni;
     @OneToMany(mappedBy = "medico",fetch = FetchType.LAZY)
     private List<PazienteEntity> pazienti;
+    @Enumerated(EnumType.ORDINAL)
+    private EntityStatusEnum status;
 
     public MedicoEntity(){}
 
@@ -33,6 +35,7 @@ public class MedicoEntity extends PersonaEntity {
         this.telefono = telefono;
         this.prenotazioni = prenotazioni;
         this.pazienti = pazienti;
+        this.status = EntityStatusEnum.ACTIVE;
     }
 
     public Long getId() {
@@ -89,6 +92,14 @@ public class MedicoEntity extends PersonaEntity {
 
     public void setPazienti(List<PazienteEntity> pazienti) {
         this.pazienti = pazienti;
+    }
+
+    public EntityStatusEnum getStatus() {
+        return status;
+    }
+
+    public void setStatus(EntityStatusEnum status) {
+        this.status = status;
     }
 
 }
