@@ -23,7 +23,6 @@ public class MedicoEntity {
     @OneToMany(mappedBy = "medico",fetch = FetchType.LAZY)
     private List<PazienteEntity> pazienti;
 
-
     public MedicoEntity(){}
 
     public MedicoEntity(Long id, String nome, String cognome, String email, String telefono, List<PrenotazioneEntity> prenotazioni, List<PazienteEntity> pazienti) {

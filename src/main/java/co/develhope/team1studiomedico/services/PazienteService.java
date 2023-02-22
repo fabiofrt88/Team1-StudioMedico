@@ -26,13 +26,13 @@ public class PazienteService {
     }
 
     public PazienteEntity getPazienteById(Long id) {
-        if(!pazienteRepository.existsById(id)) throw new NotFoundException();
+        if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
         return pazienteRepository.findById(id).get();
     }
 
     public void updatePazienteById(PazienteEntity pazienteEdit, Long id) {
         if(pazienteEdit == null) throw new IllegalArgumentException();
-        if(!pazienteRepository.existsById(id)) throw new NotFoundException();
+        if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
 
         PazienteEntity paziente = pazienteRepository.findById(id).get();
         /*Paziente paziente = new Paziente();
@@ -50,14 +50,26 @@ public class PazienteService {
     }
 
     public void deletePazienteById(Long id) {
-        if(!pazienteRepository.existsById(id)) throw new NotFoundException();
-        PazienteEntity paziente = pazienteRepository.findById(id).get();
+        if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
+        /*PazienteEntity paziente = pazienteRepository.findById(id).get();
         paziente.setStatus(EntityStatusEnum.DELETED);
-        pazienteRepository.saveAndFlush(paziente);
+        pazienteRepository.saveAndFlush(paziente);*/
+        pazienteRepository.softDeleteById(id);
+        //pazienteRepository.changeStatusById(EntityStatusEnum.DELETED, id);
     }
 
     public void deletePazienti() {
-        pazienteRepository.deleteAll();
+        pazienteRepository.softDelete();
+    }
+
+    public void restorePazienteById(Long id) {
+        if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
+        pazienteRepository.restoreById(id);
+        //pazienteRepository.changeStatusById(EntityStatusEnum.ACTIVE, id);
+    }
+
+    public void restorePazienti() {
+        pazienteRepository.restore();
     }
 
 }

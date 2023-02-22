@@ -14,29 +14,23 @@ public class SegretarioService {
     private SegretarioRepository segretarioRepository;
 
     public void createSegretario(SegretarioEntity segretario) {
-
         segretario.setId(null);
         segretarioRepository.saveAndFlush(segretario);
-
     }
 
     public SegretarioEntity getSegretarioById(Long id) {
-
-        if (!segretarioRepository.existsById(id)) throw new NotFoundException();
+        if (!segretarioRepository.existsById(id)) throw new NotFoundException("Segretario non trovato");
         return segretarioRepository.findById(id).get();
-
     }
 
     public List<SegretarioEntity> getSegretari() {
-
         return segretarioRepository.findAll();
-
     }
 
     public void updateSegretarioById(SegretarioEntity segretarioEdit, Long id) {
 
         if (segretarioEdit == null) throw new IllegalArgumentException();
-        if (!segretarioRepository.existsById(id)) throw new NotFoundException();
+        if (!segretarioRepository.existsById(id)) throw new NotFoundException("Segretario non trovato");
 
         SegretarioEntity segretario = segretarioRepository.findById(id).get();
 
@@ -50,18 +44,12 @@ public class SegretarioService {
     }
 
     public void deleteSegretarioById(Long id) {
-
-        if(!segretarioRepository.existsById(id)) throw new NotFoundException();
+        if(!segretarioRepository.existsById(id)) throw new NotFoundException("Segretario non trovato");
         segretarioRepository.deleteById(id);
-
     }
 
     public void deleteSegretari() {
-
         segretarioRepository.deleteAll();
-
     }
-
-
 
 }

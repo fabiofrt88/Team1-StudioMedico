@@ -42,7 +42,7 @@ public class MedicoController {
         return ResponseEntity.status(200).body("Medico modificato correttamente");
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/all")
     public ResponseEntity<String> deleteMedici() {
         medicoService.deleteMedici();
         return ResponseEntity.status(200).body("Medici cancellati correttamente");

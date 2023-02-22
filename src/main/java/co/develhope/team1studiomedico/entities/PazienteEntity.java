@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
+@Entity(name = "paziente")
 @Table(name = "paziente")
 public class PazienteEntity {
 
@@ -29,6 +29,7 @@ public class PazienteEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
     private MedicoEntity medico;
+    @Enumerated(EnumType.ORDINAL)
     private EntityStatusEnum status;
 
     public PazienteEntity(){}
@@ -125,4 +126,5 @@ public class PazienteEntity {
     public void setStatus(EntityStatusEnum status) {
         this.status = status;
     }
+
 }

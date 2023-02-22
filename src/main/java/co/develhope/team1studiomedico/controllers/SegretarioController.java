@@ -49,9 +49,10 @@ public class SegretarioController {
         return ResponseEntity.status(200).body("Segretario cancellato correttamente");
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/all")
     public ResponseEntity<String> deleteSegretari() {
         segretarioService.deleteSegretari();
         return ResponseEntity.status(200).body("Segretari cancellati correttamente");
     }
+
 }

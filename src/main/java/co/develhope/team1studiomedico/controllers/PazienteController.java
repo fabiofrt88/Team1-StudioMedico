@@ -46,7 +46,7 @@ public class PazienteController {
         return ResponseEntity.status(200).body("Paziente modificato correttamente");
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/all")
     public ResponseEntity<String> deletePazienti() {
         pazienteService.deletePazienti();
         return ResponseEntity.status(200).body("Pazienti cancellati correttamente");
@@ -57,6 +57,19 @@ public class PazienteController {
         if(id == null) throw new IllegalArgumentException();
         pazienteService.deletePazienteById(id);
         return ResponseEntity.status(200).body("Paziente cancellato correttamente");
+    }
+
+    @PutMapping("/restore/{id}")
+    public ResponseEntity<String> restorePazienteById(@PathVariable Long id) {
+        if(id == null) throw new IllegalArgumentException();
+        pazienteService.restorePazienteById(id);
+        return ResponseEntity.status(200).body("Paziente ripristinato correttamente");
+    }
+
+    @PutMapping("/restore/all")
+    public ResponseEntity<String> restorePazienti() {
+        pazienteService.restorePazienti();
+        return ResponseEntity.status(200).body("Pazienti ripristinati correttamente");
     }
 
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-
 @Entity
 @Table(name = "prenotazione")
 public class PrenotazioneEntity {

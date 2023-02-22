@@ -24,15 +24,14 @@ public class MedicoService {
         return medicoRepository.findAll();
     }
 
-
     public MedicoEntity getMedicoById(Long id) {
-        if(!medicoRepository.existsById(id)) throw new NotFoundException();
+        if(!medicoRepository.existsById(id)) throw new NotFoundException("Medico non trovato");
         return medicoRepository.findById(id).get();
     }
 
     public void updateMedicoById(MedicoEntity medicoEdit, Long id) {
         if(medicoEdit == null) throw new IllegalArgumentException();
-        if(!medicoRepository.existsById(id)) throw new NotFoundException();
+        if(!medicoRepository.existsById(id)) throw new NotFoundException("Medico non trovato");
 
         MedicoEntity medico = medicoRepository.findById(id).get();
 
@@ -45,14 +44,12 @@ public class MedicoService {
     }
 
     public void deleteMedicoById(Long id) {
-        if(!medicoRepository.existsById(id)) throw new NotFoundException();
+        if(!medicoRepository.existsById(id)) throw new NotFoundException("Medico non trovato");
         medicoRepository.deleteById(id);
     }
 
     public void deleteMedici() {
         medicoRepository.deleteAll();
     }
-
-
 
 }
