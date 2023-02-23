@@ -42,6 +42,19 @@ public class MedicoController {
         return ResponseEntity.status(200).body("Medico modificato correttamente");
     }
 
+    @PutMapping("/restore/{id}")
+    public ResponseEntity<String> restoreMedicoById(@PathVariable Long id){
+        if (id == null)throw new IllegalArgumentException();
+        medicoService.restoreMedicoById(id);
+        return ResponseEntity.status(200).body("Medico ripristinato correttamente");
+    }
+
+    @PutMapping("/restore/all")
+    public ResponseEntity<String> restoreMedici(){
+        medicoService.restoreAllMedici();
+        return ResponseEntity.status(200).body("Medici ripristinati correttamente");
+    }
+
     @DeleteMapping("/delete/all")
     public ResponseEntity<String> deleteMedici() {
         medicoService.deleteMedici();
@@ -54,5 +67,8 @@ public class MedicoController {
         medicoService.deleteMedicoById(id);
         return ResponseEntity.status(200).body("Medico cancellato correttamente");
     }
+
+
+
 
 }

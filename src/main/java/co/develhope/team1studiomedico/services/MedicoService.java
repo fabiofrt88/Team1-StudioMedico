@@ -45,13 +45,25 @@ public class MedicoService {
         medicoRepository.saveAndFlush(medico);
     }
 
+    public void restoreMedicoById(Long id){
+        if (!medicoRepository.existsById(id))throw new NotFoundException("Medico non trovato");
+        medicoRepository.restoreById(id);
+    }
+
+    public void restoreAllMedici(){
+        medicoRepository.restore();
+    }
+
+
     public void deleteMedicoById(Long id) {
         if(!medicoRepository.existsById(id)) throw new NotFoundException("Medico non trovato");
-        medicoRepository.deleteById(id);
+        medicoRepository.softDeleteById(id);
     }
 
     public void deleteMedici() {
-        medicoRepository.deleteAll();
+        medicoRepository.softDelete();
     }
+
+
 
 }

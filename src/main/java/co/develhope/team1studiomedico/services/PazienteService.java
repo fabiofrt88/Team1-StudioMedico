@@ -49,6 +49,18 @@ public class PazienteService {
         pazienteRepository.saveAndFlush(paziente);
     }
 
+    public void restorePazienteById(Long id) {
+        if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
+        pazienteRepository.restoreById(id);
+        //pazienteRepository.changeStatusById(EntityStatusEnum.ACTIVE, id);
+    }
+
+    public void restorePazienti() {
+        pazienteRepository.restore();
+    }
+
+
+
     public void deletePazienteById(Long id) {
         if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
         /*PazienteEntity paziente = pazienteRepository.findById(id).get();
@@ -62,14 +74,6 @@ public class PazienteService {
         pazienteRepository.softDelete();
     }
 
-    public void restorePazienteById(Long id) {
-        if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
-        pazienteRepository.restoreById(id);
-        //pazienteRepository.changeStatusById(EntityStatusEnum.ACTIVE, id);
-    }
 
-    public void restorePazienti() {
-        pazienteRepository.restore();
-    }
 
 }
