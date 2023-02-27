@@ -8,19 +8,19 @@ import org.springframework.stereotype.Component;
 public abstract class PersonaEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, name = "id")
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "nome")
     private String nome;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "cognome")
     private String cognome;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "telefono")
     private String telefono;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "email")
     private String email;
-    @Enumerated(EnumType.ORDINAL)
-    private EntityStatusEnum status;
+    @Column(nullable = false, name = "record_status")
+    private EntityStatusEnum status; //String
 
     public PersonaEntity (){}
 

@@ -18,14 +18,18 @@ public class SegretarioController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createSegretario(@RequestBody SegretarioEntity segretario){
-        if(segretario == null) throw new IllegalArgumentException();
+        if(segretario == null) {
+            throw new IllegalArgumentException();
+        }
         segretarioService.createSegretario(segretario);
         return ResponseEntity.status(HttpStatus.CREATED).body("Segretario creato correttamente");
     }
 
     @GetMapping("/{id}")
     public SegretarioEntity getSegretarioById(@PathVariable Long id) {
-        if(id == null) throw new IllegalArgumentException();
+        if(id == null) {
+            throw new IllegalArgumentException();
+        }
         return segretarioService.getSegretarioById(id);
     }
 
@@ -36,15 +40,18 @@ public class SegretarioController {
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateSegretarioById(@RequestBody SegretarioEntity segretarioEdit, @PathVariable Long id) {
-        if(segretarioEdit == null || id == null) throw new IllegalArgumentException();
+        if(segretarioEdit == null || id == null) {
+            throw new IllegalArgumentException();
+        }
         segretarioService.updateSegretarioById(segretarioEdit, id);
         return ResponseEntity.status(200).body("Segretario modificato correttamente");
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteSegretarioById(@PathVariable Long id) {
-
-        if(id == null) throw new IllegalArgumentException();
+        if(id == null) {
+            throw new IllegalArgumentException();
+        }
         segretarioService.deleteSegretarioById(id);
         return ResponseEntity.status(200).body("Segretario cancellato correttamente");
     }

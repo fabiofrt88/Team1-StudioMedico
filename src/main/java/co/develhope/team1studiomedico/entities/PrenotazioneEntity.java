@@ -11,12 +11,13 @@ public class PrenotazioneEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, name = "id")
     private Long id;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "booked_at")
     private String bookedAt;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "data_prenotazione")
     private LocalDate dataPrenotazione;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "ora_prenotazione")
     private LocalTime oraPrenotazione;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "paziente_id")

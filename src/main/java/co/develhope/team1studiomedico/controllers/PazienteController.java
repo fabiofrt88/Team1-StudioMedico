@@ -18,7 +18,9 @@ public class PazienteController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createPaziente(@RequestBody PazienteEntity paziente){
-        if(paziente == null) throw new IllegalArgumentException();
+        if(paziente == null) {
+            throw new IllegalArgumentException();
+        }
         pazienteService.createPaziente(paziente);
         return ResponseEntity.status(HttpStatus.CREATED).body("Paziente creato correttamente");
     }
@@ -35,31 +37,33 @@ public class PazienteController {
             return paziente.get();
         }
         return new Paziente();*/
-        if(id == null) throw new IllegalArgumentException();
+        if(id == null) {
+            throw new IllegalArgumentException();
+        }
         return pazienteService.getPazienteById(id);
     }
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updatePazienteById(@RequestBody PazienteEntity pazienteEdit, @PathVariable Long id) {
-        if(pazienteEdit == null || id == null) throw new IllegalArgumentException();
+        if(pazienteEdit == null || id == null) {
+            throw new IllegalArgumentException();
+        }
         pazienteService.updatePazienteById(pazienteEdit, id);
         return ResponseEntity.status(200).body("Paziente modificato correttamente");
     }
 
-    @PutMapping("/restore/{id}")
+    /*@PutMapping("/restore/{id}")
     public ResponseEntity<String> restorePazienteById(@PathVariable Long id) {
         if(id == null) throw new IllegalArgumentException();
         pazienteService.restorePazienteById(id);
         return ResponseEntity.status(200).body("Paziente ripristinato correttamente");
     }
 
-    @PutMapping("/restore/all")
+    @PutMapping("paziente/restore/all")
     public ResponseEntity<String> restorePazienti() {
         pazienteService.restorePazienti();
         return ResponseEntity.status(200).body("Pazienti ripristinati correttamente");
     }
-
-
 
 
     @DeleteMapping("/delete/all")
@@ -73,8 +77,6 @@ public class PazienteController {
         if(id == null) throw new IllegalArgumentException();
         pazienteService.deletePazienteById(id);
         return ResponseEntity.status(200).body("Paziente cancellato correttamente");
-    }
-
-
+    }*/
 
 }

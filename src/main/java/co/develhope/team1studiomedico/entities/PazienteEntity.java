@@ -12,9 +12,9 @@ import java.util.List;
         "email", "dataNascita", "codiceFiscale", "prenotazioni", "medico", "status"})
 public class PazienteEntity extends PersonaEntity{
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "data_nascita")
     private LocalDate dataNascita;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "codice_fiscale")
     private String codiceFiscale;
     @OneToMany(mappedBy = "paziente",fetch = FetchType.LAZY)
     private List<PrenotazioneEntity> prenotazioni;

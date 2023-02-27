@@ -19,7 +19,9 @@ public class MedicoController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createMedico(@RequestBody MedicoEntity medico){
-        if(medico == null) throw new IllegalArgumentException();
+        if(medico == null) {
+            throw new IllegalArgumentException();
+        }
         medicoService.createMedico(medico);
         return ResponseEntity.status(HttpStatus.CREATED).body("Medico creato correttamente");
     }
@@ -31,20 +33,26 @@ public class MedicoController {
 
     @GetMapping("/{id}")
     public MedicoEntity getMedicoById(@PathVariable Long id) {
-        if(id == null) throw new IllegalArgumentException();
+        if(id == null) {
+            throw new IllegalArgumentException();
+        }
         return medicoService.getMedicoById(id);
     }
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateMedicoById(@RequestBody MedicoEntity medicoEdit, @PathVariable Long id) {
-        if(medicoEdit == null || id == null) throw new IllegalArgumentException();
+        if(medicoEdit == null || id == null) {
+            throw new IllegalArgumentException();
+        }
         medicoService.updateMedicoById(medicoEdit, id);
         return ResponseEntity.status(200).body("Medico modificato correttamente");
     }
 
     @PutMapping("/restore/{id}")
     public ResponseEntity<String> restoreMedicoById(@PathVariable Long id){
-        if (id == null)throw new IllegalArgumentException();
+        if(id == null) {
+            throw new IllegalArgumentException();
+        }
         medicoService.restoreMedicoById(id);
         return ResponseEntity.status(200).body("Medico ripristinato correttamente");
     }
@@ -63,12 +71,11 @@ public class MedicoController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteMedicoById(@PathVariable Long id) {
-        if(id == null) throw new IllegalArgumentException();
+        if(id == null) {
+            throw new IllegalArgumentException();
+        }
         medicoService.deleteMedicoById(id);
         return ResponseEntity.status(200).body("Medico cancellato correttamente");
     }
-
-
-
 
 }

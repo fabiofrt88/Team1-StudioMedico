@@ -27,26 +27,42 @@ public class MedicoService {
     }
 
     public MedicoEntity getMedicoById(Long id) {
-        if(!medicoRepository.existsById(id)) throw new NotFoundException("Medico non trovato");
+        if(!medicoRepository.existsById(id)) {
+            throw new NotFoundException("Medico non trovato");
+        }
         return medicoRepository.findById(id).get();
     }
 
     public void updateMedicoById(MedicoEntity medicoEdit, Long id) {
-        if(medicoEdit == null) throw new IllegalArgumentException();
-        if(!medicoRepository.existsById(id)) throw new NotFoundException("Medico non trovato");
+        if(medicoEdit == null) {
+            throw new IllegalArgumentException();
+        }
+        if(!medicoRepository.existsById(id)) {
+            throw new NotFoundException("Medico non trovato");
+        }
 
         MedicoEntity medico = medicoRepository.findById(id).get();
 
-        if(medicoEdit.getNome() != null) medico.setNome(medicoEdit.getNome());
-        if(medicoEdit.getCognome() != null) medico.setCognome(medicoEdit.getCognome());
-        if(medicoEdit.getTelefono() != null) medico.setTelefono(medicoEdit.getTelefono());
-        if(medicoEdit.getEmail() != null) medico.setEmail(medicoEdit.getEmail());
+        if(medicoEdit.getNome() != null) {
+            medico.setNome(medicoEdit.getNome());
+        }
+        if(medicoEdit.getCognome() != null) {
+            medico.setCognome(medicoEdit.getCognome());
+        }
+        if(medicoEdit.getTelefono() != null) {
+            medico.setTelefono(medicoEdit.getTelefono());
+        }
+        if(medicoEdit.getEmail() != null) {
+            medico.setEmail(medicoEdit.getEmail());
+        }
 
         medicoRepository.saveAndFlush(medico);
     }
 
     public void restoreMedicoById(Long id){
-        if (!medicoRepository.existsById(id))throw new NotFoundException("Medico non trovato");
+        if(!medicoRepository.existsById(id)) {
+            throw new NotFoundException("Medico non trovato");
+        }
         medicoRepository.restoreById(id);
     }
 
@@ -54,16 +70,15 @@ public class MedicoService {
         medicoRepository.restore();
     }
 
-
     public void deleteMedicoById(Long id) {
-        if(!medicoRepository.existsById(id)) throw new NotFoundException("Medico non trovato");
+        if(!medicoRepository.existsById(id)) {
+            throw new NotFoundException("Medico non trovato");
+        }
         medicoRepository.softDeleteById(id);
     }
 
     public void deleteMedici() {
         medicoRepository.softDelete();
     }
-
-
 
 }

@@ -26,31 +26,51 @@ public class PazienteService {
     }
 
     public PazienteEntity getPazienteById(Long id) {
-        if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
+        if(!pazienteRepository.existsById(id)) {
+            throw new NotFoundException("Paziente non trovato");
+        }
         return pazienteRepository.findById(id).get();
     }
 
     public void updatePazienteById(PazienteEntity pazienteEdit, Long id) {
-        if(pazienteEdit == null) throw new IllegalArgumentException();
-        if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
+        if(pazienteEdit == null) {
+            throw new IllegalArgumentException();
+        }
+        if(!pazienteRepository.existsById(id)) {
+            throw new NotFoundException("Paziente non trovato");
+        }
 
         PazienteEntity paziente = pazienteRepository.findById(id).get();
         /*Paziente paziente = new Paziente();
         Optional<Paziente> pazienteOptional = pazienteRepository.findById(id);
         if(pazienteOptional.isPresent()) paziente = pazienteOptional.get();*/
 
-        if(pazienteEdit.getNome() != null) paziente.setNome(pazienteEdit.getNome());
-        if(pazienteEdit.getCognome() != null) paziente.setCognome(pazienteEdit.getCognome());
-        if(pazienteEdit.getDataNascita() != null) paziente.setDataNascita(pazienteEdit.getDataNascita());
-        if(pazienteEdit.getTelefono() != null) paziente.setTelefono(pazienteEdit.getTelefono());
-        if(pazienteEdit.getEmail() != null) paziente.setEmail(pazienteEdit.getEmail());
-        if(pazienteEdit.getCodiceFiscale() != null) paziente.setCodiceFiscale(pazienteEdit.getCodiceFiscale());
+        if(pazienteEdit.getNome() != null) {
+            paziente.setNome(pazienteEdit.getNome());
+        }
+        if(pazienteEdit.getCognome() != null) {
+            paziente.setCognome(pazienteEdit.getCognome());
+        }
+        if(pazienteEdit.getDataNascita() != null) {
+            paziente.setDataNascita(pazienteEdit.getDataNascita());
+        }
+        if(pazienteEdit.getTelefono() != null) {
+            paziente.setTelefono(pazienteEdit.getTelefono());
+        }
+        if(pazienteEdit.getEmail() != null) {
+            paziente.setEmail(pazienteEdit.getEmail());
+        }
+        if(pazienteEdit.getCodiceFiscale() != null) {
+            paziente.setCodiceFiscale(pazienteEdit.getCodiceFiscale());
+        }
 
         pazienteRepository.saveAndFlush(paziente);
     }
 
     public void restorePazienteById(Long id) {
-        if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
+        if(!pazienteRepository.existsById(id)) {
+            throw new NotFoundException("Paziente non trovato");
+        }
         pazienteRepository.restoreById(id);
         //pazienteRepository.changeStatusById(EntityStatusEnum.ACTIVE, id);
     }
@@ -58,8 +78,6 @@ public class PazienteService {
     public void restorePazienti() {
         pazienteRepository.restore();
     }
-
-
 
     public void deletePazienteById(Long id) {
         if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
@@ -73,7 +91,5 @@ public class PazienteService {
     public void deletePazienti() {
         pazienteRepository.softDelete();
     }
-
-
 
 }

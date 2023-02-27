@@ -21,7 +21,9 @@ public class SegretarioService {
     }
 
     public SegretarioEntity getSegretarioById(Long id) {
-        if (!segretarioRepository.existsById(id)) throw new NotFoundException("Segretario non trovato");
+        if(!segretarioRepository.existsById(id)) {
+            throw new NotFoundException("Segretario non trovato");
+        }
         return segretarioRepository.findById(id).get();
     }
 
@@ -30,23 +32,46 @@ public class SegretarioService {
     }
 
     public void updateSegretarioById(SegretarioEntity segretarioEdit, Long id) {
-
-        if (segretarioEdit == null) throw new IllegalArgumentException();
-        if (!segretarioRepository.existsById(id)) throw new NotFoundException("Segretario non trovato");
+        if(segretarioEdit == null) {
+            throw new IllegalArgumentException();
+        }
+        if(!segretarioRepository.existsById(id)) {
+            throw new NotFoundException("Segretario non trovato");
+        }
 
         SegretarioEntity segretario = segretarioRepository.findById(id).get();
 
-        if (segretarioEdit.getNome() != null) segretario.setNome(segretarioEdit.getNome());
-        if (segretarioEdit.getCognome() != null) segretario.setCognome(segretarioEdit.getCognome());
-        if (segretarioEdit.getTelefono() != null) segretario.setTelefono(segretarioEdit.getTelefono());
-        if (segretarioEdit.getEmail() != null) segretario.setEmail(segretarioEdit.getEmail());
+        if(segretarioEdit.getNome() != null) {
+            segretario.setNome(segretarioEdit.getNome());
+        }
+        if(segretarioEdit.getCognome() != null) {
+            segretario.setCognome(segretarioEdit.getCognome());
+        }
+        if(segretarioEdit.getTelefono() != null) {
+            segretario.setTelefono(segretarioEdit.getTelefono());
+        }
+        if(segretarioEdit.getEmail() != null) {
+            segretario.setEmail(segretarioEdit.getEmail());
+        }
 
         segretarioRepository.saveAndFlush(segretario);
+    }
 
+    public void restoreSegretarioById(Long id){
+        if(!segretarioRepository.existsById(id)) {
+            throw new NotFoundException("Segretario non trovato");
+        }
+        segretarioRepository.restoreById(id);
+    }
+
+    public void restoreAllSegretari(){
+        segretarioRepository.restore();
     }
 
     public void deleteSegretarioById(Long id) {
-        if(!segretarioRepository.existsById(id)) throw new NotFoundException("Segretario non trovato");
+        if(!segretarioRepository.existsById(id)) {
+            throw new NotFoundException("Segretario non trovato");
+        }
         segretarioRepository.deleteById(id);
     }
 
