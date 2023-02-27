@@ -47,6 +47,21 @@ public class SegretarioController {
         return ResponseEntity.status(200).body("Segretario modificato correttamente");
     }
 
+    @PutMapping("/restore/{id}")
+    public ResponseEntity<String> restoreSegretarioById(@PathVariable Long id){
+        if(id == null) {
+            throw new IllegalArgumentException();
+        }
+        segretarioService.restoreSegretarioById(id);
+        return ResponseEntity.status(200).body("Segretario ripristinato correttamente");
+    }
+
+    @PutMapping("/restore/all")
+    public ResponseEntity<String> restoreMedici(){
+        segretarioService.restoreAllSegretari();
+        return ResponseEntity.status(200).body("Segretari ripristinati correttamente");
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteSegretarioById(@PathVariable Long id) {
         if(id == null) {
