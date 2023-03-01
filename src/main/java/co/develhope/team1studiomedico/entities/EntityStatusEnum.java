@@ -2,16 +2,16 @@ package co.develhope.team1studiomedico.entities;
 
 public enum EntityStatusEnum {
 
-    ACTIVE("A"),
-    DELETED("D");
+    ACTIVE('A'),
+    DELETED('D');
 
-    private final String status;
+    private final Character status;
 
-    EntityStatusEnum(String status) {
+    EntityStatusEnum(Character status) {
         this.status = status;
     }
 
-    public String getStatus() {
+    public Character getStatus() {
         return status;
     }
 

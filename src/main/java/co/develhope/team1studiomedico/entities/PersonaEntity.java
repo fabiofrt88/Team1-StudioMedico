@@ -1,5 +1,6 @@
 package co.develhope.team1studiomedico.entities;
 
+import co.develhope.team1studiomedico.entities.utils.EntityStatusEnumConverter;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +20,9 @@ public abstract class PersonaEntity {
     private String telefono;
     @Column(nullable = false, unique = true, name = "email")
     private String email;
+    @Convert(converter = EntityStatusEnumConverter.class)
     @Column(nullable = false, name = "record_status")
-    private EntityStatusEnum status; //String
+    private EntityStatusEnum status; //Character
 
     public PersonaEntity (){}
 
