@@ -3,8 +3,9 @@ package co.develhope.team1studiomedico.entities;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import java.util.List;
+
 /**
- * La sottoClasse MedicoEntity rappresenta le informazioni memorizzate nel database per l'attore Medico.
+ * La classe MedicoEntity rappresenta il modello dei dati del Medico
  */
 @Entity(name = "medico")
 @Table(name = "medico")
@@ -18,12 +19,12 @@ public class MedicoEntity extends PersonaEntity{
     private List<PazienteEntity> pazienti;
 
     /**
-     * Instanzia un nuovo Medico entity.
+     * Costruttore di default che istanzia un nuovo MedicoEntity.
      */
     public MedicoEntity(){}
 
     /**
-     * Instanzia un nuovo Medico entity con parametri:
+     * Costruttore parametrico che istanzia un nuovo MedicoEntity.
      *
      * @param id           l' id
      * @param nome         il nome
@@ -40,36 +41,36 @@ public class MedicoEntity extends PersonaEntity{
     }
 
     /**
-     * Funzione che ottiene le prenotazioni.
+     * Metodo che restituisce le prenotazioni.
      *
-     * @return the prenotazioni
+     * @return le prenotazioni
      */
     public List<PrenotazioneEntity> getPrenotazioni() {
         return prenotazioni;
     }
 
     /**
-     * Funzione che setta le prenotazioni.
+     * Metodo che setta le prenotazioni.
      *
-     * @param prenotazioni the prenotazioni
+     * @param prenotazioni le prenotazioni
      */
     public void setPrenotazioni(List<PrenotazioneEntity> prenotazioni) {
         this.prenotazioni = prenotazioni;
     }
 
     /**
-     * Funzione che ottiene i pazienti.
+     * Metodo che restituisce i pazienti associati.
      *
-     * @return the pazienti
+     * @return i pazienti
      */
     public List<PazienteEntity> getPazienti() {
         return pazienti;
     }
 
     /**
-     * Funzione che setta le i pazienti.
+     * Metodo che setta i pazienti associati.
      *
-     * @param pazienti the pazienti
+     * @param pazienti le pazienti
      */
     public void setPazienti(List<PazienteEntity> pazienti) {
         this.pazienti = pazienti;

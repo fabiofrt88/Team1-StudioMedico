@@ -1,30 +1,32 @@
 package co.develhope.team1studiomedico.entities;
+
 /**
- * L'enumerato Entity status enum.
+ * L'enumerato EntityStatusEnum presenta gli stati che un record entità puà assumere
+ * e cambiare dalla creazione alla cancellazione logica, con eventuale ripristino
  */
 public enum EntityStatusEnum {
 
     /**
-     * Attiva entity status enum.
+     * Stato ATTIVO.
      */
     ACTIVE('A'),
     /**
-     * Cancella entity status enum.
+     * Stato CANCELLATO.
      */
     DELETED('D');
 
     private final Character status;
 
     /**
-     *  Costruttore.
-     * @param status che passa il parametro status.
+     *  Costruttore EntityStatusEnum.
+     * @param status il parametro status.
      */
     EntityStatusEnum(Character status) {
         this.status = status;
     }
 
     /**
-     * Ottiene lo status.
+     * Restituisce lo status.
      *
      * @return lo status
      */

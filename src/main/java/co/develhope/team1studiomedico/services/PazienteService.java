@@ -6,13 +6,16 @@ import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.PazienteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 /**
- * La classe PazienteService e dove si effettuano le operazioni di logica di businness che verranno richiamate
- * dal CRUD del PazienteController.
+ * La classe PazienteService realizza la logica di business relativamente le operazioni di CRUD dei dati di PazienteEntity.
+ * Utilizza PazienteRepository (mediante dependency injection), i metodi del service verranno richiamati
+ * nel relativo controller PazienteController
  */
 @Service
 public class PazienteService {
@@ -22,9 +25,8 @@ public class PazienteService {
 
     Logger logger = LoggerFactory.getLogger(PazienteService.class);
 
-
     /**
-     * Funzione che crea il paziente.
+     * Metodo che crea il paziente.
      *
      * @param paziente il paziente
      */
@@ -40,7 +42,7 @@ public class PazienteService {
     }
 
     /**
-     * Funzione che ottiene i pazienti.
+     * Metodo che restituisce i pazienti.
      *
      * @return i pazienti
      */
@@ -49,20 +51,20 @@ public class PazienteService {
     }
 
     /**
-     * Funzione che ottiene il paziente tramite id.
+     * Metodo che restituisce il paziente tramite id.
      *
      * @param id the id
      * @return the paziente by id
      */
     public PazienteEntity getPazienteById(Long id) {
         if(!pazienteRepository.existsById(id)) {
-            throw new NotFoundException("Paziente non trovato");
+            throw new EntityNotFoundException("Paziente non trovato");
         }
         return pazienteRepository.findById(id).get();
     }
 
     /**
-     * Funzione che modifica il paziente tramite id.
+     * Metodo che modifica il paziente tramite id.
      *
      * @param pazienteEdit the paziente edit
      * @param id           the id
@@ -72,7 +74,7 @@ public class PazienteService {
             throw new IllegalArgumentException();
         }
         if(!pazienteRepository.existsById(id)) {
-            throw new NotFoundException("Paziente non trovato");
+            throw new EntityNotFoundException("Paziente non trovato");
         }
 
         PazienteEntity paziente = pazienteRepository.findById(id).get();
@@ -103,27 +105,27 @@ public class PazienteService {
     }
 
     /**
-     * Funzione che ripristina il paziente tramite id.
+     * Metodo che ripristina il paziente tramite id.
      *
      * @param id l'id
      */
     public void restorePazienteById(Long id) {
         if(!pazienteRepository.existsById(id)) {
-            throw new NotFoundException("Paziente non trovato");
+            throw new EntityNotFoundException("Paziente non trovato");
         }
         pazienteRepository.restoreById(id);
         //pazienteRepository.changeStatusById(EntityStatusEnum.ACTIVE, id);
     }
 
     /**
-     * Funzione che ripristina i pazienti.
+     * Metodo che ripristina i pazienti.
      */
     public void restorePazienti() {
         pazienteRepository.restore();
     }
 
     /**
-     * Funzione che cancella il paziente tramite id.
+     * Metodo che cancella il paziente tramite id (soft delete).
      *
      * @param id l'id
      */
@@ -131,18 +133,18 @@ public class PazienteService {
         try {
             logger.info("Inizio processo deletePazienteById in Service");
             if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
-        /*PazienteEntity paziente = pazienteRepository.findById(id).get();
-        paziente.setStatus(EntityStatusEnum.DELETED);
-        pazienteRepository.saveAndFlush(paziente);*/
-            pazienteRepository.softDeleteById(id);
-            //pazienteRepository.changeStatusById(EntityStatusEnum.DELETED, id);
-        }finally {
+                /*PazienteEntity paziente = pazienteRepository.findById(id).get();
+                paziente.setStatus(EntityStatusEnum.DELETED);
+                pazienteRepository.saveAndFlush(paziente);*/
+                pazienteRepository.softDeleteById(id);
+                //pazienteRepository.changeStatusById(EntityStatusEnum.DELETED, id);
+        } finally {
             logger.info("Fine processo deletePazienteById in Service");
         }
     }
 
     /**
-     * Funzione che cancella i pazienti.
+     * Metodo che cancella i pazienti (soft delete).
      */
     public void deletePazienti() {
         try {

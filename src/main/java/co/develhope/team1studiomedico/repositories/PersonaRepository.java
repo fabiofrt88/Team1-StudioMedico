@@ -8,8 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+
 /**
- * La superInterfaccia PersonaRepository è un repository che fornisce un insieme di metodi e custom query per la
+ * La superInterface PersonaRepository è un repository che fornisce un insieme di metodi e custom query per la
  * gestione dei dati nel database utilizzando la JPA (Java Persistence API) per definire query ad alto livello.
  */
 @NoRepositoryBean

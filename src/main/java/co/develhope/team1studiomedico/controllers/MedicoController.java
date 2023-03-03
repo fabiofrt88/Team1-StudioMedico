@@ -10,8 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 /**
- * Il MedicoController ha la responsabilità di gestire le operazioni CRUD di Medico.
+ * MedicoController rappresenta la web API controller del Medico,
+ * espone degli endpoint circa le operazioni CRUD di MedicoEntity,
+ * elabora le response sulla base delle relative request del client
  */
 @RestController
 @RequestMapping("/medico")
@@ -22,10 +25,8 @@ public class MedicoController {
 
     Logger logger = LoggerFactory.getLogger(MedicoController.class);
 
-
-
     /**
-     * Crea il medico response entity.
+     * Crea un medico, restituisce una response entity di status 201.
      *
      * @param medico il medico
      * @return la response entity
@@ -33,7 +34,7 @@ public class MedicoController {
     @PostMapping("/create")
     public ResponseEntity<String> createMedico(@RequestBody MedicoEntity medico){
         if(medico == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error request body");
         }
         medicoService.createMedico(medico);
         logger.info("Un nuovo Medico è stato registrato");
@@ -41,7 +42,7 @@ public class MedicoController {
     }
 
     /**
-     * Ottiene i Medico list.
+     * Restituisce la lista dei medici.
      *
      * @return la list
      */
@@ -51,7 +52,7 @@ public class MedicoController {
     }
 
     /**
-     * Ottiene il medico tramite id
+     * Restituisce il medico tramite id
      *
      * @param id  id
      * @return il medico tramite id
@@ -59,29 +60,29 @@ public class MedicoController {
     @GetMapping("/{id}")
     public MedicoEntity getMedicoById(@PathVariable Long id) {
         if(id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error id request param");
         }
         return medicoService.getMedicoById(id);
     }
 
     /**
-     * Update il medico tramite id e da una response entity di status 200.
+     * Update del medico tramite id, restituisce una response entity di status 200.
      *
      * @param medicoEdit il medico edit
-     * @param id          id
+     * @param id id
      * @return la response entity di status 200.
      */
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateMedicoById(@RequestBody MedicoEntity medicoEdit, @PathVariable Long id) {
         if(medicoEdit == null || id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error request body");
         }
         medicoService.updateMedicoById(medicoEdit, id);
         return ResponseEntity.status(200).body("Medico modificato correttamente");
     }
 
     /**
-     * Ripristina il medico tramite id e da una response entity di status 200.
+     * Ripristina il medico tramite id e restituisce una response entity di status 200.
      *
      * @param id  id
      * @return la response entity di status 200.
@@ -89,14 +90,14 @@ public class MedicoController {
     @PutMapping("/restore/{id}")
     public ResponseEntity<String> restoreMedicoById(@PathVariable Long id){
         if(id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error id request param");
         }
         medicoService.restoreMedicoById(id);
         return ResponseEntity.status(200).body("Medico ripristinato correttamente");
     }
 
     /**
-     * Ripristina i medici e da una response entity di status 200.
+     * Ripristina i medici e restituisce una response entity di status 200.
      *
      * @return la response entity di status 200.
      */
@@ -107,7 +108,7 @@ public class MedicoController {
     }
 
     /**
-     * Cancella i medici e da una response entity di status 200.
+     * Cancella i medici, restituisce una response entity di status 200 (soft delete).
      *
      * @return la response entity di status 200.
      */
@@ -119,7 +120,7 @@ public class MedicoController {
     }
 
     /**
-     * Cancella il medico tramite id e da una response entity di status 200.
+     * Cancella il medico tramite id, restituisce una response entity di status 200 (soft delete).
      *
      * @param id  id
      * @return la response entity di status 200
@@ -127,7 +128,7 @@ public class MedicoController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteMedicoById(@PathVariable Long id) {
         if(id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error id request param");
         }
         medicoService.deleteMedicoById(id);
         logger.info("Un Medico è stato cancellato");

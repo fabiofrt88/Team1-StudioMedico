@@ -6,13 +6,16 @@ import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.MedicoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 /**
- * La classe MedicoService e dove si effettuano le operazioni di logica di businness che verranno richiamate
- * dal CRUD del MedicoController.
+ * La classe MedicoService realizza la logica di business relativamente le operazioni di CRUD dei dati di MedicoEntity.
+ * Utilizza MedicoRepository (mediante dependency injection), i metodi del service verranno richiamati
+ * nel relativo controller MedicoController
  */
 @Service
 public class MedicoService {
@@ -23,7 +26,7 @@ public class MedicoService {
     Logger logger = LoggerFactory.getLogger(MedicoService.class);
 
     /**
-     * Funzione che crea il medico.
+     * Metodo che crea il medico.
      *
      * @param medico il medico
      */
@@ -39,7 +42,7 @@ public class MedicoService {
     }
 
     /**
-     * Funzione che ottiene i medici.
+     * Metodo che restituisce i medici.
      *
      * @return i medici
      */
@@ -48,20 +51,20 @@ public class MedicoService {
     }
 
     /**
-     * Funzione che ottiene il medico tramite id.
+     * Metodo che restituisce il medico tramite id.
      *
      * @param id l' id
      * @return il medico tramite id
      */
     public MedicoEntity getMedicoById(Long id) {
         if(!medicoRepository.existsById(id)) {
-            throw new NotFoundException("Medico non trovato");
+            throw new EntityNotFoundException("Medico non trovato");
         }
         return medicoRepository.findById(id).get();
     }
 
     /**
-     * Funzione che modifica il medico.
+     * Metodo che modifica il medico.
      *
      * @param medicoEdit il medico edit
      * @param id         l'id
@@ -71,7 +74,7 @@ public class MedicoService {
             throw new IllegalArgumentException();
         }
         if(!medicoRepository.existsById(id)) {
-            throw new NotFoundException("Medico non trovato");
+            throw new EntityNotFoundException("Medico non trovato");
         }
 
         MedicoEntity medico = medicoRepository.findById(id).get();
@@ -93,26 +96,26 @@ public class MedicoService {
     }
 
     /**
-     * Funzione che ripristina il medico tramite id.
+     * Metodo che ripristina il medico tramite id.
      *
      * @param id l'id
      */
     public void restoreMedicoById(Long id){
         if(!medicoRepository.existsById(id)) {
-            throw new NotFoundException("Medico non trovato");
+            throw new EntityNotFoundException("Medico non trovato");
         }
         medicoRepository.restoreById(id);
     }
 
     /**
-     * Funzione che ripristina tutti i medici.
+     * Metodo che ripristina tutti i medici.
      */
     public void restoreAllMedici(){
         medicoRepository.restore();
     }
 
     /**
-     * Funzione che cancella il medico tramite id.
+     * Metodo che cancella il medico tramite id (soft delete).
      *
      * @param id l'id
      */
@@ -129,7 +132,7 @@ public class MedicoService {
     }
 
     /**
-     * Funzione che cancella tutti i medici.
+     * Metodo che cancella tutti i medici (soft delete)
      */
     public void deleteMedici() {
         try {

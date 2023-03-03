@@ -2,8 +2,9 @@ package co.develhope.team1studiomedico.entities;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
+
 /**
- * La sottoClasse SegretarioEntity rappresenta le informazioni memorizzate nel database per l'attore Segretario.
+ * La classe SegretarioEntity rappresenta il modello dei dati del Segretario
  */
 @Entity(name = "segretario")
 @Table(name = "segretario")
@@ -16,12 +17,12 @@ public class SegretarioEntity extends PersonaEntity{
     private MedicoEntity medico;
 
     /**
-     * Instanzia un nuovo Segretario entity.
+     * Costruttore di default che istanzia un nuovo SegretarioEntity.
      */
     public SegretarioEntity(){}
 
     /**
-     * Instanzia un nuovo Segretario entity.
+     * Costruttore parametrico che istanzia un nuovo SegretarioEntity.
      *
      * @param id       the id
      * @param nome     the nome
@@ -36,18 +37,18 @@ public class SegretarioEntity extends PersonaEntity{
     }
 
     /**
-     * Funzione che ottiene il medico.
+     * Metodo che restituisce il medico associato.
      *
-     * @return the medico
+     * @return il medico
      */
     public MedicoEntity getMedico() {
         return medico;
     }
 
     /**
-     * Funzione che setta il medico.
+     * Metodo che setta il medico associato.
      *
-     * @param medico the medico
+     * @param medico il medico
      */
     public void setMedico(MedicoEntity medico) {
         this.medico = medico;

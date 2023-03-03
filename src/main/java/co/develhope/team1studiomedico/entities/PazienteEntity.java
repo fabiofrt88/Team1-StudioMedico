@@ -5,8 +5,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.List;
+
 /**
- * La sottoClasse PazienteEntity rappresenta le informazioni memorizzate nel database per l'attore Paziente.
+ * La classe PazienteEntity rappresenta il modello dei dati del Paziente
  */
 @Entity(name = "paziente")
 @Table(name = "paziente")
@@ -25,12 +26,12 @@ public class PazienteEntity extends PersonaEntity{
     private MedicoEntity medico;
 
     /**
-     * Istanzia una nuova entità Paziente.
+     * Costruttore di default che istanzia un nuovo PazienteEntity.
      */
     public PazienteEntity(){}
 
     /**
-     * Istanzia una nuova entità Paziente.
+     * Costruttore parametrico che istanzia una nuova entità Paziente.
      *
      * @param id             id
      * @param nome           nome
@@ -51,7 +52,7 @@ public class PazienteEntity extends PersonaEntity{
     }
 
     /**
-     * Funzione che ottiene la data nascita.
+     * Metodo che restituisce la data nascita.
      *
      * @return la data nascita
      */
@@ -60,7 +61,7 @@ public class PazienteEntity extends PersonaEntity{
     }
 
     /**
-     * Funzione che setta la data nascita.
+     * Metodo che setta la data nascita.
      *
      * @param dataNascita la data nascita
      */
@@ -69,7 +70,7 @@ public class PazienteEntity extends PersonaEntity{
     }
 
     /**
-     * Funzione che ottiene il codice fiscale.
+     * Metodo che restituisce il codice fiscale.
      *
      * @return il codice fiscale
      */
@@ -78,7 +79,7 @@ public class PazienteEntity extends PersonaEntity{
     }
 
     /**
-     * Funzione che setta il codice fiscale.
+     * Metodo che setta il codice fiscale.
      *
      * @param codiceFiscale il codice fiscale
      */
@@ -87,7 +88,7 @@ public class PazienteEntity extends PersonaEntity{
     }
 
     /**
-     * Funzione che ottiene le prenotazioni.
+     * Metodo che restituisce le prenotazioni.
      *
      * @return le prenotazioni
      */
@@ -96,7 +97,7 @@ public class PazienteEntity extends PersonaEntity{
     }
 
     /**
-     * Funzione che setta le prenotazioni.
+     * Metodo che setta le prenotazioni.
      *
      * @param prenotazioni le prenotazioni
      */
@@ -105,7 +106,7 @@ public class PazienteEntity extends PersonaEntity{
     }
 
     /**
-     * Funzione che ottiene il medico.
+     * Metodo che retituisce il medico.
      *
      * @return il medico
      */
@@ -114,7 +115,7 @@ public class PazienteEntity extends PersonaEntity{
     }
 
     /**
-     * Funzione che setta il medico.
+     * Metodo che setta il medico.
      *
      * @param medico il medico
      */

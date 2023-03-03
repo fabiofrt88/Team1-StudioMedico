@@ -1,14 +1,17 @@
 package co.develhope.team1studiomedico.entities;
 
+import co.develhope.team1studiomedico.entities.auditing.Auditable;
 import co.develhope.team1studiomedico.entities.utils.EntityStatusEnumConverter;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
+
 /**
- * La superClasse PersonaEntity fa ereditare tutti metodi e attributi alle sottoClassi.
+ * La superclasse astratta PersonaEntity rappresenta il modello dei dati di una generica persona.
+ * Fa ereditare tutti metodi e attributi alle sottoclassi derivate. Poichè astratta, non è istanziabile.
  */
 @Component
 @MappedSuperclass
-public abstract class PersonaEntity {
+public abstract class PersonaEntity extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +30,12 @@ public abstract class PersonaEntity {
     private EntityStatusEnum status; //Character
 
     /**
-     * Instanzia una nuova Persona entity.
+     * Costruttore di default di PersonaEntity.
      */
     public PersonaEntity (){}
 
     /**
-     * Instanzia una nuova Persona entity.
+     * Costruttore parametrico di PersonaEntity
      *
      * @param id       l' id
      * @param nome     il nome
@@ -50,7 +53,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che ottiene l'id.
+     * Metodo che restituisce l'id.
      *
      * @return l' id
      */
@@ -59,7 +62,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che setta l'id.
+     * Metodo che setta l'id.
      *
      * @param id l' id
      */
@@ -68,7 +71,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che ottiene il nome.
+     * Metodo che restituisce il nome.
      *
      * @return il nome
      */
@@ -77,7 +80,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che setta il nome.
+     * Metodo che setta il nome.
      *
      * @param nome il nome
      */
@@ -86,7 +89,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che ottiene il cognome.
+     * Metodo che restituisce il cognome.
      *
      * @return il cognome
      */
@@ -95,7 +98,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che setta il cognome.
+     * Metodo che setta il cognome.
      *
      * @param cognome il cognome
      */
@@ -104,7 +107,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che ottiene il numero di telefono.
+     * Metodo che restituisce il numero di telefono.
      *
      * @return the telefono
      */
@@ -113,7 +116,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che setta il numero di telefono.
+     * Metodo che setta il numero di telefono.
      *
      * @param telefono il telefono
      */
@@ -122,7 +125,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che ottiene l'email.
+     * Metodo che restituisce l'email.
      *
      * @return l' email
      */
@@ -131,7 +134,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che setta l'email.
+     * Metodo che setta l'email.
      *
      * @param email l' email
      */
@@ -140,7 +143,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che ottiene lo status.
+     * Metodo che restituisce lo status.
      *
      * @return lo status
      */
@@ -149,7 +152,7 @@ public abstract class PersonaEntity {
     }
 
     /**
-     * Funzione che setta lo status.
+     * Metodo che setta lo status.
      *
      * @param status lo status
      */

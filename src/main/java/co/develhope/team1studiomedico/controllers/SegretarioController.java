@@ -10,8 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 /**
- * Il controller Segretario ha la responsabilità di gestire le operazioni CRUD di Segretario
+ * SegretarioController rappresenta la web API controller del Segretario,
+ * espone degli endpoint circa le operazioni CRUD di SegretarioEntity,
+ * elabora le response sulla base delle relative request del client
  */
 @RestController
 @RequestMapping("/segretario")
@@ -22,9 +25,8 @@ public class SegretarioController {
 
     Logger logger = LoggerFactory.getLogger(SegretarioController.class);
 
-
     /**
-     * Crea segretario response entity.
+     * Crea un segretario, restituisce una response entity di status 201.
      *
      * @param segretario il segretario
      * @return la response entity
@@ -32,29 +34,15 @@ public class SegretarioController {
     @PostMapping("/create")
     public ResponseEntity<String> createSegretario(@RequestBody SegretarioEntity segretario){
         if(segretario == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error request body");
         }
         segretarioService.createSegretario(segretario);
-        logger.info("Un nuovo Segretatio è stato registrato");
+        logger.info("Un nuovo Segretario è stato registrato");
         return ResponseEntity.status(HttpStatus.CREATED).body("Segretario creato correttamente");
     }
 
     /**
-     * Ottiene il segretario tramite id.
-     *
-     * @param id  id
-     * @return il segretario tramite id
-     */
-    @GetMapping("/{id}")
-    public SegretarioEntity getSegretarioById(@PathVariable Long id) {
-        if(id == null) {
-            throw new IllegalArgumentException();
-        }
-        return segretarioService.getSegretarioById(id);
-    }
-
-    /**
-     * Ottiene i segretari list.
+     * Restituisce la lista dei segretari.
      *
      * @return la list
      */
@@ -64,7 +52,21 @@ public class SegretarioController {
     }
 
     /**
-     * Update segretario by id response entity.
+     * Restituisce il segretario tramite id.
+     *
+     * @param id  id
+     * @return il segretario tramite id
+     */
+    @GetMapping("/{id}")
+    public SegretarioEntity getSegretarioById(@PathVariable Long id) {
+        if(id == null) {
+            throw new IllegalArgumentException("Bad Request - Error id request param");
+        }
+        return segretarioService.getSegretarioById(id);
+    }
+
+    /**
+     * Update del segretario tramite id, restituisce una response entity di status 200.
      *
      * @param segretarioEdit le modifiche segretario
      * @param id              id
@@ -73,14 +75,14 @@ public class SegretarioController {
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateSegretarioById(@RequestBody SegretarioEntity segretarioEdit, @PathVariable Long id) {
         if(segretarioEdit == null || id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error request body");
         }
         segretarioService.updateSegretarioById(segretarioEdit, id);
         return ResponseEntity.status(200).body("Segretario modificato correttamente");
     }
 
     /**
-     * Ripristina segretario tramite id response entity.
+     * Ripristina il segretario tramite id, restituisce una response entity di status 200.
      *
      * @param id  id
      * @return la response entity
@@ -88,14 +90,14 @@ public class SegretarioController {
     @PutMapping("/restore/{id}")
     public ResponseEntity<String> restoreSegretarioById(@PathVariable Long id){
         if(id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error id request param");
         }
         segretarioService.restoreSegretarioById(id);
         return ResponseEntity.status(200).body("Segretario ripristinato correttamente");
     }
 
     /**
-     * Rirpistina i medici response entity.
+     * Ripristina i medici response entity, restituisce una response entity di status 200.
      *
      * @return la response entity
      */
@@ -106,7 +108,7 @@ public class SegretarioController {
     }
 
     /**
-     * Cancella il segretario tramite id e da una response entity di status 200.
+     * Cancella il segretario tramite id, restituisce una response entity di status 200 (soft delete).
      *
      * @param id the id
      * @return the response entity
@@ -114,7 +116,7 @@ public class SegretarioController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteSegretarioById(@PathVariable Long id) {
         if(id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error id request param");
         }
         segretarioService.deleteSegretarioById(id);
         logger.info("Un Segretario è stato cancellato");
@@ -122,7 +124,7 @@ public class SegretarioController {
     }
 
     /**
-     * Cancella i segretari e da una response entity di status 200.
+     * Cancella i segretari, restituisce una response entity di status 200 (soft delete).
      *
      * @return the response entity
      */

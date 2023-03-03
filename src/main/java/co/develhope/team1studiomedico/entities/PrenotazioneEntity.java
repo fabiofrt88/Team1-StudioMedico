@@ -1,15 +1,17 @@
 package co.develhope.team1studiomedico.entities;
 
+import co.develhope.team1studiomedico.entities.auditing.Auditable;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+
 /**
- *  La Classe PrenotazioneEntity rappresenta le informazioni memorizzate nel database per l'attore Prenotazione.
+ * La classe PrenotazioneEntity rappresenta il modello dei dati della Prenotazione
  */
 @Entity
 @Table(name = "prenotazione")
-public class PrenotazioneEntity {
+public class PrenotazioneEntity extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +31,12 @@ public class PrenotazioneEntity {
     private MedicoEntity medico;
 
     /**
-     * Instanzia una nuova Prenotazione entity.
+     * Costruttore di default che istanzia una nuova PrenotazioneEntity.
      */
     public PrenotazioneEntity(){}
 
     /**
-     *  Instanzia una nuova Prenotazione entity.
+     * Costruttore parametrico che istanzia una nuova PrenotazioneEntity.
      *
      * @param id               the id
      * @param bookedAt         the booked at
@@ -53,7 +55,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che ottiene l'id.
+     * Metodo che restituisce l'id.
      *
      * @return l' id
      */
@@ -62,7 +64,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che setta l'id.
+     * Metodo che setta l'id.
      *
      * @param id the id
      */
@@ -71,7 +73,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che ottiene il booked at.
+     * Metodo che restituisce il booked at.
      *
      * @return il booked at
      */
@@ -80,7 +82,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che setta il booked at.
+     * Metodo che setta il booked at.
      *
      * @param bookedAt il booked at
      */
@@ -89,7 +91,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che ottiene la data prenotazione.
+     * Metodo che restituisce la data prenotazione.
      *
      * @return the data prenotazione
      */
@@ -98,7 +100,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che setta la data prenotazione.
+     * Metodo che setta la data prenotazione.
      *
      * @param dataPrenotazione the data prenotazione
      */
@@ -107,7 +109,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che ottiene l'ora prenotazione.
+     * Metodo che restituisce l'ora prenotazione.
      *
      * @return l'ora prenotazione
      */
@@ -116,7 +118,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che setta l'ora prenotazione.
+     * Metodo che setta l'ora prenotazione.
      *
      * @param oraPrenotazione the ora prenotazione
      */
@@ -125,7 +127,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che ottiene il paziente.
+     * Metodo che restituisce il paziente.
      *
      * @return the paziente
      */
@@ -134,7 +136,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che setta il paziente.
+     * Metodo che setta il paziente.
      *
      * @param paziente il paziente
      */
@@ -143,7 +145,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che ottiene il medico.
+     * Metodo che restituisce il medico.
      *
      * @return il medico
      */
@@ -152,7 +154,7 @@ public class PrenotazioneEntity {
     }
 
     /**
-     * Funzione che setta il medico.
+     * Metodo che setta il medico.
      *
      * @param medico il medico
      */
