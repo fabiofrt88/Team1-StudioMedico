@@ -19,7 +19,7 @@ public class PazienteController {
     @PostMapping("/create")
     public ResponseEntity<String> createPaziente(@RequestBody PazienteEntity paziente){
         if(paziente == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error request body");
         }
         pazienteService.createPaziente(paziente);
         return ResponseEntity.status(HttpStatus.CREATED).body("Paziente creato correttamente");
@@ -38,7 +38,7 @@ public class PazienteController {
         }
         return new Paziente();*/
         if(id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error id request param");
         }
         return pazienteService.getPazienteById(id);
     }
@@ -46,7 +46,7 @@ public class PazienteController {
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updatePazienteById(@RequestBody PazienteEntity pazienteEdit, @PathVariable Long id) {
         if(pazienteEdit == null || id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error request body");
         }
         pazienteService.updatePazienteById(pazienteEdit, id);
         return ResponseEntity.status(200).body("Paziente modificato correttamente");
@@ -54,7 +54,7 @@ public class PazienteController {
 
     /*@PutMapping("/restore/{id}")
     public ResponseEntity<String> restorePazienteById(@PathVariable Long id) {
-        if(id == null) throw new IllegalArgumentException();
+        if(id == null) throw new IllegalArgumentException("Bad Request - Error id request param");
         pazienteService.restorePazienteById(id);
         return ResponseEntity.status(200).body("Paziente ripristinato correttamente");
     }
@@ -74,7 +74,7 @@ public class PazienteController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletePazienteById(@PathVariable Long id) {
-        if(id == null) throw new IllegalArgumentException();
+        if(id == null) throw new IllegalArgumentException("Bad Request - Error id request param");
         pazienteService.deletePazienteById(id);
         return ResponseEntity.status(200).body("Paziente cancellato correttamente");
     }*/

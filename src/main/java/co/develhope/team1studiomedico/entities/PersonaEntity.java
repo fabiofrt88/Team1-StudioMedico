@@ -1,12 +1,13 @@
 package co.develhope.team1studiomedico.entities;
 
+import co.develhope.team1studiomedico.entities.auditing.Auditable;
 import co.develhope.team1studiomedico.entities.utils.EntityStatusEnumConverter;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Component;
 
 @Component
 @MappedSuperclass
-public abstract class PersonaEntity {
+public abstract class PersonaEntity extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

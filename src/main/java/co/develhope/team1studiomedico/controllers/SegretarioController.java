@@ -19,7 +19,7 @@ public class SegretarioController {
     @PostMapping("/create")
     public ResponseEntity<String> createSegretario(@RequestBody SegretarioEntity segretario){
         if(segretario == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error request body");
         }
         segretarioService.createSegretario(segretario);
         return ResponseEntity.status(HttpStatus.CREATED).body("Segretario creato correttamente");
@@ -28,7 +28,7 @@ public class SegretarioController {
     @GetMapping("/{id}")
     public SegretarioEntity getSegretarioById(@PathVariable Long id) {
         if(id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error id request param");
         }
         return segretarioService.getSegretarioById(id);
     }
@@ -41,7 +41,7 @@ public class SegretarioController {
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateSegretarioById(@RequestBody SegretarioEntity segretarioEdit, @PathVariable Long id) {
         if(segretarioEdit == null || id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error request body");
         }
         segretarioService.updateSegretarioById(segretarioEdit, id);
         return ResponseEntity.status(200).body("Segretario modificato correttamente");
@@ -50,7 +50,7 @@ public class SegretarioController {
     @PutMapping("/restore/{id}")
     public ResponseEntity<String> restoreSegretarioById(@PathVariable Long id){
         if(id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error id request param");
         }
         segretarioService.restoreSegretarioById(id);
         return ResponseEntity.status(200).body("Segretario ripristinato correttamente");
@@ -65,7 +65,7 @@ public class SegretarioController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteSegretarioById(@PathVariable Long id) {
         if(id == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Bad Request - Error id request param");
         }
         segretarioService.deleteSegretarioById(id);
         return ResponseEntity.status(200).body("Segretario cancellato correttamente");

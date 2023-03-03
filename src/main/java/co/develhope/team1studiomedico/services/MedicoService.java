@@ -4,10 +4,12 @@ import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.MedicoEntity;
 import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.MedicoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MedicoService {
@@ -28,7 +30,7 @@ public class MedicoService {
 
     public MedicoEntity getMedicoById(Long id) {
         if(!medicoRepository.existsById(id)) {
-            throw new NotFoundException("Medico non trovato");
+            throw new EntityNotFoundException("Medico non trovato");
         }
         return medicoRepository.findById(id).get();
     }
@@ -38,7 +40,7 @@ public class MedicoService {
             throw new IllegalArgumentException();
         }
         if(!medicoRepository.existsById(id)) {
-            throw new NotFoundException("Medico non trovato");
+            throw new EntityNotFoundException("Medico non trovato");
         }
 
         MedicoEntity medico = medicoRepository.findById(id).get();
@@ -61,7 +63,7 @@ public class MedicoService {
 
     public void restoreMedicoById(Long id){
         if(!medicoRepository.existsById(id)) {
-            throw new NotFoundException("Medico non trovato");
+            throw new EntityNotFoundException("Medico non trovato");
         }
         medicoRepository.restoreById(id);
     }
@@ -72,7 +74,7 @@ public class MedicoService {
 
     public void deleteMedicoById(Long id) {
         if(!medicoRepository.existsById(id)) {
-            throw new NotFoundException("Medico non trovato");
+            throw new EntityNotFoundException("Medico non trovato");
         }
         medicoRepository.softDeleteById(id);
     }

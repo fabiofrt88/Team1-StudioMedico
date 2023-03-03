@@ -4,6 +4,7 @@ import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.PazienteEntity;
 import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.PazienteRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class PazienteService {
 
     public PazienteEntity getPazienteById(Long id) {
         if(!pazienteRepository.existsById(id)) {
-            throw new NotFoundException("Paziente non trovato");
+            throw new EntityNotFoundException("Paziente non trovato");
         }
         return pazienteRepository.findById(id).get();
     }
@@ -37,7 +38,7 @@ public class PazienteService {
             throw new IllegalArgumentException();
         }
         if(!pazienteRepository.existsById(id)) {
-            throw new NotFoundException("Paziente non trovato");
+            throw new EntityNotFoundException("Paziente non trovato");
         }
 
         PazienteEntity paziente = pazienteRepository.findById(id).get();
@@ -69,7 +70,7 @@ public class PazienteService {
 
     public void restorePazienteById(Long id) {
         if(!pazienteRepository.existsById(id)) {
-            throw new NotFoundException("Paziente non trovato");
+            throw new EntityNotFoundException("Paziente non trovato");
         }
         pazienteRepository.restoreById(id);
         //pazienteRepository.changeStatusById(EntityStatusEnum.ACTIVE, id);
@@ -80,7 +81,7 @@ public class PazienteService {
     }
 
     public void deletePazienteById(Long id) {
-        if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
+        if(!pazienteRepository.existsById(id)) throw new EntityNotFoundException("Paziente non trovato");
         /*PazienteEntity paziente = pazienteRepository.findById(id).get();
         paziente.setStatus(EntityStatusEnum.DELETED);
         pazienteRepository.saveAndFlush(paziente);*/

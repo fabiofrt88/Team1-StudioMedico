@@ -4,6 +4,7 @@ import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.SegretarioEntity;
 import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.SegretarioRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -22,7 +23,7 @@ public class SegretarioService {
 
     public SegretarioEntity getSegretarioById(Long id) {
         if(!segretarioRepository.existsById(id)) {
-            throw new NotFoundException("Segretario non trovato");
+            throw new EntityNotFoundException("Segretario non trovato");
         }
         return segretarioRepository.findById(id).get();
     }
@@ -36,7 +37,7 @@ public class SegretarioService {
             throw new IllegalArgumentException();
         }
         if(!segretarioRepository.existsById(id)) {
-            throw new NotFoundException("Segretario non trovato");
+            throw new EntityNotFoundException("Segretario non trovato");
         }
 
         SegretarioEntity segretario = segretarioRepository.findById(id).get();
@@ -59,7 +60,7 @@ public class SegretarioService {
 
     public void restoreSegretarioById(Long id){
         if(!segretarioRepository.existsById(id)) {
-            throw new NotFoundException("Segretario non trovato");
+            throw new EntityNotFoundException("Segretario non trovato");
         }
         segretarioRepository.restoreById(id);
     }
@@ -70,7 +71,7 @@ public class SegretarioService {
 
     public void deleteSegretarioById(Long id) {
         if(!segretarioRepository.existsById(id)) {
-            throw new NotFoundException("Segretario non trovato");
+            throw new EntityNotFoundException("Segretario non trovato");
         }
         segretarioRepository.deleteById(id);
     }

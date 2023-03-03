@@ -1,5 +1,6 @@
 package co.develhope.team1studiomedico.entities;
 
+import co.develhope.team1studiomedico.entities.auditing.Auditable;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -7,7 +8,7 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "prenotazione")
-public class PrenotazioneEntity {
+public class PrenotazioneEntity extends Auditable<String> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
