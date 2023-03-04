@@ -1,0 +1,8 @@
+co.develhope.team1studiomedico
+co.develhope.team1studiomedico.controllers
+co.develhope.team1studiomedico.entities
+co.develhope.team1studiomedico.entities.auditing
+co.develhope.team1studiomedico.entities.utils
+co.develhope.team1studiomedico.exceptions
+co.develhope.team1studiomedico.repositories
+co.develhope.team1studiomedico.services

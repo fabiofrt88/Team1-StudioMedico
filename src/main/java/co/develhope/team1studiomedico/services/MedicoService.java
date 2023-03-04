@@ -2,7 +2,6 @@ package co.develhope.team1studiomedico.services;
 
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.MedicoEntity;
-import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.MedicoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +29,13 @@ public class MedicoService {
      *
      * @param medico il medico
      */
-    public void createMedico(MedicoEntity medico) {
+    public MedicoEntity createMedico(MedicoEntity medico) {
         try {
             logger.info("Inizio processo createMedico in Service");
             medico.setId(null);
             medico.setStatus(EntityStatusEnum.ACTIVE);
-            medicoRepository.saveAndFlush(medico);
-        }finally {
+            return medicoRepository.saveAndFlush(medico);
+        } finally {
             logger.info("Fine processo createMedico in Service");
         }
     }
@@ -69,10 +68,7 @@ public class MedicoService {
      * @param medicoEdit il medico edit
      * @param id         l'id
      */
-    public void updateMedicoById(MedicoEntity medicoEdit, Long id) {
-        if(medicoEdit == null) {
-            throw new IllegalArgumentException();
-        }
+    public MedicoEntity updateMedicoById(MedicoEntity medicoEdit, Long id) {
         if(!medicoRepository.existsById(id)) {
             throw new EntityNotFoundException("Medico non trovato");
         }
@@ -92,7 +88,7 @@ public class MedicoService {
             medico.setEmail(medicoEdit.getEmail());
         }
 
-        medicoRepository.saveAndFlush(medico);
+        return medicoRepository.saveAndFlush(medico);
     }
 
     /**
@@ -123,7 +119,7 @@ public class MedicoService {
         try {
             logger.info("Inizio processo deleteMedicoById in Service");
             if(!medicoRepository.existsById(id)) {
-                throw new NotFoundException("Medico non trovato");
+                throw new EntityNotFoundException("Medico non trovato");
             }
             medicoRepository.softDeleteById(id);
         }finally {

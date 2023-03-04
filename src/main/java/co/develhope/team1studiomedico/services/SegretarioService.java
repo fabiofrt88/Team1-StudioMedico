@@ -2,7 +2,6 @@ package co.develhope.team1studiomedico.services;
 
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.SegretarioEntity;
-import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.SegretarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +29,12 @@ public class SegretarioService {
      *
      * @param segretario il segretario
      */
-    public void createSegretario(SegretarioEntity segretario) {
+    public SegretarioEntity createSegretario(SegretarioEntity segretario) {
         try {
             logger.info("Inizio processo createSegretario in Service");
             segretario.setId(null);
             segretario.setStatus(EntityStatusEnum.ACTIVE);
-            segretarioRepository.saveAndFlush(segretario);
+            return segretarioRepository.saveAndFlush(segretario);
         }finally {
             logger.info("Fine processo createSegretario in Service");
         }
@@ -69,10 +68,7 @@ public class SegretarioService {
      * @param segretarioEdit il segretario edit
      * @param id             l'id
      */
-    public void updateSegretarioById(SegretarioEntity segretarioEdit, Long id) {
-        if(segretarioEdit == null) {
-            throw new IllegalArgumentException();
-        }
+    public SegretarioEntity updateSegretarioById(SegretarioEntity segretarioEdit, Long id) {
         if(!segretarioRepository.existsById(id)) {
             throw new EntityNotFoundException("Segretario non trovato");
         }
@@ -92,7 +88,7 @@ public class SegretarioService {
             segretario.setEmail(segretarioEdit.getEmail());
         }
 
-        segretarioRepository.saveAndFlush(segretario);
+        return segretarioRepository.saveAndFlush(segretario);
     }
 
     /**
@@ -123,7 +119,7 @@ public class SegretarioService {
         try {
             logger.info("Inizio processo deleteSegretarioById in Service");
             if(!segretarioRepository.existsById(id)) {
-                throw new NotFoundException("Segretario non trovato");
+                throw new EntityNotFoundException("Segretario non trovato");
             }
             segretarioRepository.softDeleteById(id);
         } finally {

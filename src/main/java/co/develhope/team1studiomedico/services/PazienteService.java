@@ -2,7 +2,6 @@ package co.develhope.team1studiomedico.services;
 
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.PazienteEntity;
-import co.develhope.team1studiomedico.exceptions.NotFoundException;
 import co.develhope.team1studiomedico.repositories.PazienteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,12 +29,12 @@ public class PazienteService {
      *
      * @param paziente il paziente
      */
-    public void createPaziente(PazienteEntity paziente) {
+    public PazienteEntity createPaziente(PazienteEntity paziente) {
         try {
             logger.info("Inizio processo createPaziente in Service");
             paziente.setId(null);
             paziente.setStatus(EntityStatusEnum.ACTIVE);
-            pazienteRepository.saveAndFlush(paziente);
+            return pazienteRepository.saveAndFlush(paziente);
         }finally {
             logger.info("Fine processo createPaziente in Service");
         }
@@ -69,10 +68,7 @@ public class PazienteService {
      * @param pazienteEdit the paziente edit
      * @param id           the id
      */
-    public void updatePazienteById(PazienteEntity pazienteEdit, Long id) {
-        if(pazienteEdit == null) {
-            throw new IllegalArgumentException();
-        }
+    public PazienteEntity updatePazienteById(PazienteEntity pazienteEdit, Long id) {
         if(!pazienteRepository.existsById(id)) {
             throw new EntityNotFoundException("Paziente non trovato");
         }
@@ -101,7 +97,7 @@ public class PazienteService {
             paziente.setCodiceFiscale(pazienteEdit.getCodiceFiscale());
         }
 
-        pazienteRepository.saveAndFlush(paziente);
+        return pazienteRepository.saveAndFlush(paziente);
     }
 
     /**
@@ -132,7 +128,7 @@ public class PazienteService {
     public void deletePazienteById(Long id) {
         try {
             logger.info("Inizio processo deletePazienteById in Service");
-            if(!pazienteRepository.existsById(id)) throw new NotFoundException("Paziente non trovato");
+            if(!pazienteRepository.existsById(id)) throw new EntityNotFoundException("Paziente non trovato");
                 /*PazienteEntity paziente = pazienteRepository.findById(id).get();
                 paziente.setStatus(EntityStatusEnum.DELETED);
                 pazienteRepository.saveAndFlush(paziente);*/
