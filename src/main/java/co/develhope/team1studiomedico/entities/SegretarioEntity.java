@@ -10,7 +10,7 @@ import jakarta.persistence.*;
 @Table(name = "segretario")
 @JsonPropertyOrder({"id", "nome", "cognome", "telefono",
         "email", "medico", "status"})
-public class SegretarioEntity extends PersonaEntity{
+public class SegretarioEntity extends PersonaEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
@@ -19,7 +19,7 @@ public class SegretarioEntity extends PersonaEntity{
     /**
      * Costruttore di default che istanzia un nuovo SegretarioEntity.
      */
-    public SegretarioEntity(){}
+    public SegretarioEntity(){ }
 
     /**
      * Costruttore parametrico che istanzia un nuovo SegretarioEntity.

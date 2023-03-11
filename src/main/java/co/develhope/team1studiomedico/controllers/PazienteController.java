@@ -23,7 +23,7 @@ public class PazienteController {
     @Autowired
     private PazienteService pazienteService;
 
-    Logger logger = LoggerFactory.getLogger(PazienteController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PazienteController.class);
 
     /**
      * Crea un paziente, restituisce una response entity di status 201.
@@ -37,18 +37,28 @@ public class PazienteController {
             throw new IllegalArgumentException("Bad Request - Error request body");
         }
         pazienteService.createPaziente(paziente);
-        logger.info("Un nuovo Paziente è stato registrato");
+        logger.info("Un nuovo paziente è stato registrato");
         return ResponseEntity.status(HttpStatus.CREATED).body("Paziente creato correttamente");
     }
 
     /**
-     * Restituisce la lista dei pazienti.
+     * Restituisce la lista dei pazienti con record status ACTIVE.
      *
-     * @return la list
+     * @return la lista dei pazienti con record status ACTIVE
      */
     @GetMapping({"", "/"})
-    public List<PazienteEntity> getPazienti(){
-        return pazienteService.getPazienti();
+    public List<PazienteEntity> getAllPazienti(){
+        return pazienteService.getAllPazienti();
+    }
+
+    /**
+     * Restituisce la lista dei pazienti cancellati logicamente con record status DELETED.
+     *
+     * @return la lista dei pazienti cancellati logicamente con record status DELETED.
+     */
+    @GetMapping("/deleted")
+    public List<PazienteEntity> getAllDeletedPazienti(){
+        return pazienteService.getAllDeletedPazienti();
     }
 
     /**
@@ -85,32 +95,5 @@ public class PazienteController {
         pazienteService.updatePazienteById(pazienteEdit, id);
         return ResponseEntity.status(200).body("Paziente modificato correttamente");
     }
-
-    /*@PutMapping("/restore/{id}")
-    public ResponseEntity<String> restorePazienteById(@PathVariable Long id) {
-        if(id == null) throw new IllegalArgumentException("Bad Request - Error id request param");
-        pazienteService.restorePazienteById(id);
-        return ResponseEntity.status(200).body("Paziente ripristinato correttamente");
-    }
-
-    @PutMapping("paziente/restore/all")
-    public ResponseEntity<String> restorePazienti() {
-        pazienteService.restorePazienti();
-        return ResponseEntity.status(200).body("Pazienti ripristinati correttamente");
-    }
-
-
-    @DeleteMapping("/delete/all")
-    public ResponseEntity<String> deletePazienti() {
-        pazienteService.deletePazienti();
-        return ResponseEntity.status(200).body("Pazienti cancellati correttamente");
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deletePazienteById(@PathVariable Long id) {
-        if(id == null) throw new IllegalArgumentException("Bad Request - Error id request param");
-        pazienteService.deletePazienteById(id);
-        return ResponseEntity.status(200).body("Paziente cancellato correttamente");
-    }*/
 
 }

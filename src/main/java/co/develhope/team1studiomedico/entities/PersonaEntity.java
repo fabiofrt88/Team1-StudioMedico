@@ -27,12 +27,12 @@ public abstract class PersonaEntity extends Auditable<String> {
     private String email;
     @Convert(converter = EntityStatusEnumConverter.class)
     @Column(nullable = false, name = "record_status")
-    private EntityStatusEnum status; //Character
+    private EntityStatusEnum recordStatus; //Character
 
     /**
      * Costruttore di default di PersonaEntity.
      */
-    public PersonaEntity (){}
+    public PersonaEntity (){ }
 
     /**
      * Costruttore parametrico di PersonaEntity
@@ -49,7 +49,7 @@ public abstract class PersonaEntity extends Auditable<String> {
         this.cognome = cognome;
         this.telefono = telefono;
         this.email = email;
-        this.status = EntityStatusEnum.ACTIVE;
+        this.recordStatus = EntityStatusEnum.ACTIVE;
     }
 
     /**
@@ -147,17 +147,17 @@ public abstract class PersonaEntity extends Auditable<String> {
      *
      * @return lo status
      */
-    public EntityStatusEnum getStatus() {
-        return status;
+    public EntityStatusEnum getRecordStatus() {
+        return recordStatus;
     }
 
     /**
      * Metodo che setta lo status.
      *
-     * @param status lo status
+     * @param recordStatus lo status
      */
-    public void setStatus(EntityStatusEnum status) {
-        this.status = status;
+    public void setRecordStatus(EntityStatusEnum recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
 }

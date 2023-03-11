@@ -18,9 +18,9 @@ public class EntityStatusEnumConverter implements AttributeConverter<EntityStatu
     @Override
     public Character convertToDatabaseColumn(EntityStatusEnum entityStatusEnum) {
         if(entityStatusEnum == EntityStatusEnum.DELETED) {
-            return EntityStatusEnum.DELETED.getStatus();
+            return EntityStatusEnum.DELETED.getRecordStatus();
         }
-        return EntityStatusEnum.ACTIVE.getStatus();
+        return EntityStatusEnum.ACTIVE.getRecordStatus();
     }
 
     /**
@@ -31,7 +31,7 @@ public class EntityStatusEnumConverter implements AttributeConverter<EntityStatu
      */
     @Override
     public EntityStatusEnum convertToEntityAttribute(Character character) {
-        if(character == EntityStatusEnum.DELETED.getStatus()) {
+        if(character == EntityStatusEnum.DELETED.getRecordStatus()) {
             return EntityStatusEnum.DELETED;
         }
         return EntityStatusEnum.ACTIVE;

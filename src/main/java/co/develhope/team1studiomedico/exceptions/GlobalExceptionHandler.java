@@ -1,4 +1,4 @@
-package co.develhope.team1studiomedico.controllers;
+package co.develhope.team1studiomedico.exceptions;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
- * ExceptionHandlerController è uno speciale controller che consente di gestire le eccezioni
+ * GlobalExceptionHandler è uno speciale controller che consente di gestire le eccezioni
  * nell'intera applicazione in un unico componente di gestione globale mediante relativi metodi @ExceptionHandler.
  * Può essere visto come un interceptor di eccezioni lanciate da metodi annotati con @RequestMapping e simili.
  */
 @ControllerAdvice
-public class ExceptionHandlerController {
+public class GlobalExceptionHandler {
 
     /**
      * Metodo che gestisce le eccezioni EntityNotFoundException

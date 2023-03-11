@@ -2,6 +2,7 @@ package co.develhope.team1studiomedico.services;
 
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.MedicoEntity;
+import co.develhope.team1studiomedico.entities.PersonaEntity;
 import co.develhope.team1studiomedico.repositories.MedicoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class MedicoService {
     @Autowired
     private MedicoRepository medicoRepository;
 
-    Logger logger = LoggerFactory.getLogger(MedicoService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MedicoService.class);
 
     /**
      * Metodo che crea il medico.
@@ -31,22 +32,31 @@ public class MedicoService {
      */
     public MedicoEntity createMedico(MedicoEntity medico) {
         try {
-            logger.info("Inizio processo createMedico in Service");
+            logger.info("Inizio processo createMedico in MedicoService");
             medico.setId(null);
-            medico.setStatus(EntityStatusEnum.ACTIVE);
+            medico.setRecordStatus(EntityStatusEnum.ACTIVE);
             return medicoRepository.saveAndFlush(medico);
         } finally {
-            logger.info("Fine processo createMedico in Service");
+            logger.info("Fine processo createMedico in MedicoService");
         }
     }
 
     /**
-     * Metodo che restituisce i medici.
+     * Metodo che restituisce i medici con record status ACTIVE.
      *
-     * @return i medici
+     * @return i medici con record status ACTIVE
      */
-    public List<MedicoEntity> getMedici() {
-        return medicoRepository.findAll();
+    public List<MedicoEntity> getAllMedici() {
+        return medicoRepository.findByRecordStatus(EntityStatusEnum.ACTIVE);
+    }
+
+    /**
+     * Metodo che restituisce i medici cancellati logicamente con record status DELETED.
+     *
+     * @return i medici cancellati logicamente con record status DELETED.
+     */
+    public List<MedicoEntity> getAllDeletedMedici() {
+        return medicoRepository.findByRecordStatus(EntityStatusEnum.DELETED);
     }
 
     /**
@@ -92,11 +102,40 @@ public class MedicoService {
     }
 
     /**
+     * Metodo che cancella il medico tramite id (soft delete).
+     *
+     * @param id l'id
+     */
+    public void deleteMedicoById(Long id) {
+        try {
+            logger.info("Inizio processo deleteMedicoById in MedicoService");
+            if(!medicoRepository.existsById(id)) {
+                throw new EntityNotFoundException("Medico non trovato");
+            }
+            medicoRepository.softDeleteById(id);
+        } finally {
+            logger.info("Fine processo deleteMedicoById in MedicoService");
+        }
+    }
+
+    /**
+     * Metodo che cancella tutti i medici (soft delete)
+     */
+    public void deleteAllMedici() {
+        try {
+            logger.info("Inizio processo deleteAllMedici in MedicoService");
+            medicoRepository.softDelete();
+        } finally {
+            logger.info("Fine processo deleteAllMedici in MedicoService");
+        }
+    }
+
+    /**
      * Metodo che ripristina il medico tramite id.
      *
      * @param id l'id
      */
-    public void restoreMedicoById(Long id){
+    public void restoreMedicoById(Long id) {
         if(!medicoRepository.existsById(id)) {
             throw new EntityNotFoundException("Medico non trovato");
         }
@@ -106,37 +145,8 @@ public class MedicoService {
     /**
      * Metodo che ripristina tutti i medici.
      */
-    public void restoreAllMedici(){
+    public void restoreAllMedici() {
         medicoRepository.restore();
-    }
-
-    /**
-     * Metodo che cancella il medico tramite id (soft delete).
-     *
-     * @param id l'id
-     */
-    public void deleteMedicoById(Long id) {
-        try {
-            logger.info("Inizio processo deleteMedicoById in Service");
-            if(!medicoRepository.existsById(id)) {
-                throw new EntityNotFoundException("Medico non trovato");
-            }
-            medicoRepository.softDeleteById(id);
-        }finally {
-            logger.info("Fine processo deleteMedicoById in Service");
-        }
-    }
-
-    /**
-     * Metodo che cancella tutti i medici (soft delete)
-     */
-    public void deleteMedici() {
-        try {
-            logger.info("Inizio processo deleteMedici in Service");
-            medicoRepository.softDelete();
-        }finally {
-            logger.info("Fine processo deleteMedici in Service");
-        }
     }
 
 }

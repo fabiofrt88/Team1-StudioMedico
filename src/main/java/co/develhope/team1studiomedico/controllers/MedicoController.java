@@ -23,7 +23,7 @@ public class MedicoController {
     @Autowired
     private MedicoService medicoService;
 
-    Logger logger = LoggerFactory.getLogger(MedicoController.class);
+    private static final Logger logger = LoggerFactory.getLogger(MedicoController.class);
 
     /**
      * Crea un medico, restituisce una response entity di status 201.
@@ -37,18 +37,28 @@ public class MedicoController {
             throw new IllegalArgumentException("Bad Request - Error request body");
         }
         medicoService.createMedico(medico);
-        logger.info("Un nuovo Medico è stato registrato");
+        logger.info("Un nuovo medico è stato registrato");
         return ResponseEntity.status(HttpStatus.CREATED).body("Medico creato correttamente");
     }
 
     /**
-     * Restituisce la lista dei medici.
+     * Restituisce la lista dei medici con record status ACTIVE.
      *
-     * @return la list
+     * @return la lista dei medici con record status ACTIVE
      */
     @GetMapping({"", "/"})
-    public List<MedicoEntity> getMedici(){
-        return medicoService.getMedici();
+    public List<MedicoEntity> getAllMedici(){
+        return medicoService.getAllMedici();
+    }
+
+    /**
+     * Restituisce la lista dei medici cancellati logicamente con record status DELETED.
+     *
+     * @return la lista dei medici cancellati logicamente con record status DELETED.
+     */
+    @GetMapping("/deleted")
+    public List<MedicoEntity> getAllDeletedMedici(){
+        return medicoService.getAllDeletedMedici();
     }
 
     /**
@@ -82,6 +92,34 @@ public class MedicoController {
     }
 
     /**
+     * Cancella i medici, restituisce una response entity di status 200 (soft delete).
+     *
+     * @return la response entity di status 200.
+     */
+    @DeleteMapping("/delete/all")
+    public ResponseEntity<String> deleteAllMedici() {
+        medicoService.deleteAllMedici();
+        logger.warn("Tutti i medici sono stati cancellati");
+        return ResponseEntity.status(200).body("Medici cancellati correttamente");
+    }
+
+    /**
+     * Cancella il medico tramite id, restituisce una response entity di status 200 (soft delete).
+     *
+     * @param id  id
+     * @return la response entity di status 200
+     */
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteMedicoById(@PathVariable Long id) {
+        if(id == null) {
+            throw new IllegalArgumentException("Bad Request - Error id request param");
+        }
+        medicoService.deleteMedicoById(id);
+        logger.info("Un medico è stato cancellato");
+        return ResponseEntity.status(200).body("Medico cancellato correttamente");
+    }
+
+    /**
      * Ripristina il medico tramite id e restituisce una response entity di status 200.
      *
      * @param id  id
@@ -102,37 +140,9 @@ public class MedicoController {
      * @return la response entity di status 200.
      */
     @PutMapping("/restore/all")
-    public ResponseEntity<String> restoreMedici(){
+    public ResponseEntity<String> restoreAllMedici(){
         medicoService.restoreAllMedici();
         return ResponseEntity.status(200).body("Medici ripristinati correttamente");
-    }
-
-    /**
-     * Cancella i medici, restituisce una response entity di status 200 (soft delete).
-     *
-     * @return la response entity di status 200.
-     */
-    @DeleteMapping("/delete/all")
-    public ResponseEntity<String> deleteMedici() {
-        medicoService.deleteMedici();
-        logger.warn("Tutti i Medici sono stati cancellati");
-        return ResponseEntity.status(200).body("Medici cancellati correttamente");
-    }
-
-    /**
-     * Cancella il medico tramite id, restituisce una response entity di status 200 (soft delete).
-     *
-     * @param id  id
-     * @return la response entity di status 200
-     */
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteMedicoById(@PathVariable Long id) {
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
-        medicoService.deleteMedicoById(id);
-        logger.info("Un Medico è stato cancellato");
-        return ResponseEntity.status(200).body("Medico cancellato correttamente");
     }
 
 }

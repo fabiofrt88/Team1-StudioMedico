@@ -22,7 +22,7 @@ public class PazienteService {
     @Autowired
     private PazienteRepository pazienteRepository;
 
-    Logger logger = LoggerFactory.getLogger(PazienteService.class);
+    private static final Logger logger = LoggerFactory.getLogger(PazienteService.class);
 
     /**
      * Metodo che crea il paziente.
@@ -31,22 +31,31 @@ public class PazienteService {
      */
     public PazienteEntity createPaziente(PazienteEntity paziente) {
         try {
-            logger.info("Inizio processo createPaziente in Service");
+            logger.info("Inizio processo createPaziente in PazienteService");
             paziente.setId(null);
-            paziente.setStatus(EntityStatusEnum.ACTIVE);
+            paziente.setRecordStatus(EntityStatusEnum.ACTIVE);
             return pazienteRepository.saveAndFlush(paziente);
-        }finally {
-            logger.info("Fine processo createPaziente in Service");
+        } finally {
+            logger.info("Fine processo createPaziente in PazienteService");
         }
     }
 
     /**
-     * Metodo che restituisce i pazienti.
+     * Metodo che restituisce i pazienti con record status ACTIVE.
      *
-     * @return i pazienti
+     * @return i pazienti con record status ACTIVE
      */
-    public List<PazienteEntity> getPazienti() {
-        return pazienteRepository.findAll();
+    public List<PazienteEntity> getAllPazienti() {
+        return pazienteRepository.findByRecordStatus(EntityStatusEnum.ACTIVE);
+    }
+
+    /**
+     * Metodo che restituisce i pazienti cancellati logicamente con record status DELETED.
+     *
+     * @return i pazienti cancellati logicamente con record status DELETED.
+     */
+    public List<PazienteEntity> getAllDeletedPazienti() {
+        return pazienteRepository.findByRecordStatus(EntityStatusEnum.DELETED);
     }
 
     /**
@@ -101,6 +110,37 @@ public class PazienteService {
     }
 
     /**
+     * Metodo che cancella il paziente tramite id (soft delete).
+     *
+     * @param id l'id
+     */
+    public void deletePazienteById(Long id) {
+        try {
+            logger.info("Inizio processo deletePazienteById in PazienteService");
+            if(!pazienteRepository.existsById(id)) throw new EntityNotFoundException("Paziente non trovato");
+                /*PazienteEntity paziente = pazienteRepository.findById(id).get();
+                paziente.setStatus(EntityStatusEnum.DELETED);
+                pazienteRepository.saveAndFlush(paziente);*/
+                pazienteRepository.softDeleteById(id);
+                //pazienteRepository.changeStatusById(EntityStatusEnum.DELETED, id);
+        } finally {
+            logger.info("Fine processo deletePazienteById in PazienteService");
+        }
+    }
+
+    /**
+     * Metodo che cancella i pazienti (soft delete).
+     */
+    public void deleteAllPazienti() {
+        try {
+            logger.info("Inizio processo deleteAllPazienti in PazienteService");
+            pazienteRepository.softDelete();
+        } finally {
+            logger.info("Fine processo deleteAllPazienti in PazienteService");
+        }
+    }
+
+    /**
      * Metodo che ripristina il paziente tramite id.
      *
      * @param id l'id
@@ -116,39 +156,8 @@ public class PazienteService {
     /**
      * Metodo che ripristina i pazienti.
      */
-    public void restorePazienti() {
+    public void restoreAllPazienti() {
         pazienteRepository.restore();
-    }
-
-    /**
-     * Metodo che cancella il paziente tramite id (soft delete).
-     *
-     * @param id l'id
-     */
-    public void deletePazienteById(Long id) {
-        try {
-            logger.info("Inizio processo deletePazienteById in Service");
-            if(!pazienteRepository.existsById(id)) throw new EntityNotFoundException("Paziente non trovato");
-                /*PazienteEntity paziente = pazienteRepository.findById(id).get();
-                paziente.setStatus(EntityStatusEnum.DELETED);
-                pazienteRepository.saveAndFlush(paziente);*/
-                pazienteRepository.softDeleteById(id);
-                //pazienteRepository.changeStatusById(EntityStatusEnum.DELETED, id);
-        } finally {
-            logger.info("Fine processo deletePazienteById in Service");
-        }
-    }
-
-    /**
-     * Metodo che cancella i pazienti (soft delete).
-     */
-    public void deletePazienti() {
-        try {
-            logger.info("Inizio processo deletePazienti in Service");
-            pazienteRepository.softDelete();
-        }finally {
-            logger.info("Fine processo deletePazienti in Service");
-        }
     }
 
 }

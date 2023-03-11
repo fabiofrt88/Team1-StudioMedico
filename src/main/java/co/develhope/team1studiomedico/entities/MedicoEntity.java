@@ -1,6 +1,6 @@
 package co.develhope.team1studiomedico.entities;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -10,18 +10,19 @@ import java.util.List;
 @Entity(name = "medico")
 @Table(name = "medico")
 @JsonPropertyOrder({"id", "nome", "cognome", "telefono",
-        "email", "prenotazioni", "pazienti", "status"})
-public class MedicoEntity extends PersonaEntity{
+        "email", "status"})
+@JsonIgnoreProperties({"prenotazioni", "pazienti", "hibernateLazyInitializer"})
+public class MedicoEntity extends PersonaEntity {
 
-    @OneToMany(mappedBy = "medico",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "medico", fetch = FetchType.LAZY)
     private List<PrenotazioneEntity> prenotazioni;
-    @OneToMany(mappedBy = "medico",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "medico", fetch = FetchType.LAZY)
     private List<PazienteEntity> pazienti;
 
     /**
      * Costruttore di default che istanzia un nuovo MedicoEntity.
      */
-    public MedicoEntity(){}
+    public MedicoEntity(){ }
 
     /**
      * Costruttore parametrico che istanzia un nuovo MedicoEntity.

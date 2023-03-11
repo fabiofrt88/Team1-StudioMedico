@@ -1,6 +1,7 @@
 package co.develhope.team1studiomedico.services;
 
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
+import co.develhope.team1studiomedico.entities.MedicoEntity;
 import co.develhope.team1studiomedico.entities.SegretarioEntity;
 import co.develhope.team1studiomedico.repositories.SegretarioRepository;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ public class SegretarioService {
     @Autowired
     private SegretarioRepository segretarioRepository;
 
-    Logger logger = LoggerFactory.getLogger(SegretarioService.class);
+    private static final Logger logger = LoggerFactory.getLogger(SegretarioService.class);
 
 
     /**
@@ -31,22 +32,31 @@ public class SegretarioService {
      */
     public SegretarioEntity createSegretario(SegretarioEntity segretario) {
         try {
-            logger.info("Inizio processo createSegretario in Service");
+            logger.info("Inizio processo createSegretario in SegretarioService");
             segretario.setId(null);
-            segretario.setStatus(EntityStatusEnum.ACTIVE);
+            segretario.setRecordStatus(EntityStatusEnum.ACTIVE);
             return segretarioRepository.saveAndFlush(segretario);
-        }finally {
-            logger.info("Fine processo createSegretario in Service");
+        } finally {
+            logger.info("Fine processo createSegretario in SegretarioService");
         }
     }
 
     /**
-     * Metodo che restituisce i segretari.
+     * Metodo che restituisce i segretari con record status ACTIVE.
      *
-     * @return i segretari
+     * @return i segretari con record status ACTIVE
      */
-    public List<SegretarioEntity> getSegretari() {
-        return segretarioRepository.findAll();
+    public List<SegretarioEntity> getAllSegretari() {
+        return segretarioRepository.findByRecordStatus(EntityStatusEnum.ACTIVE);
+    }
+
+    /**
+     * Metodo che restituisce i segretari cancellati logicamente con record status DELETED.
+     *
+     * @return i segretari cancellati logicamente con record status DELETED.
+     */
+    public List<SegretarioEntity> getAllDeletedSegretari() {
+        return segretarioRepository.findByRecordStatus(EntityStatusEnum.DELETED);
     }
 
     /**
@@ -92,11 +102,40 @@ public class SegretarioService {
     }
 
     /**
+     * Metodo che cancella il segretario tramite id (soft delete)
+     *
+     * @param id l'id
+     */
+    public void deleteSegretarioById(Long id) {
+        try {
+            logger.info("Inizio processo deleteSegretarioById in SegretarioService");
+            if(!segretarioRepository.existsById(id)) {
+                throw new EntityNotFoundException("Segretario non trovato");
+            }
+            segretarioRepository.softDeleteById(id);
+        } finally {
+            logger.info("Fine processo deleteSegretarioById in SegretarioService");
+        }
+    }
+
+    /**
+     * Metodo che cancella tutti i segretari (soft delete)
+     */
+    public void deleteAllSegretari() {
+        try {
+            logger.info("Inizio processo deleteAllSegretari in SegretarioService");
+            segretarioRepository.softDelete();
+        } finally {
+            logger.info("Fine processo deleteAllSegretari in SegretarioService");
+        }
+    }
+
+    /**
      * Metodo che ripristina il segretario tramite id.
      *
      * @param id l'id
      */
-    public void restoreSegretarioById(Long id){
+    public void restoreSegretarioById(Long id) {
         if(!segretarioRepository.existsById(id)) {
             throw new EntityNotFoundException("Segretario non trovato");
         }
@@ -106,37 +145,8 @@ public class SegretarioService {
     /**
      * Metodo che ripristina tutti i segretari.
      */
-    public void restoreAllSegretari(){
+    public void restoreAllSegretari() {
         segretarioRepository.restore();
-    }
-
-    /**
-     * Metodo che cancella il segretario tramite id (soft delete)
-     *
-     * @param id l'id
-     */
-    public void deleteSegretarioById(Long id) {
-        try {
-            logger.info("Inizio processo deleteSegretarioById in Service");
-            if(!segretarioRepository.existsById(id)) {
-                throw new EntityNotFoundException("Segretario non trovato");
-            }
-            segretarioRepository.softDeleteById(id);
-        } finally {
-            logger.info("Fine processo deleteSegretarioById in Service");
-        }
-    }
-
-    /**
-     * Metodo che cancella tutti i segretari (soft delete)
-     */
-    public void deleteSegretari() {
-        try {
-            logger.info("Inizio processo deleteSegretari in Service");
-            segretarioRepository.softDelete();
-        }finally {
-            logger.info("Fine processo deleteSegretari in Service");
-        }
     }
 
 }

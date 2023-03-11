@@ -1,7 +1,7 @@
 package co.develhope.team1studiomedico.entities;
 
 /**
- * L'enumerato EntityStatusEnum presenta gli stati che un record entità puà assumere
+ * L'enumerato EntityStatusEnum presenta gli stati che un record entità può assumere
  * e cambiare dalla creazione alla cancellazione logica, con eventuale ripristino
  */
 public enum EntityStatusEnum {
@@ -15,23 +15,23 @@ public enum EntityStatusEnum {
      */
     DELETED('D');
 
-    private final Character status;
+    private final Character recordStatus;
 
     /**
-     *  Costruttore EntityStatusEnum.
-     * @param status il parametro status.
+     * Costruttore EntityStatusEnum.
+     * @param recordStatus il parametro status.
      */
-    EntityStatusEnum(Character status) {
-        this.status = status;
+    EntityStatusEnum(Character recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
     /**
-     * Restituisce lo status.
+     * Metodo che restituisce lo status.
      *
      * @return lo status
      */
-    public Character getStatus() {
-        return status;
+    public Character getRecordStatus() {
+        return recordStatus;
     }
 
 }

@@ -1,6 +1,6 @@
 package co.develhope.team1studiomedico.entities;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -12,14 +12,15 @@ import java.util.List;
 @Entity(name = "paziente")
 @Table(name = "paziente")
 @JsonPropertyOrder({"id", "nome", "cognome", "telefono",
-        "email", "dataNascita", "codiceFiscale", "prenotazioni", "medico", "status"})
-public class PazienteEntity extends PersonaEntity{
+        "email", "dataNascita", "codiceFiscale", "medico", "status"})
+@JsonIgnoreProperties({"prenotazioni", "hibernateLazyInitializer"})
+public class PazienteEntity extends PersonaEntity {
 
     @Column(nullable = false, name = "data_nascita")
     private LocalDate dataNascita;
     @Column(nullable = false, unique = true, name = "codice_fiscale")
     private String codiceFiscale;
-    @OneToMany(mappedBy = "paziente",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "paziente", fetch = FetchType.LAZY)
     private List<PrenotazioneEntity> prenotazioni;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
@@ -28,7 +29,7 @@ public class PazienteEntity extends PersonaEntity{
     /**
      * Costruttore di default che istanzia un nuovo PazienteEntity.
      */
-    public PazienteEntity(){}
+    public PazienteEntity(){ }
 
     /**
      * Costruttore parametrico che istanzia una nuova entità Paziente.

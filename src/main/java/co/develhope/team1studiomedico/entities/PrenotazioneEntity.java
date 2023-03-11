@@ -1,16 +1,21 @@
 package co.develhope.team1studiomedico.entities;
 
 import co.develhope.team1studiomedico.entities.auditing.Auditable;
+import co.develhope.team1studiomedico.entities.utils.EntityStatusEnumConverter;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
  * La classe PrenotazioneEntity rappresenta il modello dei dati della Prenotazione
  */
-@Entity
+@Entity(name = "prenotazione")
 @Table(name = "prenotazione")
+@JsonPropertyOrder({"id", "bookedAt", "dataPrenotazione", "oraPrenotazione",
+        "paziente", "medico", "statoPrenotazione", "recordStatus"})
 public class PrenotazioneEntity extends Auditable<String> {
 
     @Id
@@ -18,7 +23,7 @@ public class PrenotazioneEntity extends Auditable<String> {
     @Column(nullable = false, name = "id")
     private Long id;
     @Column(nullable = false, name = "booked_at")
-    private String bookedAt;
+    private final LocalDateTime bookedAt;
     @Column(nullable = false, name = "data_prenotazione")
     private LocalDate dataPrenotazione;
     @Column(nullable = false, name = "ora_prenotazione")
@@ -29,29 +34,38 @@ public class PrenotazioneEntity extends Auditable<String> {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medico_id")
     private MedicoEntity medico;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "stato_prenotazione")
+    private PrenotazioneStatusEnum statoPrenotazione;
+    @Convert(converter = EntityStatusEnumConverter.class)
+    @Column(nullable = false, name = "record_status")
+    private EntityStatusEnum recordStatus; //Character
 
     /**
      * Costruttore di default che istanzia una nuova PrenotazioneEntity.
      */
-    public PrenotazioneEntity(){}
+    public PrenotazioneEntity(){
+        this.bookedAt = LocalDateTime.now();
+    }
 
     /**
      * Costruttore parametrico che istanzia una nuova PrenotazioneEntity.
      *
      * @param id               the id
-     * @param bookedAt         the booked at
      * @param dataPrenotazione the data prenotazione
      * @param oraPrenotazione  the ora prenotazione
      * @param paziente         the paziente
      * @param medico           the medico
      */
-    public PrenotazioneEntity(Long id, String bookedAt, LocalDate dataPrenotazione, LocalTime oraPrenotazione, PazienteEntity paziente, MedicoEntity medico) {
+    public PrenotazioneEntity(Long id, LocalDate dataPrenotazione, LocalTime oraPrenotazione, PazienteEntity paziente, MedicoEntity medico, PrenotazioneStatusEnum statoPrenotazione) {
         this.id = id;
-        this.bookedAt = bookedAt;
+        this.bookedAt = LocalDateTime.now();
         this.dataPrenotazione = dataPrenotazione;
         this.oraPrenotazione = oraPrenotazione;
         this.paziente = paziente;
         this.medico = medico;
+        this.statoPrenotazione = statoPrenotazione;
+        this.recordStatus = EntityStatusEnum.ACTIVE;
     }
 
     /**
@@ -77,17 +91,8 @@ public class PrenotazioneEntity extends Auditable<String> {
      *
      * @return il booked at
      */
-    public String getBookedAt() {
+    public LocalDateTime getBookedAt() {
         return bookedAt;
-    }
-
-    /**
-     * Metodo che setta il booked at.
-     *
-     * @param bookedAt il booked at
-     */
-    public void setBookedAt(String bookedAt) {
-        this.bookedAt = bookedAt;
     }
 
     /**
@@ -160,6 +165,42 @@ public class PrenotazioneEntity extends Auditable<String> {
      */
     public void setMedico(MedicoEntity medico) {
         this.medico = medico;
+    }
+
+    /**
+     * Metodo che restituisce lo stato della prenotazione.
+     *
+     * @return lo stato della prenotazione
+     */
+    public PrenotazioneStatusEnum getStatoPrenotazione() {
+        return statoPrenotazione;
+    }
+
+    /**
+     * Metodo che setta lo stato dela prenotazione.
+     *
+     * @param statoPrenotazione lo stato della prenotazione
+     */
+    public void setStatoPrenotazione(PrenotazioneStatusEnum statoPrenotazione) {
+        this.statoPrenotazione = statoPrenotazione;
+    }
+
+    /**
+     * Metodo che restituisce lo status.
+     *
+     * @return lo status
+     */
+    public EntityStatusEnum getRecordStatus() {
+        return recordStatus;
+    }
+
+    /**
+     * Metodo che setta lo status.
+     *
+     * @param recordStatus lo status
+     */
+    public void setRecordStatus(EntityStatusEnum recordStatus) {
+        this.recordStatus = recordStatus;
     }
 
 }
