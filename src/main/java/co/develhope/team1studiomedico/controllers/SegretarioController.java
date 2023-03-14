@@ -1,6 +1,5 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.entities.MedicoEntity;
 import co.develhope.team1studiomedico.entities.SegretarioEntity;
 import co.develhope.team1studiomedico.services.PazienteService;
 import co.develhope.team1studiomedico.services.SegretarioService;
@@ -37,10 +36,7 @@ public class SegretarioController {
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<String> createSegretario(@RequestBody SegretarioEntity segretario){
-        if(segretario == null) {
-            throw new IllegalArgumentException("Bad Request - Error request body");
-        }
+    public ResponseEntity<String> createSegretario(@RequestBody SegretarioEntity segretario) {
         segretarioService.createSegretario(segretario);
         logger.info("Un nuovo segretario è stato registrato");
         return ResponseEntity.status(HttpStatus.CREATED).body("Segretario creato correttamente");
@@ -52,7 +48,7 @@ public class SegretarioController {
      * @return la lista dei segretari con record status ACTIVE
      */
     @GetMapping({"", "/"})
-    public List<SegretarioEntity> getAllSegretari(){
+    public List<SegretarioEntity> getAllSegretari() {
         return segretarioService.getAllSegretari();
     }
 
@@ -62,7 +58,7 @@ public class SegretarioController {
      * @return la lista dei segretari cancellati logicamente con record status DELETED.
      */
     @GetMapping("/deleted")
-    public List<SegretarioEntity> getAllDeletedSegretari(){
+    public List<SegretarioEntity> getAllDeletedSegretari() {
         return segretarioService.getAllDeletedSegretari();
     }
 
@@ -74,9 +70,6 @@ public class SegretarioController {
      */
     @GetMapping("/{id}")
     public SegretarioEntity getSegretarioById(@PathVariable Long id) {
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
         return segretarioService.getSegretarioById(id);
     }
 
@@ -89,9 +82,6 @@ public class SegretarioController {
      */
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateSegretarioById(@RequestBody SegretarioEntity segretarioEdit, @PathVariable Long id) {
-        if(segretarioEdit == null || id == null) {
-            throw new IllegalArgumentException("Bad Request - Error request body");
-        }
         segretarioService.updateSegretarioById(segretarioEdit, id);
         return ResponseEntity.status(200).body("Segretario modificato correttamente");
     }
@@ -104,9 +94,6 @@ public class SegretarioController {
      */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteSegretarioById(@PathVariable Long id) {
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
         segretarioService.deleteSegretarioById(id);
         logger.info("Un segretario è stato cancellato");
         return ResponseEntity.status(200).body("Segretario cancellato correttamente");
@@ -131,10 +118,7 @@ public class SegretarioController {
      * @return la response entity
      */
     @PutMapping("/restore/{id}")
-    public ResponseEntity<String> restoreSegretarioById(@PathVariable Long id){
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
+    public ResponseEntity<String> restoreSegretarioById(@PathVariable Long id) {
         segretarioService.restoreSegretarioById(id);
         return ResponseEntity.status(200).body("Segretario ripristinato correttamente");
     }
@@ -145,7 +129,7 @@ public class SegretarioController {
      * @return la response entity
      */
     @PutMapping("/restore/all")
-    public ResponseEntity<String> restoreAllSegretari(){
+    public ResponseEntity<String> restoreAllSegretari() {
         segretarioService.restoreAllSegretari();
         return ResponseEntity.status(200).body("Segretari ripristinati correttamente");
     }
@@ -172,7 +156,6 @@ public class SegretarioController {
      */
     @DeleteMapping("/paziente/delete/{id}")
     public ResponseEntity<String> deletePazienteById(@PathVariable Long id) {
-        if(id == null) throw new IllegalArgumentException("Bad Request - Error id request param");
         pazienteService.deletePazienteById(id);
         logger.info("Un paziente è stato cancellato");
         return ResponseEntity.status(200).body("Paziente cancellato correttamente");
@@ -186,7 +169,6 @@ public class SegretarioController {
      */
     @PutMapping("/paziente/restore/{id}")
     public ResponseEntity<String> restorePazienteById(@PathVariable Long id) {
-        if(id == null) throw new IllegalArgumentException("Bad Request - Error id request param");
         pazienteService.restorePazienteById(id);
         return ResponseEntity.status(200).body("Paziente ripristinato correttamente");
     }

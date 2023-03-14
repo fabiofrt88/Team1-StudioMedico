@@ -3,8 +3,6 @@ package co.develhope.team1studiomedico.controllers;
 import co.develhope.team1studiomedico.entities.PrenotazioneEntity;
 import co.develhope.team1studiomedico.entities.PrenotazioneStatusEnum;
 import co.develhope.team1studiomedico.services.PrenotazioneService;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +33,7 @@ public class PrenotazioneController {
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<String> createPrenotazione(@RequestBody PrenotazioneEntity prenotazione){
-        if(prenotazione == null) {
-            throw new IllegalArgumentException("Bad Request - Error request body");
-        }
-        /*if(!prenotazioneService.countPrenotazioniByDay(prenotazione.getDataPrenotazione())) {
-            throw new IllegalArgumentException("Data non disponibile");
-        }*/
+    public ResponseEntity<String> createPrenotazione(@RequestBody PrenotazioneEntity prenotazione) {
         prenotazione.setStatoPrenotazione(PrenotazioneStatusEnum.PENDING);
         prenotazioneService.createPrenotazione(prenotazione);
         logger.info("Una nuova prenotazione è stata registrata");
@@ -54,7 +46,7 @@ public class PrenotazioneController {
      * @return la lista delle prenotazioni con record status ACTIVE.
      */
     @GetMapping({"", "/"})
-    public List<PrenotazioneEntity> getAllPrenotazioni(){
+    public List<PrenotazioneEntity> getAllPrenotazioni() {
         return prenotazioneService.getAllPrenotazioni();
     }
 
@@ -64,7 +56,7 @@ public class PrenotazioneController {
      * @return la lista delle prenotazioni cancellate logicamente con record status DELETED.
      */
     @GetMapping("/deleted")
-    public List<PrenotazioneEntity> getAllDeletedPrenotazioni(){
+    public List<PrenotazioneEntity> getAllDeletedPrenotazioni() {
         return prenotazioneService.getAllDeletedPrenotazioni();
     }
 
@@ -76,9 +68,6 @@ public class PrenotazioneController {
      */
     @GetMapping("/{id}")
     public PrenotazioneEntity getPrenotazioneById(@PathVariable Long id) {
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
         return prenotazioneService.getPrenotazioneById(id);
     }
 
@@ -91,9 +80,6 @@ public class PrenotazioneController {
      */
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updatePrenotazioneById(@RequestBody PrenotazioneEntity prenotazioneEdit, @PathVariable Long id) {
-        if(prenotazioneEdit == null || id == null) {
-            throw new IllegalArgumentException("Bad Request - Error request body");
-        }
         prenotazioneService.updatePrenotazioneById(prenotazioneEdit, id);
         return ResponseEntity.status(200).body("Prenotazione modificata correttamente");
     }
@@ -118,9 +104,6 @@ public class PrenotazioneController {
      */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletePrenotazioneById(@PathVariable Long id) {
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
         prenotazioneService.deletePrenotazioneById(id);
         logger.info("Una prenotazione è stata cancellata");
         return ResponseEntity.status(200).body("Prenotazione cancellata correttamente");
@@ -134,9 +117,6 @@ public class PrenotazioneController {
      */
     @PutMapping("/restore/{id}")
     public ResponseEntity<String> restorePrenotazioneById(@PathVariable Long id){
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
         prenotazioneService.restorePrenotazioneById(id);
         return ResponseEntity.status(200).body("Prenotazione ripristinata correttamente");
     }
@@ -147,7 +127,7 @@ public class PrenotazioneController {
      * @return la response entity di status 200.
      */
     @PutMapping("/restore/all")
-    public ResponseEntity<String> restoreAllPrenotazioni(){
+    public ResponseEntity<String> restoreAllPrenotazioni() {
         prenotazioneService.restoreAllPrenotazioni();
         return ResponseEntity.status(200).body("Prenotazioni ripristinate correttamente");
     }
