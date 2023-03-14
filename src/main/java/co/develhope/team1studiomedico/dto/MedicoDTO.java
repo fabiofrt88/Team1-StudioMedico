@@ -1,4 +1,4 @@
-package co.develhope.team1studiomedico.DTO;
+package co.develhope.team1studiomedico.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
