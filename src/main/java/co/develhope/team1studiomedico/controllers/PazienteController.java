@@ -32,10 +32,7 @@ public class PazienteController {
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<String> createPaziente(@RequestBody PazienteEntity paziente){
-        if(paziente == null) {
-            throw new IllegalArgumentException("Bad Request - Error request body");
-        }
+    public ResponseEntity<String> createPaziente(@RequestBody PazienteEntity paziente) {
         pazienteService.createPaziente(paziente);
         logger.info("Un nuovo paziente è stato registrato");
         return ResponseEntity.status(HttpStatus.CREATED).body("Paziente creato correttamente");
@@ -47,7 +44,7 @@ public class PazienteController {
      * @return la lista dei pazienti con record status ACTIVE
      */
     @GetMapping({"", "/"})
-    public List<PazienteEntity> getAllPazienti(){
+    public List<PazienteEntity> getAllPazienti() {
         return pazienteService.getAllPazienti();
     }
 
@@ -57,7 +54,7 @@ public class PazienteController {
      * @return la lista dei pazienti cancellati logicamente con record status DELETED.
      */
     @GetMapping("/deleted")
-    public List<PazienteEntity> getAllDeletedPazienti(){
+    public List<PazienteEntity> getAllDeletedPazienti() {
         return pazienteService.getAllDeletedPazienti();
     }
 
@@ -74,9 +71,6 @@ public class PazienteController {
             return paziente.get();
         }
         return new Paziente();*/
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
         return pazienteService.getPazienteById(id);
     }
 
@@ -89,9 +83,6 @@ public class PazienteController {
      */
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updatePazienteById(@RequestBody PazienteEntity pazienteEdit, @PathVariable Long id) {
-        if(pazienteEdit == null || id == null) {
-            throw new IllegalArgumentException("Bad Request - Error request body");
-        }
         pazienteService.updatePazienteById(pazienteEdit, id);
         return ResponseEntity.status(200).body("Paziente modificato correttamente");
     }

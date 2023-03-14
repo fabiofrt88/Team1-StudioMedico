@@ -32,10 +32,7 @@ public class MedicoController {
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<String> createMedico(@RequestBody MedicoEntity medico){
-        if(medico == null) {
-            throw new IllegalArgumentException("Bad Request - Error request body");
-        }
+    public ResponseEntity<String> createMedico(@RequestBody MedicoEntity medico) {
         medicoService.createMedico(medico);
         logger.info("Un nuovo medico è stato registrato");
         return ResponseEntity.status(HttpStatus.CREATED).body("Medico creato correttamente");
@@ -47,7 +44,7 @@ public class MedicoController {
      * @return la lista dei medici con record status ACTIVE
      */
     @GetMapping({"", "/"})
-    public List<MedicoEntity> getAllMedici(){
+    public List<MedicoEntity> getAllMedici() {
         return medicoService.getAllMedici();
     }
 
@@ -57,7 +54,7 @@ public class MedicoController {
      * @return la lista dei medici cancellati logicamente con record status DELETED.
      */
     @GetMapping("/deleted")
-    public List<MedicoEntity> getAllDeletedMedici(){
+    public List<MedicoEntity> getAllDeletedMedici() {
         return medicoService.getAllDeletedMedici();
     }
 
@@ -69,9 +66,6 @@ public class MedicoController {
      */
     @GetMapping("/{id}")
     public MedicoEntity getMedicoById(@PathVariable Long id) {
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
         return medicoService.getMedicoById(id);
     }
 
@@ -84,9 +78,6 @@ public class MedicoController {
      */
     @PutMapping("/edit/{id}")
     public ResponseEntity<String> updateMedicoById(@RequestBody MedicoEntity medicoEdit, @PathVariable Long id) {
-        if(medicoEdit == null || id == null) {
-            throw new IllegalArgumentException("Bad Request - Error request body");
-        }
         medicoService.updateMedicoById(medicoEdit, id);
         return ResponseEntity.status(200).body("Medico modificato correttamente");
     }
@@ -111,9 +102,6 @@ public class MedicoController {
      */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteMedicoById(@PathVariable Long id) {
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
         medicoService.deleteMedicoById(id);
         logger.info("Un medico è stato cancellato");
         return ResponseEntity.status(200).body("Medico cancellato correttamente");
@@ -126,10 +114,7 @@ public class MedicoController {
      * @return la response entity di status 200.
      */
     @PutMapping("/restore/{id}")
-    public ResponseEntity<String> restoreMedicoById(@PathVariable Long id){
-        if(id == null) {
-            throw new IllegalArgumentException("Bad Request - Error id request param");
-        }
+    public ResponseEntity<String> restoreMedicoById(@PathVariable Long id) {
         medicoService.restoreMedicoById(id);
         return ResponseEntity.status(200).body("Medico ripristinato correttamente");
     }
@@ -140,7 +125,7 @@ public class MedicoController {
      * @return la response entity di status 200.
      */
     @PutMapping("/restore/all")
-    public ResponseEntity<String> restoreAllMedici(){
+    public ResponseEntity<String> restoreAllMedici() {
         medicoService.restoreAllMedici();
         return ResponseEntity.status(200).body("Medici ripristinati correttamente");
     }

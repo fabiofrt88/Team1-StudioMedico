@@ -2,7 +2,6 @@ package co.develhope.team1studiomedico.services;
 
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.MedicoEntity;
-import co.develhope.team1studiomedico.entities.PersonaEntity;
 import co.develhope.team1studiomedico.repositories.MedicoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * La classe MedicoService realizza la logica di business relativamente le operazioni di CRUD dei dati di MedicoEntity.
@@ -66,10 +66,12 @@ public class MedicoService {
      * @return il medico tramite id
      */
     public MedicoEntity getMedicoById(Long id) {
-        if(!medicoRepository.existsById(id)) {
+        /*if(!medicoRepository.existsById(id)) {
             throw new EntityNotFoundException("Medico non trovato");
         }
-        return medicoRepository.findById(id).get();
+        return medicoRepository.findById(id).get();*/
+        return medicoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Medico con id " + id + " non trovato"));
     }
 
     /**
