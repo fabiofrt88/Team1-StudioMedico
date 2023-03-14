@@ -21,7 +21,11 @@ public class MedicoDTO {
     public MedicoDTO(){ }
 
 
-
+    /**
+     * Costruttore di default che istanzia un nuovo MedicoDTO.
+     * @param prenotazioniId gli id delle prenotazioni
+     * @param pazientiId gli id dei pazienti
+     */
     public MedicoDTO(List<Long> prenotazioniId, List<Long> pazientiId) {
         this.prenotazioniId = prenotazioniId;
         this.pazientiId = pazientiId;
