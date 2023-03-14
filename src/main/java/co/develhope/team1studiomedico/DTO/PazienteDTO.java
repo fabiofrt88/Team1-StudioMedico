@@ -53,4 +53,166 @@ public class PazienteDTO {
         this.recordStatus = recordStatus;
         this.medicoId = medicoId;
     }
+
+    /**
+     * Metodo che restituisce l'id.
+     *
+     * @return l' id
+     */
+    public Long getId() {
+        return id;
+    }
+
+    /**
+     * Metodo che setta l'id.
+     *
+     * @param id l' id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * Metodo che restituisce il nome.
+     *
+     * @return il nome
+     */
+    public String getNome() {
+        return nome;
+    }
+
+    /**
+     * Metodo che setta il nome.
+     *
+     * @param nome il nome
+     */
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    /**
+     * Metodo che restituisce il cognome.
+     *
+     * @return il cognome
+     */
+    public String getCognome() {
+        return cognome;
+    }
+
+    /**
+     * Metodo che setta il cognome.
+     *
+     * @param cognome il cognome
+     */
+    public void setCognome(String cognome) {
+        this.cognome = cognome;
+    }
+
+    /**
+     * Metodo che restituisce il numero di telefono.
+     *
+     * @return the telefono
+     */
+    public String getTelefono() {
+        return telefono;
+    }
+
+    /**
+     * Metodo che setta il numero di telefono.
+     *
+     * @param telefono il telefono
+     */
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    /**
+     * Metodo che restituisce l'email.
+     *
+     * @return l' email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Metodo che setta l'email.
+     *
+     * @param email l' email
+     */
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    /**
+     * Metodo che restituisce lo status.
+     *
+     * @return lo status
+     */
+    public EntityStatusEnum getRecordStatus() {
+        return recordStatus;
+    }
+
+    /**
+     * Metodo che setta lo status.
+     *
+     * @param recordStatus lo status
+     */
+    public void setRecordStatus(EntityStatusEnum recordStatus) {
+        this.recordStatus = recordStatus;
+    }
+
+    /**
+     * Metodo che restituisce la data nascita.
+     *
+     * @return la data nascita
+     */
+    public LocalDate getDataNascita() {
+        return dataNascita;
+    }
+
+    /**
+     * Metodo che setta la data nascita.
+     *
+     * @param dataNascita la data nascita
+     */
+    public void setDataNascita(LocalDate dataNascita) {
+        this.dataNascita = dataNascita;
+    }
+
+    /**
+     * Metodo che restituisce il codice fiscale.
+     *
+     * @return il codice fiscale
+     */
+    public String getCodiceFiscale() {
+        return codiceFiscale;
+    }
+
+    /**
+     * Metodo che setta il codice fiscale.
+     *
+     * @param codiceFiscale il codice fiscale
+     */
+    public void setCodiceFiscale(String codiceFiscale) {
+        this.codiceFiscale = codiceFiscale;
+    }
+
+    /**
+     * Metodo che restituisce l'id del medico.
+     *
+     * @return medicoId il medico id
+     */
+    public Long getMedicoId() {
+        return medicoId;
+    }
+
+    /**
+     * Metodo che setta l'id del medico.
+     *
+     * @param medicoId il medico id
+     */
+    public void setMedicoId(Long medicoId) {
+        this.medicoId = medicoId;
+    }
 }
