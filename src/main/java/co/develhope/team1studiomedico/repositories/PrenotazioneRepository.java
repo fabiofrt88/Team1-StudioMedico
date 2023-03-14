@@ -76,7 +76,7 @@ public interface PrenotazioneRepository extends JpaRepository<PrenotazioneEntity
     @Query(value = "UPDATE prenotazione p SET p.recordStatus = :recordStatus WHERE p.id = :id")
     void changeStatusById(@Param("recordStatus") EntityStatusEnum recordStatus, @Param("id") Long id);
 
-    /*@Query(value = "SELECT COUNT(*) prenotazione p WHERE p.data_prenotazione = :data_prenotazione")
-    Integer countPrenotazioniByDate(@Param("data_prenotazione") LocalDate dataPrenotazione);*/
+    /*@Query(value = "SELECT COUNT(*) prenotazione p WHERE p.dataPrenotazione = :dataPrenotazione")
+    Integer countPrenotazioniByDate(@Param("dataPrenotazione") LocalDate dataPrenotazione);*/
 
 }
