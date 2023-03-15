@@ -1,13 +1,18 @@
 package co.develhope.team1studiomedico.dto;
 
+/**
+ * La classe MedicoCreateDTO rappresenta il DTO (Data Transfer Object) di creazione di MedicoEntity,
+ * consente di creare degli oggetti di trasferimento dati in entrata a partire dai quali sarà possibile
+ * creare un nuovo medico nel database
+ */
 public class MedicoCreateDTO {
+
     private final String id;
     private final String nome;
     private final String cognome;
-    private final String email;
     private final String telefono;
+    private final String email;
     private final String password;
-
 
     /**
      * Costruttore parametrico che istanzia una nuova entità Paziente.
@@ -19,12 +24,12 @@ public class MedicoCreateDTO {
      * @param email          email
      * @param password       password
      */
-    public MedicoCreateDTO(String id, String nome, String cognome, String email, String telefono, String password) {
+    public MedicoCreateDTO(String id, String nome, String cognome, String telefono, String email, String password) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
-        this.email = email;
         this.telefono = telefono;
+        this.email = email;
         this.password = password;
     }
 
@@ -56,21 +61,21 @@ public class MedicoCreateDTO {
     }
 
     /**
-     * Metodo che restituisce l'email del medico.
-     *
-     * @return l'email.
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
      * Metodo che restituisce il telefono del medico.
      *
      * @return telefono.
      */
     public String getTelefono() {
         return telefono;
+    }
+
+    /**
+     * Metodo che restituisce l'email del medico.
+     *
+     * @return l'email.
+     */
+    public String getEmail() {
+        return email;
     }
 
     /**
@@ -81,4 +86,5 @@ public class MedicoCreateDTO {
     public String getPassword() {
         return password;
     }
+
 }

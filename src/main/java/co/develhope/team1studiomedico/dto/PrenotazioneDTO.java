@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 /**
- * La classe PrenotazioneCreateDTO rappresenta il DTO (Data Transfer Object) di update e lettura di PrenotazioneEntity,
+ * La classe PrenotazioneDTO rappresenta il DTO (Data Transfer Object) di update e lettura di PrenotazioneEntity,
  * consente di creare degli oggetti di trasferimento dati in entrata (update) e uscita (lettura) mediante i quali sarà possibile
  * rispettivamente modificare una prenotazione e restituire una selezione dei dati di una prenotazione nel payload delle response
  */

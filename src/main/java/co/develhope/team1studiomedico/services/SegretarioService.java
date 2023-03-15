@@ -1,15 +1,18 @@
 package co.develhope.team1studiomedico.services;
 
+import co.develhope.team1studiomedico.dto.SegretarioCreateDTO;
+import co.develhope.team1studiomedico.dto.SegretarioDTO;
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
-import co.develhope.team1studiomedico.entities.MedicoEntity;
 import co.develhope.team1studiomedico.entities.SegretarioEntity;
 import co.develhope.team1studiomedico.repositories.SegretarioRepository;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * La classe SegretarioService realizza la logica di business relativamente le operazioni di CRUD dei dati di SegretarioEntity.
@@ -22,20 +25,23 @@ public class SegretarioService {
     @Autowired
     private SegretarioRepository segretarioRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(SegretarioService.class);
+    @Autowired
+    private ModelMapper modelMapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(SegretarioService.class);
 
     /**
      * Metodo che crea il segretario.
      *
-     * @param segretario il segretario
+     * @param segretarioCreateDTO il DTO di creazione del segretario
      */
-    public SegretarioEntity createSegretario(SegretarioEntity segretario) {
+    public SegretarioDTO createSegretario(SegretarioCreateDTO segretarioCreateDTO) {
         try {
             logger.info("Inizio processo createSegretario in SegretarioService");
+            SegretarioEntity segretario = convertToEntity(segretarioCreateDTO);
             segretario.setId(null);
             segretario.setRecordStatus(EntityStatusEnum.ACTIVE);
-            return segretarioRepository.saveAndFlush(segretario);
+            return convertToDTO(segretarioRepository.saveAndFlush(segretario));
         } finally {
             logger.info("Fine processo createSegretario in SegretarioService");
         }
@@ -46,8 +52,11 @@ public class SegretarioService {
      *
      * @return i segretari con record status ACTIVE
      */
-    public List<SegretarioEntity> getAllSegretari() {
-        return segretarioRepository.findByRecordStatus(EntityStatusEnum.ACTIVE);
+    public List<SegretarioDTO> getAllSegretari() {
+        return segretarioRepository.findByRecordStatus(EntityStatusEnum.ACTIVE)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -55,8 +64,11 @@ public class SegretarioService {
      *
      * @return i segretari cancellati logicamente con record status DELETED.
      */
-    public List<SegretarioEntity> getAllDeletedSegretari() {
-        return segretarioRepository.findByRecordStatus(EntityStatusEnum.DELETED);
+    public List<SegretarioDTO> getAllDeletedSegretari() {
+        return segretarioRepository.findByRecordStatus(EntityStatusEnum.DELETED)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -65,11 +77,10 @@ public class SegretarioService {
      * @param id l' id
      * @return il segretario tramite id
      */
-    public SegretarioEntity getSegretarioById(Long id) {
-        if(!segretarioRepository.existsById(id)) {
-            throw new EntityNotFoundException("Segretario non trovato");
-        }
-        return segretarioRepository.findById(id).get();
+    public SegretarioDTO getSegretarioById(Long id) {
+        SegretarioEntity segretario = segretarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+        return convertToDTO(segretario);
     }
 
     /**
@@ -78,12 +89,9 @@ public class SegretarioService {
      * @param segretarioEdit il segretario edit
      * @param id             l'id
      */
-    public SegretarioEntity updateSegretarioById(SegretarioEntity segretarioEdit, Long id) {
-        if(!segretarioRepository.existsById(id)) {
-            throw new EntityNotFoundException("Segretario non trovato");
-        }
-
-        SegretarioEntity segretario = segretarioRepository.findById(id).get();
+    public SegretarioDTO updateSegretarioById(SegretarioDTO segretarioEdit, Long id) {
+        SegretarioEntity segretario = segretarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
 
         if(segretarioEdit.getNome() != null) {
             segretario.setNome(segretarioEdit.getNome());
@@ -98,7 +106,7 @@ public class SegretarioService {
             segretario.setEmail(segretarioEdit.getEmail());
         }
 
-        return segretarioRepository.saveAndFlush(segretario);
+        return convertToDTO(segretarioRepository.saveAndFlush(segretario));
     }
 
     /**
@@ -147,6 +155,18 @@ public class SegretarioService {
      */
     public void restoreAllSegretari() {
         segretarioRepository.restore();
+    }
+
+    public SegretarioEntity convertToEntity(SegretarioCreateDTO segretarioCreateDTO) {
+        return modelMapper.map(segretarioCreateDTO, SegretarioEntity.class);
+    }
+
+    public SegretarioEntity convertToEntity(SegretarioDTO segretarioDTO) {
+        return modelMapper.map(segretarioDTO, SegretarioEntity.class);
+    }
+
+    public SegretarioDTO convertToDTO(SegretarioEntity segretario) {
+        return modelMapper.map(segretario, SegretarioDTO.class);
     }
 
 }

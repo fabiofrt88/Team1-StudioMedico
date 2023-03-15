@@ -1,6 +1,7 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.entities.MedicoEntity;
+import co.develhope.team1studiomedico.dto.MedicoCreateDTO;
+import co.develhope.team1studiomedico.dto.MedicoDTO;
 import co.develhope.team1studiomedico.services.MedicoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +29,11 @@ public class MedicoController {
     /**
      * Crea un medico, restituisce una response entity di status 201.
      *
-     * @param medico il medico
+     * @param medico il DTO di creazione del medico
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<String> createMedico(@RequestBody MedicoEntity medico) {
+    public ResponseEntity<String> createMedico(@RequestBody MedicoCreateDTO medico) {
         medicoService.createMedico(medico);
         logger.info("Un nuovo medico è stato registrato");
         return ResponseEntity.status(HttpStatus.CREATED).body("Medico creato correttamente");
@@ -44,7 +45,7 @@ public class MedicoController {
      * @return la lista dei medici con record status ACTIVE
      */
     @GetMapping({"", "/"})
-    public List<MedicoEntity> getAllMedici() {
+    public List<MedicoDTO> getAllMedici() {
         return medicoService.getAllMedici();
     }
 
@@ -54,7 +55,7 @@ public class MedicoController {
      * @return la lista dei medici cancellati logicamente con record status DELETED.
      */
     @GetMapping("/deleted")
-    public List<MedicoEntity> getAllDeletedMedici() {
+    public List<MedicoDTO> getAllDeletedMedici() {
         return medicoService.getAllDeletedMedici();
     }
 
@@ -65,7 +66,7 @@ public class MedicoController {
      * @return il medico tramite id
      */
     @GetMapping("/{id}")
-    public MedicoEntity getMedicoById(@PathVariable Long id) {
+    public MedicoDTO getMedicoById(@PathVariable Long id) {
         return medicoService.getMedicoById(id);
     }
 
@@ -77,7 +78,7 @@ public class MedicoController {
      * @return la response entity di status 200.
      */
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updateMedicoById(@RequestBody MedicoEntity medicoEdit, @PathVariable Long id) {
+    public ResponseEntity<String> updateMedicoById(@RequestBody MedicoDTO medicoEdit, @PathVariable Long id) {
         medicoService.updateMedicoById(medicoEdit, id);
         return ResponseEntity.status(200).body("Medico modificato correttamente");
     }

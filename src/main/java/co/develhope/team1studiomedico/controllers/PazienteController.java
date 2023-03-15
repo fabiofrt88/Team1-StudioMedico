@@ -1,6 +1,7 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.entities.PazienteEntity;
+import co.develhope.team1studiomedico.dto.PazienteCreateDTO;
+import co.develhope.team1studiomedico.dto.PazienteDTO;
 import co.develhope.team1studiomedico.services.PazienteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +29,11 @@ public class PazienteController {
     /**
      * Crea un paziente, restituisce una response entity di status 201.
      *
-     * @param paziente il paziente
+     * @param paziente il DTO di creazione del paziente
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<String> createPaziente(@RequestBody PazienteEntity paziente) {
+    public ResponseEntity<String> createPaziente(@RequestBody PazienteCreateDTO paziente) {
         pazienteService.createPaziente(paziente);
         logger.info("Un nuovo paziente è stato registrato");
         return ResponseEntity.status(HttpStatus.CREATED).body("Paziente creato correttamente");
@@ -44,7 +45,7 @@ public class PazienteController {
      * @return la lista dei pazienti con record status ACTIVE
      */
     @GetMapping({"", "/"})
-    public List<PazienteEntity> getAllPazienti() {
+    public List<PazienteDTO> getAllPazienti() {
         return pazienteService.getAllPazienti();
     }
 
@@ -54,7 +55,7 @@ public class PazienteController {
      * @return la lista dei pazienti cancellati logicamente con record status DELETED.
      */
     @GetMapping("/deleted")
-    public List<PazienteEntity> getAllDeletedPazienti() {
+    public List<PazienteDTO> getAllDeletedPazienti() {
         return pazienteService.getAllDeletedPazienti();
     }
 
@@ -65,12 +66,7 @@ public class PazienteController {
      * @return il paziente tramite id
      */
     @GetMapping("/{id}")
-    public PazienteEntity getPazienteById(@PathVariable Long id) {
-        /*Optional<Paziente> paziente = pazienteService.getPazienteById(id);
-        if(paziente.isPresent()) {
-            return paziente.get();
-        }
-        return new Paziente();*/
+    public PazienteDTO getPazienteById(@PathVariable Long id) {
         return pazienteService.getPazienteById(id);
     }
 
@@ -82,7 +78,7 @@ public class PazienteController {
      * @return la response entity di status 200
      */
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updatePazienteById(@RequestBody PazienteEntity pazienteEdit, @PathVariable Long id) {
+    public ResponseEntity<String> updatePazienteById(@RequestBody PazienteDTO pazienteEdit, @PathVariable Long id) {
         pazienteService.updatePazienteById(pazienteEdit, id);
         return ResponseEntity.status(200).body("Paziente modificato correttamente");
     }

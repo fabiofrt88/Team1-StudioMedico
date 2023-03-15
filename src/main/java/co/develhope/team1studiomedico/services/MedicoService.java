@@ -1,8 +1,11 @@
 package co.develhope.team1studiomedico.services;
 
+import co.develhope.team1studiomedico.dto.MedicoCreateDTO;
+import co.develhope.team1studiomedico.dto.MedicoDTO;
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.MedicoEntity;
 import co.develhope.team1studiomedico.repositories.MedicoRepository;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityNotFoundException;
@@ -23,19 +26,23 @@ public class MedicoService {
     @Autowired
     private MedicoRepository medicoRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     private static final Logger logger = LoggerFactory.getLogger(MedicoService.class);
 
     /**
      * Metodo che crea il medico.
      *
-     * @param medico il medico
+     * @param medicoCreateDTO il DTO di creazione del medico
      */
-    public MedicoEntity createMedico(MedicoEntity medico) {
+    public MedicoDTO createMedico(MedicoCreateDTO medicoCreateDTO) {
         try {
             logger.info("Inizio processo createMedico in MedicoService");
+            MedicoEntity medico = convertToEntity(medicoCreateDTO);
             medico.setId(null);
             medico.setRecordStatus(EntityStatusEnum.ACTIVE);
-            return medicoRepository.saveAndFlush(medico);
+            return convertToDTO(medicoRepository.saveAndFlush(medico));
         } finally {
             logger.info("Fine processo createMedico in MedicoService");
         }
@@ -46,8 +53,11 @@ public class MedicoService {
      *
      * @return i medici con record status ACTIVE
      */
-    public List<MedicoEntity> getAllMedici() {
-        return medicoRepository.findByRecordStatus(EntityStatusEnum.ACTIVE);
+    public List<MedicoDTO> getAllMedici() {
+        return medicoRepository.findByRecordStatus(EntityStatusEnum.ACTIVE)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -55,8 +65,11 @@ public class MedicoService {
      *
      * @return i medici cancellati logicamente con record status DELETED.
      */
-    public List<MedicoEntity> getAllDeletedMedici() {
-        return medicoRepository.findByRecordStatus(EntityStatusEnum.DELETED);
+    public List<MedicoDTO> getAllDeletedMedici() {
+        return medicoRepository.findByRecordStatus(EntityStatusEnum.DELETED)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -65,27 +78,21 @@ public class MedicoService {
      * @param id l' id
      * @return il medico tramite id
      */
-    public MedicoEntity getMedicoById(Long id) {
-        /*if(!medicoRepository.existsById(id)) {
-            throw new EntityNotFoundException("Medico non trovato");
-        }
-        return medicoRepository.findById(id).get();*/
-        return medicoRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Medico con id " + id + " non trovato"));
+    public MedicoDTO getMedicoById(Long id) {
+         MedicoEntity medico = medicoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
+         return convertToDTO(medico);
     }
 
     /**
      * Metodo che modifica il medico.
      *
-     * @param medicoEdit il medico edit
+     * @param medicoEdit il DTO medico edit
      * @param id         l'id
      */
-    public MedicoEntity updateMedicoById(MedicoEntity medicoEdit, Long id) {
-        if(!medicoRepository.existsById(id)) {
-            throw new EntityNotFoundException("Medico non trovato");
-        }
-
-        MedicoEntity medico = medicoRepository.findById(id).get();
+    public MedicoDTO updateMedicoById(MedicoDTO medicoEdit, Long id) {
+        MedicoEntity medico = medicoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
 
         if(medicoEdit.getNome() != null) {
             medico.setNome(medicoEdit.getNome());
@@ -100,7 +107,7 @@ public class MedicoService {
             medico.setEmail(medicoEdit.getEmail());
         }
 
-        return medicoRepository.saveAndFlush(medico);
+        return convertToDTO(medicoRepository.saveAndFlush(medico));
     }
 
     /**
@@ -149,6 +156,18 @@ public class MedicoService {
      */
     public void restoreAllMedici() {
         medicoRepository.restore();
+    }
+
+    public MedicoEntity convertToEntity(MedicoCreateDTO medicoCreateDTO) {
+        return modelMapper.map(medicoCreateDTO, MedicoEntity.class);
+    }
+
+    public MedicoEntity convertToEntity(MedicoDTO medicoDTO) {
+        return modelMapper.map(medicoDTO, MedicoEntity.class);
+    }
+
+    public MedicoDTO convertToDTO(MedicoEntity medico) {
+        return modelMapper.map(medico, MedicoDTO.class);
     }
 
 }

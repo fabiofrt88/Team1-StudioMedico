@@ -29,14 +29,14 @@ public class PrenotazioneController {
     /**
      * Crea un prenotazione, restituisce una response entity di status 201.
      *
-     * @param prenotazione il prenotazione
+     * @param prenotazione il DTO di creazione della prenotazione
      * @return la response entity
      */
     @PostMapping("/create")
     public ResponseEntity createPrenotazione(@RequestBody PrenotazioneCreateDTO prenotazione) {
-        PrenotazioneDTO prenotazioneDTO = prenotazioneService.createPrenotazione(prenotazione);
+        prenotazioneService.createPrenotazione(prenotazione);
         logger.info("Una nuova prenotazione è stata registrata");
-        return ResponseEntity.status(HttpStatus.CREATED).body(prenotazioneDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Prenotazione creata correttamente");
     }
 
     /**

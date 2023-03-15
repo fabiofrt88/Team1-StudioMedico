@@ -90,7 +90,7 @@ public class PrenotazioneService {
     /**
      * Metodo che modifica la prenotazione.
      *
-     * @param prenotazioneEdit la prenotazione edit
+     * @param prenotazioneEdit il DTO prenotazione edit
      * @param id         l'id
      */
     public PrenotazioneDTO updatePrenotazioneById(PrenotazioneDTO prenotazioneEdit, Long id) {

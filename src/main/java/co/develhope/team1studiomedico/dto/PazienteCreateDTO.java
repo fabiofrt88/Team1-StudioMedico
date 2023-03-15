@@ -1,29 +1,23 @@
 package co.develhope.team1studiomedico.dto;
 
-import co.develhope.team1studiomedico.entities.EntityStatusEnum;
-
 import java.time.LocalDate;
 
+/**
+ * La classe PazienteCreateDTO rappresenta il DTO (Data Transfer Object) di creazione di PazienteEntity,
+ * consente di creare degli oggetti di trasferimento dati in entrata a partire dai quali sarà possibile
+ * creare un nuovo paziente nel database
+ */
 public class PazienteCreateDTO {
 
     private final Long id;
-
     private final String nome;
-
     private final String cognome;
-
     private final String telefono;
-
     private final String email;
-
+    private final String password;
     private final LocalDate dataNascita;
-
     private final String codiceFiscale;
-
-    private final EntityStatusEnum recordStatus;
-
     private final Long medicoId;
-
 
     /**
      * Costruttore parametrico che istanzia una nuova entità Paziente.
@@ -33,20 +27,21 @@ public class PazienteCreateDTO {
      * @param cognome        cognome
      * @param telefono       telefono
      * @param email          email
+     * @param password       password
      * @param dataNascita    data nascita
      * @param codiceFiscale  codice fiscale
-     * @param medicoId         medico id
+     * @param medicoId       medico id
      */
 
-    public PazienteCreateDTO(Long id, String nome, String cognome, String telefono, String email, LocalDate dataNascita, String codiceFiscale, EntityStatusEnum recordStatus, Long medicoId) {
+    public PazienteCreateDTO(Long id, String nome, String cognome, String telefono, String email, String password, LocalDate dataNascita, String codiceFiscale, Long medicoId) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.telefono = telefono;
         this.email = email;
+        this.password = password;
         this.dataNascita = dataNascita;
         this.codiceFiscale = codiceFiscale;
-        this.recordStatus = recordStatus;
         this.medicoId = medicoId;
     }
 
@@ -96,12 +91,12 @@ public class PazienteCreateDTO {
     }
 
     /**
-     * Metodo che restituisce lo status.
+     * Metodo che restituisce la password.
      *
-     * @return lo status
+     * @return la password
      */
-    public EntityStatusEnum getRecordStatus() {
-        return recordStatus;
+    public String getPassword() {
+        return password;
     }
 
     /**

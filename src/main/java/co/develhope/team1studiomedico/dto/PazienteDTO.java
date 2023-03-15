@@ -1,27 +1,21 @@
 package co.develhope.team1studiomedico.dto;
 
-import co.develhope.team1studiomedico.entities.EntityStatusEnum;
-
 import java.time.LocalDate;
 
+/**
+ * La classe PazienteDTO rappresenta il DTO (Data Transfer Object) di update e lettura di PazienteEntity,
+ * consente di creare degli oggetti di trasferimento dati in entrata (update) e uscita (lettura) mediante i quali sarà possibile
+ * rispettivamente modificare un paziente e restituire una selezione dei dati di un paziente nel payload delle response
+ */
 public class PazienteDTO {
 
     private Long id;
-
     private String nome;
-
     private String cognome;
-
     private String telefono;
-
     private String email;
-
     private LocalDate dataNascita;
-
     private String codiceFiscale;
-
-    private EntityStatusEnum recordStatus;
-
     private Long medicoId;
 
     /**
@@ -39,10 +33,10 @@ public class PazienteDTO {
      * @param email          email
      * @param dataNascita    data nascita
      * @param codiceFiscale  codice fiscale
-     * @param medicoId         medico id
+     * @param medicoId       medico id
      */
 
-    public PazienteDTO(Long id, String nome, String cognome, String telefono, String email, LocalDate dataNascita, String codiceFiscale, EntityStatusEnum recordStatus, Long medicoId) {
+    public PazienteDTO(Long id, String nome, String cognome, String telefono, String email, LocalDate dataNascita, String codiceFiscale, Long medicoId) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
@@ -50,7 +44,6 @@ public class PazienteDTO {
         this.email = email;
         this.dataNascita = dataNascita;
         this.codiceFiscale = codiceFiscale;
-        this.recordStatus = recordStatus;
         this.medicoId = medicoId;
     }
 
@@ -145,24 +138,6 @@ public class PazienteDTO {
     }
 
     /**
-     * Metodo che restituisce lo status.
-     *
-     * @return lo status
-     */
-    public EntityStatusEnum getRecordStatus() {
-        return recordStatus;
-    }
-
-    /**
-     * Metodo che setta lo status.
-     *
-     * @param recordStatus lo status
-     */
-    public void setRecordStatus(EntityStatusEnum recordStatus) {
-        this.recordStatus = recordStatus;
-    }
-
-    /**
      * Metodo che restituisce la data nascita.
      *
      * @return la data nascita
@@ -215,4 +190,5 @@ public class PazienteDTO {
     public void setMedicoId(Long medicoId) {
         this.medicoId = medicoId;
     }
+
 }

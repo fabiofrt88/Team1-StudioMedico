@@ -10,32 +10,30 @@ public class SegretarioCreateDTO {
     private final Long id;
     private final String nome;
     private final String cognome;
-    private final String email;
     private final String telefono;
+    private final String email;
     private final String password;
-    private final String medicoId;
+    private final Long medicoId;
 
     /**
      * Costruttore parametrico che istanzia un nuovo SegretarioCreateDTO
      *
-     * @param id       id segretario
-     * @param nome     nome segretario
-     * @param cognome  cognome segretario
-     * @param email    email segretario
-     * @param telefono telefono segretario
-     * @param password password segretario
-     * @param medicoId medico id di riferimento(per il quale lavora)
+     * @param id        id segretario
+     * @param nome      nome segretario
+     * @param cognome   cognome segretario
+     * @param telefono  telefono segretario
+     * @param email     email segretario
+     * @param password  password segretario
+     * @param medicoId  medico id di riferimento
      */
-    public SegretarioCreateDTO(Long id, String nome, String cognome, String email, String telefono, String password, String medicoId) {
-
+    public SegretarioCreateDTO(Long id, String nome, String cognome, String telefono, String email, String password, Long medicoId) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
-        this.email = email;
         this.telefono = telefono;
+        this.email = email;
         this.password = password;
         this.medicoId = medicoId;
-
     }
 
     /**
@@ -66,21 +64,21 @@ public class SegretarioCreateDTO {
     }
 
     /**
-     * Metodo che restituisce l'email del segretario.
-     *
-     * @return L'email del segretario
-     */
-    public String getEmail() {
-        return email;
-    }
-
-    /**
      * Metodo che restituisce il telefono.
      *
      * @return Il telefono del segretario
      */
     public String getTelefono() {
         return telefono;
+    }
+
+    /**
+     * Metodo che restituisce l'email del segretario.
+     *
+     * @return L'email del segretario
+     */
+    public String getEmail() {
+        return email;
     }
 
     /**
@@ -97,7 +95,7 @@ public class SegretarioCreateDTO {
      *
      * @return L'id del medico
      */
-    public String getMedicoId() {
+    public Long getMedicoId() {
         return medicoId;
     }
 

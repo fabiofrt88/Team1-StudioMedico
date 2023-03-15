@@ -1,6 +1,7 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.entities.SegretarioEntity;
+import co.develhope.team1studiomedico.dto.SegretarioCreateDTO;
+import co.develhope.team1studiomedico.dto.SegretarioDTO;
 import co.develhope.team1studiomedico.services.PazienteService;
 import co.develhope.team1studiomedico.services.SegretarioService;
 import org.slf4j.Logger;
@@ -32,11 +33,11 @@ public class SegretarioController {
     /**
      * Crea un segretario, restituisce una response entity di status 201.
      *
-     * @param segretario il segretario
+     * @param segretario il DTO di creazione del segretario
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<String> createSegretario(@RequestBody SegretarioEntity segretario) {
+    public ResponseEntity<String> createSegretario(@RequestBody SegretarioCreateDTO segretario) {
         segretarioService.createSegretario(segretario);
         logger.info("Un nuovo segretario è stato registrato");
         return ResponseEntity.status(HttpStatus.CREATED).body("Segretario creato correttamente");
@@ -48,7 +49,7 @@ public class SegretarioController {
      * @return la lista dei segretari con record status ACTIVE
      */
     @GetMapping({"", "/"})
-    public List<SegretarioEntity> getAllSegretari() {
+    public List<SegretarioDTO> getAllSegretari() {
         return segretarioService.getAllSegretari();
     }
 
@@ -58,7 +59,7 @@ public class SegretarioController {
      * @return la lista dei segretari cancellati logicamente con record status DELETED.
      */
     @GetMapping("/deleted")
-    public List<SegretarioEntity> getAllDeletedSegretari() {
+    public List<SegretarioDTO> getAllDeletedSegretari() {
         return segretarioService.getAllDeletedSegretari();
     }
 
@@ -69,7 +70,7 @@ public class SegretarioController {
      * @return il segretario tramite id
      */
     @GetMapping("/{id}")
-    public SegretarioEntity getSegretarioById(@PathVariable Long id) {
+    public SegretarioDTO getSegretarioById(@PathVariable Long id) {
         return segretarioService.getSegretarioById(id);
     }
 
@@ -81,7 +82,7 @@ public class SegretarioController {
      * @return la response entity
      */
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updateSegretarioById(@RequestBody SegretarioEntity segretarioEdit, @PathVariable Long id) {
+    public ResponseEntity<String> updateSegretarioById(@RequestBody SegretarioDTO segretarioEdit, @PathVariable Long id) {
         segretarioService.updateSegretarioById(segretarioEdit, id);
         return ResponseEntity.status(200).body("Segretario modificato correttamente");
     }

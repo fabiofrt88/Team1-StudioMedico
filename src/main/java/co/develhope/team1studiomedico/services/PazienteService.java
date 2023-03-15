@@ -1,8 +1,11 @@
 package co.develhope.team1studiomedico.services;
 
+import co.develhope.team1studiomedico.dto.PazienteCreateDTO;
+import co.develhope.team1studiomedico.dto.PazienteDTO;
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.PazienteEntity;
 import co.develhope.team1studiomedico.repositories.PazienteRepository;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityNotFoundException;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * La classe PazienteService realizza la logica di business relativamente le operazioni di CRUD dei dati di PazienteEntity.
@@ -22,19 +26,23 @@ public class PazienteService {
     @Autowired
     private PazienteRepository pazienteRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     private static final Logger logger = LoggerFactory.getLogger(PazienteService.class);
 
     /**
      * Metodo che crea il paziente.
      *
-     * @param paziente il paziente
+     * @param pazienteCreateDTO il DTO di creazione del paziente
      */
-    public PazienteEntity createPaziente(PazienteEntity paziente) {
+    public PazienteDTO createPaziente(PazienteCreateDTO pazienteCreateDTO) {
         try {
             logger.info("Inizio processo createPaziente in PazienteService");
+            PazienteEntity paziente = convertToEntity(pazienteCreateDTO);
             paziente.setId(null);
             paziente.setRecordStatus(EntityStatusEnum.ACTIVE);
-            return pazienteRepository.saveAndFlush(paziente);
+            return convertToDTO(pazienteRepository.saveAndFlush(paziente));
         } finally {
             logger.info("Fine processo createPaziente in PazienteService");
         }
@@ -45,8 +53,11 @@ public class PazienteService {
      *
      * @return i pazienti con record status ACTIVE
      */
-    public List<PazienteEntity> getAllPazienti() {
-        return pazienteRepository.findByRecordStatus(EntityStatusEnum.ACTIVE);
+    public List<PazienteDTO> getAllPazienti() {
+        return pazienteRepository.findByRecordStatus(EntityStatusEnum.ACTIVE)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -54,8 +65,11 @@ public class PazienteService {
      *
      * @return i pazienti cancellati logicamente con record status DELETED.
      */
-    public List<PazienteEntity> getAllDeletedPazienti() {
-        return pazienteRepository.findByRecordStatus(EntityStatusEnum.DELETED);
+    public List<PazienteDTO> getAllDeletedPazienti() {
+        return pazienteRepository.findByRecordStatus(EntityStatusEnum.DELETED)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -64,11 +78,10 @@ public class PazienteService {
      * @param id the id
      * @return the paziente by id
      */
-    public PazienteEntity getPazienteById(Long id) {
-        if(!pazienteRepository.existsById(id)) {
-            throw new EntityNotFoundException("Paziente non trovato");
-        }
-        return pazienteRepository.findById(id).get();
+    public PazienteDTO getPazienteById(Long id) {
+        PazienteEntity paziente = pazienteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+        return convertToDTO(paziente);
     }
 
     /**
@@ -77,15 +90,9 @@ public class PazienteService {
      * @param pazienteEdit the paziente edit
      * @param id           the id
      */
-    public PazienteEntity updatePazienteById(PazienteEntity pazienteEdit, Long id) {
-        if(!pazienteRepository.existsById(id)) {
-            throw new EntityNotFoundException("Paziente non trovato");
-        }
-
-        PazienteEntity paziente = pazienteRepository.findById(id).get();
-        /*Paziente paziente = new Paziente();
-        Optional<Paziente> pazienteOptional = pazienteRepository.findById(id);
-        if(pazienteOptional.isPresent()) paziente = pazienteOptional.get();*/
+    public PazienteDTO updatePazienteById(PazienteDTO pazienteEdit, Long id) {
+        PazienteEntity paziente = pazienteRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
 
         if(pazienteEdit.getNome() != null) {
             paziente.setNome(pazienteEdit.getNome());
@@ -106,7 +113,7 @@ public class PazienteService {
             paziente.setCodiceFiscale(pazienteEdit.getCodiceFiscale());
         }
 
-        return pazienteRepository.saveAndFlush(paziente);
+        return convertToDTO(pazienteRepository.saveAndFlush(paziente));
     }
 
     /**
@@ -117,12 +124,10 @@ public class PazienteService {
     public void deletePazienteById(Long id) {
         try {
             logger.info("Inizio processo deletePazienteById in PazienteService");
-            if(!pazienteRepository.existsById(id)) throw new EntityNotFoundException("Paziente non trovato");
-                /*PazienteEntity paziente = pazienteRepository.findById(id).get();
-                paziente.setStatus(EntityStatusEnum.DELETED);
-                pazienteRepository.saveAndFlush(paziente);*/
-                pazienteRepository.softDeleteById(id);
-                //pazienteRepository.changeStatusById(EntityStatusEnum.DELETED, id);
+            if(!pazienteRepository.existsById(id)) {
+                throw new EntityNotFoundException("Paziente non trovato");
+            }
+            pazienteRepository.softDeleteById(id);
         } finally {
             logger.info("Fine processo deletePazienteById in PazienteService");
         }
@@ -150,7 +155,6 @@ public class PazienteService {
             throw new EntityNotFoundException("Paziente non trovato");
         }
         pazienteRepository.restoreById(id);
-        //pazienteRepository.changeStatusById(EntityStatusEnum.ACTIVE, id);
     }
 
     /**
@@ -158,6 +162,18 @@ public class PazienteService {
      */
     public void restoreAllPazienti() {
         pazienteRepository.restore();
+    }
+
+    public PazienteEntity convertToEntity(PazienteCreateDTO pazienteCreateDTO) {
+        return modelMapper.map(pazienteCreateDTO, PazienteEntity.class);
+    }
+
+    public PazienteEntity convertToEntity(PazienteDTO pazienteDTO) {
+        return modelMapper.map(pazienteDTO, PazienteEntity.class);
+    }
+
+    public PazienteDTO convertToDTO(PazienteEntity paziente) {
+        return modelMapper.map(paziente, PazienteDTO.class);
     }
 
 }
