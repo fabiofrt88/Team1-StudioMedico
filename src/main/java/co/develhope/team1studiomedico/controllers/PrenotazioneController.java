@@ -1,7 +1,7 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.entities.PrenotazioneEntity;
-import co.develhope.team1studiomedico.entities.PrenotazioneStatusEnum;
+import co.develhope.team1studiomedico.dto.PrenotazioneCreateDTO;
+import co.develhope.team1studiomedico.dto.PrenotazioneDTO;
 import co.develhope.team1studiomedico.services.PrenotazioneService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +33,10 @@ public class PrenotazioneController {
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<String> createPrenotazione(@RequestBody PrenotazioneEntity prenotazione) {
-        prenotazione.setStatoPrenotazione(PrenotazioneStatusEnum.PENDING);
-        prenotazioneService.createPrenotazione(prenotazione);
+    public ResponseEntity createPrenotazione(@RequestBody PrenotazioneCreateDTO prenotazione) {
+        PrenotazioneDTO prenotazioneDTO = prenotazioneService.createPrenotazione(prenotazione);
         logger.info("Una nuova prenotazione è stata registrata");
-        return ResponseEntity.status(HttpStatus.CREATED).body("Prenotazione creata correttamente");
+        return ResponseEntity.status(HttpStatus.CREATED).body(prenotazioneDTO);
     }
 
     /**
@@ -46,7 +45,7 @@ public class PrenotazioneController {
      * @return la lista delle prenotazioni con record status ACTIVE.
      */
     @GetMapping({"", "/"})
-    public List<PrenotazioneEntity> getAllPrenotazioni() {
+    public List<PrenotazioneDTO> getAllPrenotazioni() {
         return prenotazioneService.getAllPrenotazioni();
     }
 
@@ -56,7 +55,7 @@ public class PrenotazioneController {
      * @return la lista delle prenotazioni cancellate logicamente con record status DELETED.
      */
     @GetMapping("/deleted")
-    public List<PrenotazioneEntity> getAllDeletedPrenotazioni() {
+    public List<PrenotazioneDTO> getAllDeletedPrenotazioni() {
         return prenotazioneService.getAllDeletedPrenotazioni();
     }
 
@@ -67,7 +66,7 @@ public class PrenotazioneController {
      * @return la prenotazione tramite id
      */
     @GetMapping("/{id}")
-    public PrenotazioneEntity getPrenotazioneById(@PathVariable Long id) {
+    public PrenotazioneDTO getPrenotazioneById(@PathVariable Long id) {
         return prenotazioneService.getPrenotazioneById(id);
     }
 
@@ -79,7 +78,7 @@ public class PrenotazioneController {
      * @return la response entity di status 200.
      */
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updatePrenotazioneById(@RequestBody PrenotazioneEntity prenotazioneEdit, @PathVariable Long id) {
+    public ResponseEntity<String> updatePrenotazioneById(@RequestBody PrenotazioneDTO prenotazioneEdit, @PathVariable Long id) {
         prenotazioneService.updatePrenotazioneById(prenotazioneEdit, id);
         return ResponseEntity.status(200).body("Prenotazione modificata correttamente");
     }

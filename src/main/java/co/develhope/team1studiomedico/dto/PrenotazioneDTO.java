@@ -9,7 +9,7 @@ import java.time.LocalTime;
 /**
  * La classe PrenotazioneCreateDTO rappresenta il DTO (Data Transfer Object) di update e lettura di PrenotazioneEntity,
  * consente di creare degli oggetti di trasferimento dati in entrata (update) e uscita (lettura) mediante i quali sarà possibile
- * rispettivamente modificare una prenotazione e visualizzare una selezione dei dati di una prenotazione dal database
+ * rispettivamente modificare una prenotazione e restituire una selezione dei dati di una prenotazione nel payload delle response
  */
 public class PrenotazioneDTO {
 
@@ -46,10 +46,20 @@ public class PrenotazioneDTO {
         this.statoPrenotazione = statoPrenotazione;
     }
 
+    /**
+     * Metodo che restituisce l'id del paziente.
+     *
+     * @return l'id del paziente
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * Metodo che setta l'id del paziente.
+     *
+     * @param id l'id del paziente
+     */
     public void setId(Long id) {
         this.id = id;
     }
@@ -65,6 +75,8 @@ public class PrenotazioneDTO {
 
     /**
      * Metodo che setta il timestamp prenotazione.
+     *
+     * @param bookedAt il timestamp prenotazione
      */
     public void setBookedAt(LocalDateTime bookedAt) {
         this.bookedAt = bookedAt;
@@ -81,6 +93,8 @@ public class PrenotazioneDTO {
 
     /**
      * Metodo che setta la data prenotazione.
+     *
+     * @param dataPrenotazione the data prenotazione
      */
     public void setDataPrenotazione(LocalDate dataPrenotazione) {
         this.dataPrenotazione = dataPrenotazione;
@@ -97,6 +111,8 @@ public class PrenotazioneDTO {
 
     /**
      * Metodo che setta l'ora prenotazione.
+     *
+     * @param oraPrenotazione l'ora prenotazione
      */
     public void setOraPrenotazione(LocalTime oraPrenotazione) {
         this.oraPrenotazione = oraPrenotazione;
@@ -113,6 +129,8 @@ public class PrenotazioneDTO {
 
     /**
      * Metodo che setta l'id del medico.
+     *
+     * @param medicoId l'id del medico
      */
     public void setMedicoId(Long medicoId) {
         this.medicoId = medicoId;
@@ -129,6 +147,8 @@ public class PrenotazioneDTO {
 
     /**
      * Metodo che setta l'id del paziente.
+     *
+     * @param pazienteId l'id del paziente
      */
     public void setPazienteId(Long pazienteId) {
         this.pazienteId = pazienteId;
@@ -145,6 +165,8 @@ public class PrenotazioneDTO {
 
     /**
      * Metodo che setta lo stato prenotazione.
+     *
+     * @param statoPrenotazione lo stato prenotazione
      */
     public void setStatoPrenotazione(PrenotazioneStatusEnum statoPrenotazione) {
         this.statoPrenotazione = statoPrenotazione;

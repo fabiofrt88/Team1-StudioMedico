@@ -63,7 +63,7 @@ public class PrenotazioneCreateDTO {
     /**
      * Metodo che restituisce l'id del medico.
      *
-     * @return l'ide del medico
+     * @return l'id del medico
      */
     public Long getMedicoId() {
         return medicoId;
