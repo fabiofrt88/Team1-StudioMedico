@@ -1,15 +1,20 @@
 package co.develhope.team1studiomedico.services;
 
+import co.develhope.team1studiomedico.dto.PrenotazioneCreateDTO;
+import co.develhope.team1studiomedico.dto.PrenotazioneDTO;
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.PrenotazioneEntity;
+import co.develhope.team1studiomedico.entities.PrenotazioneStatusEnum;
 import co.develhope.team1studiomedico.repositories.PrenotazioneRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * La classe PrenotazioneService realizza la logica di business relativamente le operazioni di CRUD dei dati di PrenotazioneEntity.
@@ -22,20 +27,24 @@ public class PrenotazioneService {
     @Autowired
     private PrenotazioneRepository prenotazioneRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     private static final Logger logger = LoggerFactory.getLogger(PrenotazioneService.class);
 
     /**
      * Metodo che crea la prenotazione.
      *
-     * @param prenotazione la prenotazione
+     * @param prenotazioneCreateDTO il DTO di creazione della prenotazione
      */
-    public PrenotazioneEntity createPrenotazione(PrenotazioneEntity prenotazione) {
+    public PrenotazioneDTO createPrenotazione(PrenotazioneCreateDTO prenotazioneCreateDTO) {
         try {
             logger.info("Inizio processo createPrenotazione in PrenotazioneService");
+            PrenotazioneEntity prenotazione = convertToEntity(prenotazioneCreateDTO);
             prenotazione.setId(null);
             prenotazione.setRecordStatus(EntityStatusEnum.ACTIVE);
-            //prenotazione.setStatoPrenotazione(PrenotazioneStatusEnum.PENDING);
-            return prenotazioneRepository.saveAndFlush(prenotazione);
+            prenotazione.setStatoPrenotazione(PrenotazioneStatusEnum.PENDING);
+            return convertToDTO(prenotazioneRepository.saveAndFlush(prenotazione));
         } finally {
             logger.info("Fine processo createPrenotazione in PrenotazioneService");
         }
@@ -46,8 +55,11 @@ public class PrenotazioneService {
      *
      * @return le prenotazioni con record status ACTIVE
      */
-    public List<PrenotazioneEntity> getAllPrenotazioni() {
-        return prenotazioneRepository.findByRecordStatus(EntityStatusEnum.ACTIVE);
+    public List<PrenotazioneDTO> getAllPrenotazioni() {
+        return prenotazioneRepository.findByRecordStatus(EntityStatusEnum.ACTIVE)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -55,8 +67,11 @@ public class PrenotazioneService {
      *
      * @return le prenotazioni cancellate logicamente con record status DELETED.
      */
-    public List<PrenotazioneEntity> getAllDeletedPrenotazioni() {
-        return prenotazioneRepository.findByRecordStatus(EntityStatusEnum.DELETED);
+    public List<PrenotazioneDTO> getAllDeletedPrenotazioni() {
+        return prenotazioneRepository.findByRecordStatus(EntityStatusEnum.DELETED)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -65,11 +80,11 @@ public class PrenotazioneService {
      * @param id l' id
      * @return la prenotazione tramite id
      */
-    public PrenotazioneEntity getPrenotazioneById(Long id) {
-        if(!prenotazioneRepository.existsById(id)) {
-            throw new EntityNotFoundException("Prenotazione non trovata");
-        }
-        return prenotazioneRepository.findById(id).get();
+    public PrenotazioneDTO getPrenotazioneById(Long id) {
+        PrenotazioneEntity prenotazione = prenotazioneRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Prenotazione non trovata"));
+        return convertToDTO(prenotazione);
+
     }
 
     /**
@@ -78,12 +93,9 @@ public class PrenotazioneService {
      * @param prenotazioneEdit la prenotazione edit
      * @param id         l'id
      */
-    public PrenotazioneEntity updatePrenotazioneById(PrenotazioneEntity prenotazioneEdit, Long id) {
-        if(!prenotazioneRepository.existsById(id)) {
-            throw new EntityNotFoundException("Prenotazione non trovata");
-        }
-
-        PrenotazioneEntity prenotazione = prenotazioneRepository.findById(id).get();
+    public PrenotazioneDTO updatePrenotazioneById(PrenotazioneDTO prenotazioneEdit, Long id) {
+        PrenotazioneEntity prenotazione = prenotazioneRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Prenotazione non trovata"));
 
         if(prenotazioneEdit.getDataPrenotazione() != null) {
             prenotazione.setDataPrenotazione(prenotazioneEdit.getDataPrenotazione());
@@ -95,7 +107,7 @@ public class PrenotazioneService {
             prenotazione.setStatoPrenotazione(prenotazioneEdit.getStatoPrenotazione());
         }
 
-        return prenotazioneRepository.saveAndFlush(prenotazione);
+        return convertToDTO(prenotazioneRepository.saveAndFlush(prenotazione));
     }
 
     /**
@@ -144,6 +156,18 @@ public class PrenotazioneService {
      */
     public void restoreAllPrenotazioni() {
         prenotazioneRepository.restore();
+    }
+
+    public PrenotazioneEntity convertToEntity(PrenotazioneCreateDTO prenotazioneCreateDTO) {
+        return modelMapper.map(prenotazioneCreateDTO, PrenotazioneEntity.class);
+    }
+
+    public PrenotazioneEntity convertToEntity(PrenotazioneDTO prenotazioneDTO) {
+        return modelMapper.map(prenotazioneDTO, PrenotazioneEntity.class);
+    }
+
+    public PrenotazioneDTO convertToDTO(PrenotazioneEntity prenotazione) {
+        return modelMapper.map(prenotazione, PrenotazioneDTO.class);
     }
 
 }
