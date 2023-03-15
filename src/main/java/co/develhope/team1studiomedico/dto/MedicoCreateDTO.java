@@ -27,4 +27,58 @@ public class MedicoCreateDTO {
         this.telefono = telefono;
         this.password = password;
     }
+
+    /**
+     * Metodo che restituisce l'id del medico.
+     *
+     * @return id
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Metodo che restituisce il nome del medico.
+     *
+     * @return nome
+     */
+    public String getNome() {
+        return nome;
+    }
+
+    /**
+     * Metodo che restituisce il cognome del medico.
+     *
+     * @return cognome
+     */
+    public String getCognome() {
+        return cognome;
+    }
+
+    /**
+     * Metodo che restituisce l'email del medico.
+     *
+     * @return l'email.
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * Metodo che restituisce il telefono del medico.
+     *
+     * @return telefono.
+     */
+    public String getTelefono() {
+        return telefono;
+    }
+
+    /**
+     * Metodo che restituisce la password del medico.
+     *
+     * @return password.
+     */
+    public String getPassword() {
+        return password;
+    }
 }
