@@ -17,9 +17,9 @@ public class PrenotazioneDTO {
     private LocalDateTime bookedAt;
     private LocalDate dataPrenotazione;
     private LocalTime oraPrenotazione;
-    private Long medicoId;
-    private Long pazienteId;
     private PrenotazioneStatusEnum statoPrenotazione;
+    private PazienteDTO paziente;
+    private MedicoDTO medico;
 
     /**
      * Costruttore di default che istanzia una nuovo PrenotazioneDTO.
@@ -33,17 +33,18 @@ public class PrenotazioneDTO {
      * @param bookedAt         timestamp prenotazione
      * @param dataPrenotazione data prenotazione
      * @param oraPrenotazione  ora prenotazione
-     * @param pazienteId       id del paziente
-     * @param medicoId         id del medico
+     * @param paziente         paziente
+     * @param medico           medico
      */
-    public PrenotazioneDTO(Long id, LocalDateTime bookedAt, LocalDate dataPrenotazione, LocalTime oraPrenotazione, Long medicoId, Long pazienteId, PrenotazioneStatusEnum statoPrenotazione) {
+    public PrenotazioneDTO(Long id, LocalDateTime bookedAt, LocalDate dataPrenotazione, LocalTime oraPrenotazione,
+                           PrenotazioneStatusEnum statoPrenotazione, PazienteDTO paziente, MedicoDTO medico) {
         this.id = id;
         this.bookedAt = bookedAt;
         this.dataPrenotazione = dataPrenotazione;
         this.oraPrenotazione = oraPrenotazione;
-        this.medicoId = medicoId;
-        this.pazienteId = pazienteId;
         this.statoPrenotazione = statoPrenotazione;
+        this.paziente = paziente;
+        this.medico = medico;
     }
 
     /**
@@ -119,42 +120,6 @@ public class PrenotazioneDTO {
     }
 
     /**
-     * Metodo che restituisce l'id del medico.
-     *
-     * @return il booked at
-     */
-    public Long getMedicoId() {
-        return medicoId;
-    }
-
-    /**
-     * Metodo che setta l'id del medico.
-     *
-     * @param medicoId l'id del medico
-     */
-    public void setMedicoId(Long medicoId) {
-        this.medicoId = medicoId;
-    }
-
-    /**
-     * Metodo che restituisce l'id del paziente.
-     *
-     * @return id del paziente
-     */
-    public Long getPazienteId() {
-        return pazienteId;
-    }
-
-    /**
-     * Metodo che setta l'id del paziente.
-     *
-     * @param pazienteId l'id del paziente
-     */
-    public void setPazienteId(Long pazienteId) {
-        this.pazienteId = pazienteId;
-    }
-
-    /**
      * Metodo che restituisce lo stato prenotazione.
      *
      * @return stato prenotazione
@@ -170,6 +135,42 @@ public class PrenotazioneDTO {
      */
     public void setStatoPrenotazione(PrenotazioneStatusEnum statoPrenotazione) {
         this.statoPrenotazione = statoPrenotazione;
+    }
+
+    /**
+     * Metodo che restituisce il paziente.
+     *
+     * @return il medico
+     */
+    public PazienteDTO getPaziente() {
+        return paziente;
+    }
+
+    /**
+     * Metodo che setta il paziente.
+     *
+     * @param paziente il paziente
+     */
+    public void setPaziente(PazienteDTO paziente) {
+        this.paziente = paziente;
+    }
+
+    /**
+     * Metodo che restituisce il medico.
+     *
+     * @return il medico
+     */
+    public MedicoDTO getMedico() {
+        return medico;
+    }
+
+    /**
+     * Metodo che setta il medico.
+     *
+     * @param medico il medico
+     */
+    public void setMedico(MedicoDTO medico) {
+        this.medico = medico;
     }
 
 }

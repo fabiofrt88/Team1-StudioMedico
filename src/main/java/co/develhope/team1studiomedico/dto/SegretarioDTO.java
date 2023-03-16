@@ -12,7 +12,7 @@ public class SegretarioDTO {
     private String cognome;
     private String telefono;
     private String email;
-    private Long medicoId;
+    private MedicoDTO medico;
 
     /**
      * Costruttore di default che istanzia un nuovo SegretarioDTO.
@@ -27,15 +27,15 @@ public class SegretarioDTO {
      * @param cognome   cognome segretario
      * @param email     email segretario
      * @param telefono  telefono segretario
-     * @param medicoId  medico id di riferimento(per il quale lavora)
+     * @param medico    medico di riferimento
      */
-    public SegretarioDTO(Long id, String nome, String cognome, String telefono, String email, Long medicoId) {
+    public SegretarioDTO(Long id, String nome, String cognome, String telefono, String email, MedicoDTO medico) {
         this.id = id;
         this.nome = nome;
         this.cognome = cognome;
         this.email = email;
         this.telefono = telefono;
-        this.medicoId = medicoId;
+        this.medico = medico;
     }
 
     /**
@@ -131,19 +131,19 @@ public class SegretarioDTO {
     /**
      * Metodo che restituisce l'id del medico di riferimento.
      *
-     * @return L'id del medico
+     * @return medico di riferimento
      */
-    public Long getMedicoId() {
-        return medicoId;
+    public MedicoDTO getMedico() {
+        return medico;
     }
 
     /**
      * Metodo che setta l'id del medico di riferimento.
      *
-     * @param medicoId l'id del medico.
+     * @param medico medico di riferimento
      */
-    public void setMedicoId(Long medicoId) {
-        this.medicoId = medicoId;
+    public void setMedico(MedicoDTO medico) {
+        this.medico = medico;
     }
 
 }
