@@ -3,6 +3,8 @@ package co.develhope.team1studiomedico.controllers;
 import co.develhope.team1studiomedico.dto.MedicoCreateDTO;
 import co.develhope.team1studiomedico.dto.MedicoDTO;
 import co.develhope.team1studiomedico.services.MedicoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.models.annotations.OpenAPI30;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,7 @@ public class MedicoController {
      * @param medico il DTO di creazione del medico
      * @return la response entity
      */
+
     @PostMapping("/create")
     public ResponseEntity<String> createMedico(@RequestBody MedicoCreateDTO medico) {
         medicoService.createMedico(medico);
