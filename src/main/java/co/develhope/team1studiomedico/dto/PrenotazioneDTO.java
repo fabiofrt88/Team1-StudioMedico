@@ -1,6 +1,8 @@
 package co.develhope.team1studiomedico.dto;
 
 import co.develhope.team1studiomedico.entities.PrenotazioneStatusEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.FutureOrPresent;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,8 +16,12 @@ import java.time.LocalTime;
 public class PrenotazioneDTO {
 
     private Long id;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime bookedAt;
+    @FutureOrPresent(message = "data prenotazione non valida: deve essere diversa da una data passata")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataPrenotazione;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime oraPrenotazione;
     private PrenotazioneStatusEnum statoPrenotazione;
     private PazienteDTO paziente;

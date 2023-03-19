@@ -6,12 +6,16 @@ import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.PrenotazioneEntity;
 import co.develhope.team1studiomedico.entities.PrenotazioneStatusEnum;
 import co.develhope.team1studiomedico.repositories.PrenotazioneRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
+import jakarta.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,6 +31,9 @@ public class PrenotazioneService {
     @Autowired
     private PrenotazioneRepository prenotazioneRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -37,14 +44,17 @@ public class PrenotazioneService {
      *
      * @param prenotazioneCreateDTO il DTO di creazione della prenotazione
      */
-    public PrenotazioneDTO createPrenotazione(PrenotazioneCreateDTO prenotazioneCreateDTO) {
+    @Transactional
+    public PrenotazioneDTO createPrenotazione(@NotNull PrenotazioneCreateDTO prenotazioneCreateDTO) {
         try {
             logger.info("Inizio processo createPrenotazione in PrenotazioneService");
             PrenotazioneEntity prenotazione = convertToEntity(prenotazioneCreateDTO);
             prenotazione.setId(null);
             prenotazione.setRecordStatus(EntityStatusEnum.ACTIVE);
             prenotazione.setStatoPrenotazione(PrenotazioneStatusEnum.PENDING);
-            return convertToDTO(prenotazioneRepository.saveAndFlush(prenotazione));
+            prenotazione = prenotazioneRepository.saveAndFlush(prenotazione);
+            entityManager.refresh(prenotazione);
+            return convertToDTO(prenotazione);
         } finally {
             logger.info("Fine processo createPrenotazione in PrenotazioneService");
         }
@@ -93,7 +103,7 @@ public class PrenotazioneService {
      * @param prenotazioneEdit il DTO prenotazione edit
      * @param id         l'id
      */
-    public PrenotazioneDTO updatePrenotazioneById(PrenotazioneDTO prenotazioneEdit, Long id) {
+    public PrenotazioneDTO updatePrenotazioneById(@NotNull PrenotazioneDTO prenotazioneEdit, Long id) {
         PrenotazioneEntity prenotazione = prenotazioneRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Prenotazione non trovata"));
 
@@ -158,15 +168,15 @@ public class PrenotazioneService {
         prenotazioneRepository.restore();
     }
 
-    public PrenotazioneEntity convertToEntity(PrenotazioneCreateDTO prenotazioneCreateDTO) {
+    public PrenotazioneEntity convertToEntity(@NotNull PrenotazioneCreateDTO prenotazioneCreateDTO) {
         return modelMapper.map(prenotazioneCreateDTO, PrenotazioneEntity.class);
     }
 
-    public PrenotazioneEntity convertToEntity(PrenotazioneDTO prenotazioneDTO) {
+    public PrenotazioneEntity convertToEntity(@NotNull PrenotazioneDTO prenotazioneDTO) {
         return modelMapper.map(prenotazioneDTO, PrenotazioneEntity.class);
     }
 
-    public PrenotazioneDTO convertToDTO(PrenotazioneEntity prenotazione) {
+    public PrenotazioneDTO convertToDTO(@NotNull PrenotazioneEntity prenotazione) {
         return modelMapper.map(prenotazione, PrenotazioneDTO.class);
     }
 

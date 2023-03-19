@@ -1,9 +1,11 @@
 package co.develhope.team1studiomedico.controllers;
 
+import co.develhope.team1studiomedico.dto.ResponseDataSuccessDTO;
 import co.develhope.team1studiomedico.dto.SegretarioCreateDTO;
 import co.develhope.team1studiomedico.dto.SegretarioDTO;
 import co.develhope.team1studiomedico.services.PazienteService;
 import co.develhope.team1studiomedico.services.SegretarioService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +39,10 @@ public class SegretarioController {
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<String> createSegretario(@RequestBody SegretarioCreateDTO segretario) {
-        segretarioService.createSegretario(segretario);
+    public ResponseEntity createSegretario(@Valid @RequestBody SegretarioCreateDTO segretario) {
+        SegretarioDTO segretarioDTO = segretarioService.createSegretario(segretario);
         logger.info("Un nuovo segretario è stato registrato");
-        return ResponseEntity.status(HttpStatus.CREATED).body("Segretario creato correttamente");
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Segretario creato correttamente", segretarioDTO));
     }
 
     /**
@@ -82,9 +84,9 @@ public class SegretarioController {
      * @return la response entity
      */
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updateSegretarioById(@RequestBody SegretarioDTO segretarioEdit, @PathVariable Long id) {
-        segretarioService.updateSegretarioById(segretarioEdit, id);
-        return ResponseEntity.status(200).body("Segretario modificato correttamente");
+    public ResponseEntity updateSegretarioById(@Valid @RequestBody SegretarioDTO segretarioEdit, @PathVariable Long id) {
+        SegretarioDTO segretarioDTO = segretarioService.updateSegretarioById(segretarioEdit, id);
+        return ResponseEntity.status(200).body(new ResponseDataSuccessDTO<>("Segretario modificato correttamente", segretarioDTO));
     }
 
     /**

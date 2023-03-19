@@ -2,9 +2,9 @@ package co.develhope.team1studiomedico.controllers;
 
 import co.develhope.team1studiomedico.dto.MedicoCreateDTO;
 import co.develhope.team1studiomedico.dto.MedicoDTO;
+import co.develhope.team1studiomedico.dto.ResponseDataSuccessDTO;
 import co.develhope.team1studiomedico.services.MedicoService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.models.annotations.OpenAPI30;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +36,10 @@ public class MedicoController {
      */
 
     @PostMapping("/create")
-    public ResponseEntity<String> createMedico(@RequestBody MedicoCreateDTO medico) {
-        medicoService.createMedico(medico);
+    public ResponseEntity createMedico(@Valid @RequestBody MedicoCreateDTO medico) {
+        MedicoDTO medicoDTO = medicoService.createMedico(medico);
         logger.info("Un nuovo medico è stato registrato");
-        return ResponseEntity.status(HttpStatus.CREATED).body("Medico creato correttamente");
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Medico creato correttamente", medicoDTO));
     }
 
     /**
@@ -81,9 +81,9 @@ public class MedicoController {
      * @return la response entity di status 200.
      */
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updateMedicoById(@RequestBody MedicoDTO medicoEdit, @PathVariable Long id) {
-        medicoService.updateMedicoById(medicoEdit, id);
-        return ResponseEntity.status(200).body("Medico modificato correttamente");
+    public ResponseEntity updateMedicoById(@Valid @RequestBody MedicoDTO medicoEdit, @PathVariable Long id) {
+        MedicoDTO medicoDTO = medicoService.updateMedicoById(medicoEdit, id);
+        return ResponseEntity.status(200).body(new ResponseDataSuccessDTO<>("Medico modificato correttamente", medicoDTO));
     }
 
     /**

@@ -5,12 +5,16 @@ import co.develhope.team1studiomedico.dto.MedicoDTO;
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.MedicoEntity;
 import co.develhope.team1studiomedico.repositories.MedicoRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +30,9 @@ public class MedicoService {
     @Autowired
     private MedicoRepository medicoRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -36,13 +43,16 @@ public class MedicoService {
      *
      * @param medicoCreateDTO il DTO di creazione del medico
      */
-    public MedicoDTO createMedico(MedicoCreateDTO medicoCreateDTO) {
+    @Transactional
+    public MedicoDTO createMedico(@NotNull MedicoCreateDTO medicoCreateDTO) {
         try {
             logger.info("Inizio processo createMedico in MedicoService");
             MedicoEntity medico = convertToEntity(medicoCreateDTO);
             medico.setId(null);
             medico.setRecordStatus(EntityStatusEnum.ACTIVE);
-            return convertToDTO(medicoRepository.saveAndFlush(medico));
+            medico = medicoRepository.saveAndFlush(medico);
+            entityManager.refresh(medico);
+            return convertToDTO(medico);
         } finally {
             logger.info("Fine processo createMedico in MedicoService");
         }
@@ -90,7 +100,7 @@ public class MedicoService {
      * @param medicoEdit il DTO medico edit
      * @param id         l'id
      */
-    public MedicoDTO updateMedicoById(MedicoDTO medicoEdit, Long id) {
+    public MedicoDTO updateMedicoById(@NotNull MedicoDTO medicoEdit, Long id) {
         MedicoEntity medico = medicoRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
 
@@ -158,15 +168,15 @@ public class MedicoService {
         medicoRepository.restore();
     }
 
-    public MedicoEntity convertToEntity(MedicoCreateDTO medicoCreateDTO) {
+    public MedicoEntity convertToEntity(@NotNull MedicoCreateDTO medicoCreateDTO) {
         return modelMapper.map(medicoCreateDTO, MedicoEntity.class);
     }
 
-    public MedicoEntity convertToEntity(MedicoDTO medicoDTO) {
+    public MedicoEntity convertToEntity(@NotNull MedicoDTO medicoDTO) {
         return modelMapper.map(medicoDTO, MedicoEntity.class);
     }
 
-    public MedicoDTO convertToDTO(MedicoEntity medico) {
+    public MedicoDTO convertToDTO(@NotNull MedicoEntity medico) {
         return modelMapper.map(medico, MedicoDTO.class);
     }
 

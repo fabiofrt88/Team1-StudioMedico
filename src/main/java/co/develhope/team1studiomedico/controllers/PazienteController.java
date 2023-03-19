@@ -2,7 +2,9 @@ package co.develhope.team1studiomedico.controllers;
 
 import co.develhope.team1studiomedico.dto.PazienteCreateDTO;
 import co.develhope.team1studiomedico.dto.PazienteDTO;
+import co.develhope.team1studiomedico.dto.ResponseDataSuccessDTO;
 import co.develhope.team1studiomedico.services.PazienteService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +35,10 @@ public class PazienteController {
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<String> createPaziente(@RequestBody PazienteCreateDTO paziente) {
-        pazienteService.createPaziente(paziente);
+    public ResponseEntity createPaziente(@Valid @RequestBody PazienteCreateDTO paziente) {
+        PazienteDTO pazienteDTO = pazienteService.createPaziente(paziente);
         logger.info("Un nuovo paziente è stato registrato");
-        return ResponseEntity.status(HttpStatus.CREATED).body("Paziente creato correttamente");
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Paziente creato correttamente", pazienteDTO));
     }
 
     /**
@@ -78,9 +80,9 @@ public class PazienteController {
      * @return la response entity di status 200
      */
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updatePazienteById(@RequestBody PazienteDTO pazienteEdit, @PathVariable Long id) {
-        pazienteService.updatePazienteById(pazienteEdit, id);
-        return ResponseEntity.status(200).body("Paziente modificato correttamente");
+    public ResponseEntity updatePazienteById(@Valid @RequestBody PazienteDTO pazienteEdit, @PathVariable Long id) {
+        PazienteDTO pazienteDTO = pazienteService.updatePazienteById(pazienteEdit, id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Paziente modificato correttamente", pazienteDTO));
     }
 
 }

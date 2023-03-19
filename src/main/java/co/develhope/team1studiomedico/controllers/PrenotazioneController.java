@@ -2,7 +2,9 @@ package co.develhope.team1studiomedico.controllers;
 
 import co.develhope.team1studiomedico.dto.PrenotazioneCreateDTO;
 import co.develhope.team1studiomedico.dto.PrenotazioneDTO;
+import co.develhope.team1studiomedico.dto.ResponseDataSuccessDTO;
 import co.develhope.team1studiomedico.services.PrenotazioneService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +35,10 @@ public class PrenotazioneController {
      * @return la response entity
      */
     @PostMapping("/create")
-    public ResponseEntity createPrenotazione(@RequestBody PrenotazioneCreateDTO prenotazione) {
-        prenotazioneService.createPrenotazione(prenotazione);
+    public ResponseEntity createPrenotazione(@Valid @RequestBody PrenotazioneCreateDTO prenotazione) {
+        PrenotazioneDTO prenotazioneDTO = prenotazioneService.createPrenotazione(prenotazione);
         logger.info("Una nuova prenotazione è stata registrata");
-        return ResponseEntity.status(HttpStatus.CREATED).body("Prenotazione creata correttamente");
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Prenotazione creata correttamente", prenotazioneDTO));
     }
 
     /**
@@ -78,9 +80,9 @@ public class PrenotazioneController {
      * @return la response entity di status 200.
      */
     @PutMapping("/edit/{id}")
-    public ResponseEntity<String> updatePrenotazioneById(@RequestBody PrenotazioneDTO prenotazioneEdit, @PathVariable Long id) {
-        prenotazioneService.updatePrenotazioneById(prenotazioneEdit, id);
-        return ResponseEntity.status(200).body("Prenotazione modificata correttamente");
+    public ResponseEntity updatePrenotazioneById(@Valid @RequestBody PrenotazioneDTO prenotazioneEdit, @PathVariable Long id) {
+        PrenotazioneDTO prenotazioneDTO = prenotazioneService.updatePrenotazioneById(prenotazioneEdit, id);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Prenotazione modificata correttamente", prenotazioneDTO));
     }
 
     /**

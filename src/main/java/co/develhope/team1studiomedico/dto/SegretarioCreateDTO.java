@@ -1,5 +1,7 @@
 package co.develhope.team1studiomedico.dto;
 
+import jakarta.validation.constraints.*;
+
 /**
  * La classe SegretarioCreateDTO rappresenta il DTO (Data Transfer Object) di creazione di SegretarioEntity,
  * consente di creare degli oggetti di trasferimento dati in entrata a partire dai quali sarà possibile
@@ -8,11 +10,29 @@ package co.develhope.team1studiomedico.dto;
 public class SegretarioCreateDTO {
 
     private final Long id;
+    @NotBlank(message = "il campo nome è obbligatorio")
+    @Size(min = 2, max = 25, message = "nome non valido: deve essere compreso tra i 2 - 25 caratteri")
+    @Pattern(regexp = "^[a-zA-Z]*$", message = "nome non valido: non segue gli standard di validazione")
     private final String nome;
+    @NotBlank(message = "il campo cognome è obbligatorio")
+    @Size(min = 2, max = 25, message = "cognome non valido: deve essere compreso tra 2 - 25 caratteri")
+    @Pattern(regexp = "^[a-zA-Z']*$", message = "cognome non valido: non segue gli standard di validazione")
     private final String cognome;
+    @NotBlank(message = "il campo telefono è obbligatorio")
+    @Size(min = 8, max = 16, message = "nome non valido: deve essere compreso tra 8 - 16 caratteri")
+    @Pattern(regexp = "^(\\((00|\\+)39\\)|(00|\\+)39)?(38[890]|34[4-90]|36[680]|33[13-90]|32[89]|35[01]|37[019])\\d{6,7}$",
+            message = "telefono non valido: non segue gli standard di validazione")
     private final String telefono;
+    @NotBlank(message = "il campo email è obbligatorio")
+    @Pattern(regexp = "^(?=.{1,32}@)[a-z0-9_-]+(\\.[a-z0-9_-]+)*@[^-][a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,})$",
+            message = "email non valida: non segue gli standard di validazione")
     private final String email;
+    @NotBlank(message = "il campo password è obbligatorio")
+    @Size(min = 8, max = 16, message = "password non valida: deve essere compresa tra 8 - 16 caratteri")
+    @Pattern(regexp = "(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$@!%&*?])[A-Za-z\\d#$@!%&*?]{8,16}$",
+            message = "password non valida: non segue gli standard di validazione")
     private final String password;
+    @NotNull(message = "il campo foreign key medicoId è obbligatorio")
     private final Long medicoId;
 
     /**

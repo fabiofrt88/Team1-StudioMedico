@@ -5,12 +5,16 @@ import co.develhope.team1studiomedico.dto.PazienteDTO;
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.PazienteEntity;
 import co.develhope.team1studiomedico.repositories.PazienteRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +30,9 @@ public class PazienteService {
     @Autowired
     private PazienteRepository pazienteRepository;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -36,13 +43,16 @@ public class PazienteService {
      *
      * @param pazienteCreateDTO il DTO di creazione del paziente
      */
-    public PazienteDTO createPaziente(PazienteCreateDTO pazienteCreateDTO) {
+    @Transactional
+    public PazienteDTO createPaziente(@NotNull PazienteCreateDTO pazienteCreateDTO) {
         try {
             logger.info("Inizio processo createPaziente in PazienteService");
             PazienteEntity paziente = convertToEntity(pazienteCreateDTO);
             paziente.setId(null);
             paziente.setRecordStatus(EntityStatusEnum.ACTIVE);
-            return convertToDTO(pazienteRepository.saveAndFlush(paziente));
+            paziente = pazienteRepository.saveAndFlush(paziente);
+            entityManager.refresh(paziente);
+            return convertToDTO(paziente);
         } finally {
             logger.info("Fine processo createPaziente in PazienteService");
         }
@@ -90,7 +100,7 @@ public class PazienteService {
      * @param pazienteEdit the paziente edit
      * @param id           the id
      */
-    public PazienteDTO updatePazienteById(PazienteDTO pazienteEdit, Long id) {
+    public PazienteDTO updatePazienteById(@NotNull PazienteDTO pazienteEdit, Long id) {
         PazienteEntity paziente = pazienteRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
 
@@ -164,15 +174,15 @@ public class PazienteService {
         pazienteRepository.restore();
     }
 
-    public PazienteEntity convertToEntity(PazienteCreateDTO pazienteCreateDTO) {
+    public PazienteEntity convertToEntity(@NotNull PazienteCreateDTO pazienteCreateDTO) {
         return modelMapper.map(pazienteCreateDTO, PazienteEntity.class);
     }
 
-    public PazienteEntity convertToEntity(PazienteDTO pazienteDTO) {
+    public PazienteEntity convertToEntity(@NotNull PazienteDTO pazienteDTO) {
         return modelMapper.map(pazienteDTO, PazienteEntity.class);
     }
 
-    public PazienteDTO convertToDTO(PazienteEntity paziente) {
+    public PazienteDTO convertToDTO(@NotNull PazienteEntity paziente) {
         return modelMapper.map(paziente, PazienteDTO.class);
     }
 

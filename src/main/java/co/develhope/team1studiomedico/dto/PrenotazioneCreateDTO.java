@@ -1,5 +1,8 @@
 package co.develhope.team1studiomedico.dto;
 
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -11,9 +14,14 @@ import java.time.LocalTime;
 public class PrenotazioneCreateDTO {
 
     private final Long id;
+    @NotNull(message = "il campo data prenotazione è obbligatorio")
+    @FutureOrPresent(message = "data prenotazione non valida: deve essere diversa da una data passata")
     private final LocalDate dataPrenotazione;
+    @NotNull(message = "il campo ora prenotazione è obbligatorio")
     private final LocalTime oraPrenotazione;
+    @NotNull(message = "il campo foreign key medicoId è obbligatorio")
     private final Long medicoId;
+    @NotNull(message = "il campo foreign key pazienteId è obbligatorio")
     private final Long pazienteId;
 
     /**
