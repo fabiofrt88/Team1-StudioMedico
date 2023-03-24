@@ -6,6 +6,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * La classe ResponseErrorDTO rappresenta il DTO (Data Transfer Object) delle response di errore nella validazione dati,
+ * consente di creare degli oggetti di trasferimento dati mediante i quali sarà possibile restituire dei
+ * messaggi di errore con timestamp, status, tipologia, path e mappa degli errori nel payload delle response
+ */
 public class ResponseValidationErrorDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")

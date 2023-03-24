@@ -27,7 +27,7 @@ public abstract class PersonaEntity extends Auditable<String> {
     private String email;
     @Convert(converter = EntityStatusEnumConverter.class)
     @Column(nullable = false, name = "record_status")
-    private EntityStatusEnum recordStatus; //Character
+    private EntityStatusEnum recordStatus;
 
     /**
      * Costruttore di default di PersonaEntity.

@@ -3,6 +3,7 @@ package co.develhope.team1studiomedico.exceptions;
 import co.develhope.team1studiomedico.dto.ResponseErrorDTO;
 import co.develhope.team1studiomedico.dto.ResponseValidationErrorDTO;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -47,12 +49,25 @@ public class GlobalExceptionHandler {
      * @return response con status di errore 400
      */
     @ExceptionHandler({IllegalArgumentException.class, MethodArgumentTypeMismatchException.class,
-            HttpMessageNotReadableException.class, DateTimeException.class})
-    public ResponseEntity handleIllegalArgumentTypeMismatchParseException(RuntimeException e, HttpServletRequest request) {
+            HttpMessageNotReadableException.class, DateTimeException.class, EntityStatusException.class})
+    public ResponseEntity handleBadRequestRuntimeException(RuntimeException e, HttpServletRequest request) {
         System.out.println(e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ResponseErrorDTO(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
                         HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage(), request.getRequestURI()));
+    }
+
+    /**
+     * Metodo che gestisce le eccezioni ServletException
+     * @param e oggetto eccezione di tipo ServletException
+     * @return response con status di errore 500
+     */
+    @ExceptionHandler(MissingPathVariableException.class)
+    public ResponseEntity handleServletException(ServletException e, HttpServletRequest request) {
+        System.out.println(e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseErrorDTO(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e.getMessage(), request.getRequestURI()));
     }
 
     /**

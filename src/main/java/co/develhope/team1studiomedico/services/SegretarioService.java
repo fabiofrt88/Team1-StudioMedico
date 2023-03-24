@@ -4,6 +4,7 @@ import co.develhope.team1studiomedico.dto.SegretarioCreateDTO;
 import co.develhope.team1studiomedico.dto.SegretarioDTO;
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.SegretarioEntity;
+import co.develhope.team1studiomedico.exceptions.EntityStatusException;
 import co.develhope.team1studiomedico.repositories.SegretarioRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -13,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +43,7 @@ public class SegretarioService {
      * Metodo che crea il segretario.
      *
      * @param segretarioCreateDTO il DTO di creazione del segretario
+     * @return il DTO del segretario
      */
     @Transactional
     public SegretarioDTO createSegretario(@NotNull SegretarioCreateDTO segretarioCreateDTO) {
@@ -87,10 +88,11 @@ public class SegretarioService {
      * Metodo che restituisce il segretario tramite id.
      *
      * @param id l' id
-     * @return il segretario tramite id
+     * @return il DTO del segretario tramite id
      */
     public SegretarioDTO getSegretarioById(Long id) {
         SegretarioEntity segretario = segretarioRepository.findById(id)
+                .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
         return convertToDTO(segretario);
     }
@@ -100,9 +102,11 @@ public class SegretarioService {
      *
      * @param segretarioEdit il segretario edit
      * @param id             l'id
+     * @return il DTO del segretario
      */
     public SegretarioDTO updateSegretarioById(@NotNull SegretarioDTO segretarioEdit, Long id) {
         SegretarioEntity segretario = segretarioRepository.findById(id)
+                .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
 
         if(segretarioEdit.getNome() != null) {
@@ -129,8 +133,11 @@ public class SegretarioService {
     public void deleteSegretarioById(Long id) {
         try {
             logger.info("Inizio processo deleteSegretarioById in SegretarioService");
-            if(!segretarioRepository.existsById(id)) {
-                throw new EntityNotFoundException("Segretario non trovato");
+            SegretarioEntity segretario = segretarioRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+
+            if(segretario.getRecordStatus().equals(EntityStatusEnum.DELETED)) {
+                throw new EntityStatusException("Segretario già cancellato");
             }
             segretarioRepository.softDeleteById(id);
         } finally {
@@ -156,17 +163,30 @@ public class SegretarioService {
      * @param id l'id
      */
     public void restoreSegretarioById(Long id) {
-        if(!segretarioRepository.existsById(id)) {
-            throw new EntityNotFoundException("Segretario non trovato");
+        try {
+            logger.info("Inizio processo restoreSegretarioById in SegretarioService");
+            SegretarioEntity segretario = segretarioRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+
+            if(segretario.getRecordStatus().equals(EntityStatusEnum.ACTIVE)) {
+                throw new EntityStatusException("Segretario già attivo");
+            }
+            segretarioRepository.restoreById(id);
+        } finally {
+            logger.info("Fine processo restoreSegretarioById in SegretarioService");
         }
-        segretarioRepository.restoreById(id);
     }
 
     /**
      * Metodo che ripristina tutti i segretari.
      */
     public void restoreAllSegretari() {
-        segretarioRepository.restore();
+        try {
+            logger.info("Inizio processo restoreAllSegretari in SegretarioService");
+            segretarioRepository.restore();
+        } finally {
+            logger.info("Fine processo restoreAllSegretari in SegretarioService");
+        }
     }
 
     public SegretarioEntity convertToEntity(@NotNull SegretarioCreateDTO segretarioCreateDTO) {
@@ -179,6 +199,44 @@ public class SegretarioService {
 
     public SegretarioDTO convertToDTO(@NotNull SegretarioEntity segretario) {
         return modelMapper.map(segretario, SegretarioDTO.class);
+    }
+
+    /**
+     * Ricerca e restituisce il segretario a partire dall'id del medico (foreign key in segretario)
+     * @param medicoId id del medico
+     * @return il DTO del segretario
+     */
+    public SegretarioDTO getSegretarioByMedicoId(Long medicoId) {
+        SegretarioEntity segretario = segretarioRepository.findSegretarioByMedicoId(medicoId)
+                .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+        return convertToDTO(segretario);
+    }
+
+    /**
+     * Ricerca e restituisce il segretario a partire dall'id del paziente,
+     * le due tabelle hanno in comune l'id del medico (foreign key)
+     * @param pazienteId id del paziente
+     * @return il DTO del segretario
+     */
+    public SegretarioDTO getSegretarioPazienteId(Long pazienteId) {
+        SegretarioEntity segretario = segretarioRepository.findSegretarioByPazienteId(pazienteId)
+                .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+        return convertToDTO(segretario);
+    }
+
+    /**
+     * Ricerca e restituisce il segretario a partire dall'id della prenotazione,
+     * le due tabelle hanno in comune l'id del medico (foreign key)
+     * @param prenotazioneId id della prenotazione
+     * @return il DTO del segretario
+     */
+    public SegretarioDTO getSegretarioByPrenotazioneId(Long prenotazioneId) {
+        SegretarioEntity segretario = segretarioRepository.findSegretarioByPrenotazioneId(prenotazioneId)
+                .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+        return convertToDTO(segretario);
     }
 
 }

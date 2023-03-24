@@ -13,6 +13,7 @@ public class MedicoCreateDTO {
 
     private final String id;
 
+    @NotBlank(message = "il campo nome è obbligatorio")
     @Size(min = 2, max = 25, message = "nome non valido: deve essere compreso tra i 2 - 25 caratteri")
     @Pattern(regexp = "^[a-zA-Z]*$", message = "nome non valido: non segue gli standard di validazione")
     private final String nome;

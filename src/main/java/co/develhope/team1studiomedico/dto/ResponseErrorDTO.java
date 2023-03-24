@@ -4,6 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
+/**
+ * La classe ResponseErrorDTO rappresenta il DTO (Data Transfer Object) delle response di errore,
+ * consente di creare degli oggetti di trasferimento dati mediante i quali sarà possibile
+ * restituire dei messaggi di errore con timestamp, status, tipologia, path nel payload delle response
+ */
 public class ResponseErrorDTO {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")

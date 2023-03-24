@@ -31,14 +31,13 @@ public class MedicoController {
     /**
      * Crea un medico, restituisce una response entity di status 201.
      *
-     * @param medico il DTO di creazione del medico
-     * @return la response entity
+     * @param medicoCreateDTO il DTO di creazione del medico
+     * @return il DTO del medico
      */
-
     @PostMapping("/create")
-    public ResponseEntity createMedico(@Valid @RequestBody MedicoCreateDTO medico) {
-        MedicoDTO medicoDTO = medicoService.createMedico(medico);
-        logger.info("Un nuovo medico è stato registrato");
+    public ResponseEntity createMedico(@Valid @RequestBody MedicoCreateDTO medicoCreateDTO) {
+        MedicoDTO medicoDTO = medicoService.createMedico(medicoCreateDTO);
+        logger.info("Un nuovo medico con id {} è stato registrato", medicoDTO.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Medico creato correttamente", medicoDTO));
     }
 
@@ -66,7 +65,7 @@ public class MedicoController {
      * Restituisce il medico tramite id
      *
      * @param id  id
-     * @return il medico tramite id
+     * @return il DTO del medico tramite id
      */
     @GetMapping("/{id}")
     public MedicoDTO getMedicoById(@PathVariable Long id) {
@@ -83,7 +82,7 @@ public class MedicoController {
     @PutMapping("/edit/{id}")
     public ResponseEntity updateMedicoById(@Valid @RequestBody MedicoDTO medicoEdit, @PathVariable Long id) {
         MedicoDTO medicoDTO = medicoService.updateMedicoById(medicoEdit, id);
-        return ResponseEntity.status(200).body(new ResponseDataSuccessDTO<>("Medico modificato correttamente", medicoDTO));
+        return ResponseEntity.status(200).body(new ResponseDataSuccessDTO<>("Medico con id " + id + " modificato correttamente", medicoDTO));
     }
 
     /**
@@ -107,8 +106,8 @@ public class MedicoController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteMedicoById(@PathVariable Long id) {
         medicoService.deleteMedicoById(id);
-        logger.info("Un medico è stato cancellato");
-        return ResponseEntity.status(200).body("Medico cancellato correttamente");
+        logger.info("Medico con id {} è stato cancellato", id);
+        return ResponseEntity.status(200).body("Medico con id " + id + " cancellato correttamente");
     }
 
     /**
@@ -120,7 +119,8 @@ public class MedicoController {
     @PutMapping("/restore/{id}")
     public ResponseEntity<String> restoreMedicoById(@PathVariable Long id) {
         medicoService.restoreMedicoById(id);
-        return ResponseEntity.status(200).body("Medico ripristinato correttamente");
+        logger.info("Medico con id {} è stato ripristinato", id);
+        return ResponseEntity.status(200).body("Medico con id " + id + " ripristinato correttamente");
     }
 
     /**
@@ -131,7 +131,39 @@ public class MedicoController {
     @PutMapping("/restore/all")
     public ResponseEntity<String> restoreAllMedici() {
         medicoService.restoreAllMedici();
+        logger.warn("Tutti i medici sono stati ripristinati");
         return ResponseEntity.status(200).body("Medici ripristinati correttamente");
+    }
+
+    /**
+     * Ricerca e restituisce il medico a partire dall'id del segretario (foreign key medicoId in segretario)
+     * @param segretarioId id del segretario
+     * @return il DTO del medico
+     */
+    @GetMapping("/segretario/{segretarioId}")
+    public MedicoDTO getMedicoBySegretarioId(@PathVariable Long segretarioId) {
+        return medicoService.getMedicoBySegretarioId(segretarioId);
+    }
+
+    /**
+     * Ricerca e restituisce il medico a partire dall'id del paziente (foreign key medicoId in paziente)
+     * @param pazienteId id del paziente
+     * @return il DTO del medico
+     */
+    @GetMapping("/paziente/{pazienteId}")
+    public MedicoDTO getMedicoByPazienteId(@PathVariable Long pazienteId) {
+        return medicoService.getMedicoByPazienteId(pazienteId);
+    }
+
+    /**
+     * Ricerca e restituisce il medico a partire dall'id della prenotazione
+     * (foreign key medicoId in prenotazione)
+     * @param prenotazioneId id della prenotazione
+     * @return il DTO del medico
+     */
+    @GetMapping("/prenotazione/{prenotazioneId}")
+    public MedicoDTO getMedicoByPrenotazioneId(@PathVariable Long prenotazioneId) {
+        return medicoService.getMedicoByPrenotazioneId(prenotazioneId);
     }
 
 }

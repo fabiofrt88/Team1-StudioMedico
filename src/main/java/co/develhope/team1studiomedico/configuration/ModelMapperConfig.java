@@ -6,6 +6,10 @@ import org.modelmapper.config.Configuration.AccessLevel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Classe di configurazione che istanzia il bean della classe ModelMapper
+ * per realizzare nelle classi services le conversioni tra oggetti entità e DTO
+ */
 @Configuration
 public class ModelMapperConfig {
 

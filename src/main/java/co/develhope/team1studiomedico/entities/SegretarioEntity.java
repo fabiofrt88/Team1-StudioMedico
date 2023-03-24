@@ -13,7 +13,7 @@ import jakarta.persistence.*;
 public class SegretarioEntity extends PersonaEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "medico_id")
+    @JoinColumn(name = "medico_id", unique = true)
     private MedicoEntity medico;
 
     /**

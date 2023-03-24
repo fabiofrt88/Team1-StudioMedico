@@ -4,6 +4,7 @@ import co.develhope.team1studiomedico.dto.PazienteCreateDTO;
 import co.develhope.team1studiomedico.dto.PazienteDTO;
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.PazienteEntity;
+import co.develhope.team1studiomedico.exceptions.EntityStatusException;
 import co.develhope.team1studiomedico.repositories.PazienteRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -42,6 +43,7 @@ public class PazienteService {
      * Metodo che crea il paziente.
      *
      * @param pazienteCreateDTO il DTO di creazione del paziente
+     * @return il DTO del paziente
      */
     @Transactional
     public PazienteDTO createPaziente(@NotNull PazienteCreateDTO pazienteCreateDTO) {
@@ -85,11 +87,12 @@ public class PazienteService {
     /**
      * Metodo che restituisce il paziente tramite id.
      *
-     * @param id the id
-     * @return the paziente by id
+     * @param id l' id
+     * @return il DTO del paziente tramite id
      */
     public PazienteDTO getPazienteById(Long id) {
         PazienteEntity paziente = pazienteRepository.findById(id)
+                .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
         return convertToDTO(paziente);
     }
@@ -99,9 +102,11 @@ public class PazienteService {
      *
      * @param pazienteEdit the paziente edit
      * @param id           the id
+     * @return il DTO del paziente
      */
     public PazienteDTO updatePazienteById(@NotNull PazienteDTO pazienteEdit, Long id) {
         PazienteEntity paziente = pazienteRepository.findById(id)
+                .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
 
         if(pazienteEdit.getNome() != null) {
@@ -134,8 +139,11 @@ public class PazienteService {
     public void deletePazienteById(Long id) {
         try {
             logger.info("Inizio processo deletePazienteById in PazienteService");
-            if(!pazienteRepository.existsById(id)) {
-                throw new EntityNotFoundException("Paziente non trovato");
+            PazienteEntity paziente = pazienteRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Paziente non trovata"));
+
+            if(paziente.getRecordStatus().equals(EntityStatusEnum.DELETED)) {
+                throw new EntityStatusException("Paziente già cancellato");
             }
             pazienteRepository.softDeleteById(id);
         } finally {
@@ -161,17 +169,30 @@ public class PazienteService {
      * @param id l'id
      */
     public void restorePazienteById(Long id) {
-        if(!pazienteRepository.existsById(id)) {
-            throw new EntityNotFoundException("Paziente non trovato");
+        try {
+            logger.info("Inizio processo restorePazienteById in PazienteService");
+            PazienteEntity paziente = pazienteRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+
+            if(paziente.getRecordStatus().equals(EntityStatusEnum.ACTIVE)) {
+                throw new EntityStatusException("Paziente già attivo");
+            }
+            pazienteRepository.restoreById(id);
+        } finally {
+            logger.info("Fine processo restorePazienteById in PazienteService");
         }
-        pazienteRepository.restoreById(id);
     }
 
     /**
      * Metodo che ripristina i pazienti.
      */
     public void restoreAllPazienti() {
-        pazienteRepository.restore();
+        try {
+            logger.info("Inizio processo restoreAllPazienti in PazienteService");
+            pazienteRepository.restore();
+        } finally {
+            logger.info("Fine processo restoreAllPazienti in PazienteService");
+        }
     }
 
     public PazienteEntity convertToEntity(@NotNull PazienteCreateDTO pazienteCreateDTO) {
@@ -184,6 +205,46 @@ public class PazienteService {
 
     public PazienteDTO convertToDTO(@NotNull PazienteEntity paziente) {
         return modelMapper.map(paziente, PazienteDTO.class);
+    }
+
+    /**
+     * Ricerca e restituisce i pazienti a partire dall'id del medico (foreign key medicoId in paziente)
+     * @param medicoId id del medico
+     * @return lista di pazienti filtrati per id medico
+     */
+    public List<PazienteDTO> getAllPazientiByMedicoId(Long medicoId) {
+        return pazienteRepository.findPazientiByMedicoId(medicoId)
+                .stream()
+                .filter(paziente -> paziente.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce i pazienti a partire dall'id del segretario,
+     * le due tabelle hanno in comune l'id del medico (foreign key)
+     * @param segretarioId id del segretario
+     * @return lista di pazienti filtrati per id segretario
+     */
+    public List<PazienteDTO> getAllPazientiBySegretarioId(Long segretarioId) {
+        return pazienteRepository.findPazientiBySegretarioId(segretarioId)
+                .stream()
+                .filter(paziente -> paziente.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce il paziente a partire dall'id della prenotazione
+     * (foreign key pazienteId in prenotazione)
+     * @param prenotazioneId id della prenotazione
+     * @return il DTO del paziente
+     */
+    public PazienteDTO getPazienteByPrenotazioneId(Long prenotazioneId) {
+        PazienteEntity paziente = pazienteRepository.findPazienteByPrenotazioneId(prenotazioneId)
+                .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+        return convertToDTO(paziente);
     }
 
 }
