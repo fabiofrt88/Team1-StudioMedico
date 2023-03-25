@@ -47,4 +47,32 @@ public interface PazienteRepository extends PersonaRepository<PazienteEntity> {
             WHERE pr.id = :prenotazioneId""")
     Optional<PazienteEntity> findPazienteByPrenotazioneId(@Param("prenotazioneId") Long prenotazioneId);
 
+    /**
+     * Ricerca pazienti per nome e cognome e id del medico (foreign key medicoId in paziente)
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @param medicoId id del medico
+     * @return lista di pazienti filtrati per nome, cognome, id del medico
+     */
+    @Query("""
+            SELECT p FROM paziente p 
+            WHERE p.nome LIKE %:nome% AND p.cognome LIKE %:cognome% 
+            AND p.medico.id = :medicoId""")
+    List<PazienteEntity> searchPazientiByNomeAndCognomeAndMedicoId(@Param("nome") String nome, @Param("cognome") String cognome, @Param("medicoId") Long medicoId);
+
+    /**
+     * Ricerca pazienti per nome e cognome e id del segretario
+     * le due tabelle hanno in comune l'id del medico (foreign key)
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @param segretarioId id del segretario
+     * @return lista di pazienti filtrati per nome, cognome, id del segretario
+     */
+    @Query("""
+            SELECT p FROM paziente p 
+            INNER JOIN segretario s
+            WHERE p.nome LIKE %:nome% AND p.cognome LIKE %:cognome% 
+            AND s.id = :segretarioId""")
+    List<PazienteEntity> searchPazientiByNomeAndCognomeAndSegretarioId(@Param("nome") String nome, @Param("cognome") String cognome, @Param("segretarioId") Long segretarioId);
+
 }

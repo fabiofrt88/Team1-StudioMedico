@@ -15,11 +15,11 @@ public class MedicoCreateDTO {
 
     @NotBlank(message = "il campo nome è obbligatorio")
     @Size(min = 2, max = 25, message = "nome non valido: deve essere compreso tra i 2 - 25 caratteri")
-    @Pattern(regexp = "^[a-zA-Z]*$", message = "nome non valido: non segue gli standard di validazione")
+    @Pattern(regexp = "^[a-zA-Z]+(?:\\s[a-zA-Z]+)*$", message = "nome non valido: non segue gli standard di validazione")
     private final String nome;
     @NotBlank(message = "il campo cognome è obbligatorio")
     @Size(min = 2, max = 25, message = "cognome non valido: deve essere compreso tra 2 - 25 caratteri")
-    @Pattern(regexp = "^[a-zA-Z']*$", message = "cognome non valido: non segue gli standard di validazione")
+    @Pattern(regexp = "^[a-zA-Z']+(?:\\s[a-zA-Z']+)*$", message = "cognome non valido: non segue gli standard di validazione")
     private final String cognome;
     @NotBlank(message = "il campo telefono è obbligatorio")
     @Size(min = 8, max = 16, message = "nome non valido: deve essere compreso tra 8 - 16 caratteri")

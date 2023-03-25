@@ -1,10 +1,12 @@
 package co.develhope.team1studiomedico.repositories;
 
+import co.develhope.team1studiomedico.entities.MedicoEntity;
 import co.develhope.team1studiomedico.entities.SegretarioEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**

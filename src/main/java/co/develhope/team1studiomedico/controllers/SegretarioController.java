@@ -171,4 +171,25 @@ public class SegretarioController {
         return segretarioService.getSegretarioByPrenotazioneId(prenotazioneId);
     }
 
+    /**
+     * Ricerca e restituisce il segretario per email
+     * @param email email di ricerca
+     * @return il DTO del segretario
+     */
+    @GetMapping("/email/{email}")
+    public SegretarioDTO getSegretarioByEmail(@PathVariable String email) {
+        return segretarioService.getSegretarioByEmail(email);
+    }
+
+    /**
+     * Ricerca e restituisce i segretari per nome e cognome
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @return lista dei segretari filtrati per nome e cognome
+     */
+    @GetMapping("/nome/{nome}/cognome/{cognome}")
+    public List<SegretarioDTO> getSegretariByNomeAndCognome(@PathVariable String nome, @PathVariable String cognome) {
+        return segretarioService.getSegretariByNomeAndCognome(nome, cognome);
+    }
+
 }

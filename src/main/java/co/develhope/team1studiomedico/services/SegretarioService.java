@@ -189,14 +189,29 @@ public class SegretarioService {
         }
     }
 
+    /**
+     * Metodo che converte un oggetto SegretarioCreateDTO in un oggetto SegretarioEntity
+     * @param segretarioCreateDTO il DTO di creazione del segretario
+     * @return il segretario
+     */
     public SegretarioEntity convertToEntity(@NotNull SegretarioCreateDTO segretarioCreateDTO) {
         return modelMapper.map(segretarioCreateDTO, SegretarioEntity.class);
     }
 
+    /**
+     * Metodo che converte un oggetto SegretarioDTO in un oggetto SegretarioEntity
+     * @param segretarioDTO il DTO del segretario
+     * @return il segretario
+     */
     public SegretarioEntity convertToEntity(@NotNull SegretarioDTO segretarioDTO) {
         return modelMapper.map(segretarioDTO, SegretarioEntity.class);
     }
 
+    /**
+     * Metodo che converte un oggetto SegretarioEntity in un oggetto SegretarioDTO
+     * @param segretario il segretario
+     * @return il DTO del segretario
+     */
     public SegretarioDTO convertToDTO(@NotNull SegretarioEntity segretario) {
         return modelMapper.map(segretario, SegretarioDTO.class);
     }
@@ -237,6 +252,32 @@ public class SegretarioService {
                 .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
         return convertToDTO(segretario);
+    }
+
+    /**
+     * Ricerca e restituisce il segretario per email
+     * @param email email di ricerca
+     * @return il DTO del segretario
+     */
+    public SegretarioDTO getSegretarioByEmail(String email) {
+        SegretarioEntity segretario = segretarioRepository.findByEmail(email)
+                .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+        return convertToDTO(segretario);
+    }
+
+    /**
+     * Ricerca e restituisce i segretari per nome e cognome
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @return lista dei segretari filtrati per nome e cognome
+     */
+    public List<SegretarioDTO> getSegretariByNomeAndCognome(String nome, String cognome) {
+        return segretarioRepository.searchByNomeAndCognome(nome, cognome)
+                .stream()
+                .filter(segretario -> segretario.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
 }

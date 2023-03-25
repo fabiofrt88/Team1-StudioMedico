@@ -254,4 +254,30 @@ public class MedicoService {
         return convertToDTO(medico);
     }
 
+    /**
+     * Ricerca e restituisce il medico per email
+     * @param email email di ricerca
+     * @return il DTO del medico
+     */
+    public MedicoDTO getMedicoByEmail(String email) {
+        MedicoEntity medico = medicoRepository.findByEmail(email)
+                .filter(medicoEntity -> medicoEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
+        return convertToDTO(medico);
+    }
+
+    /**
+     * Ricerca e restituisce i medici per nome e cognome
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @return lista dei medici filtrati per nome e cognome
+     */
+    public List<MedicoDTO> getMediciByNomeAndCognome(String nome, String cognome) {
+        return medicoRepository.searchByNomeAndCognome(nome, cognome)
+                .stream()
+                .filter(medico -> medico.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
 }

@@ -191,14 +191,29 @@ public class PrenotazioneService {
         }
     }
 
+    /**
+     * Metodo che converte un oggetto PrenotazioneCreateDTO in un oggetto PrenotazioneEntity
+     * @param prenotazioneCreateDTO il DTO di creazione della prenotazione
+     * @return la prenotazione
+     */
     public PrenotazioneEntity convertToEntity(@NotNull PrenotazioneCreateDTO prenotazioneCreateDTO) {
         return modelMapper.map(prenotazioneCreateDTO, PrenotazioneEntity.class);
     }
 
+    /**
+     * Metodo che converte un oggetto PrenotazioneDTO in un oggetto PrenotazioneEntity
+     * @param prenotazioneDTO il DTO della prenotazione
+     * @return la prenotazione
+     */
     public PrenotazioneEntity convertToEntity(@NotNull PrenotazioneDTO prenotazioneDTO) {
         return modelMapper.map(prenotazioneDTO, PrenotazioneEntity.class);
     }
 
+    /**
+     * Metodo che converte un oggetto PrenotazioneEntity in un oggetto PrenotazioneDTO
+     * @param prenotazione la prenotazione
+     * @return il DTO della prenotazione
+     */
     public PrenotazioneDTO convertToDTO(@NotNull PrenotazioneEntity prenotazione) {
         return modelMapper.map(prenotazione, PrenotazioneDTO.class);
     }

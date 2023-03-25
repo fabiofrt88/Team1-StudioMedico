@@ -195,14 +195,29 @@ public class PazienteService {
         }
     }
 
+    /**
+     * Metodo che converte un oggetto PazienteCreateDTO in un oggetto PazienteEntity
+     * @param pazienteCreateDTO il DTO di creazione del paziente
+     * @return il paziente
+     */
     public PazienteEntity convertToEntity(@NotNull PazienteCreateDTO pazienteCreateDTO) {
         return modelMapper.map(pazienteCreateDTO, PazienteEntity.class);
     }
 
+    /**
+     * Metodo che converte un oggetto PazienteDTO in un oggetto PazienteEntity
+     * @param pazienteDTO il DTO del paziente
+     * @return il paziente
+     */
     public PazienteEntity convertToEntity(@NotNull PazienteDTO pazienteDTO) {
         return modelMapper.map(pazienteDTO, PazienteEntity.class);
     }
 
+    /**
+     * Metodo che converte un oggetto PazienteEntity in un oggetto PazienteDTO
+     * @param paziente il paziente
+     * @return il DTO del paziente
+     */
     public PazienteDTO convertToDTO(@NotNull PazienteEntity paziente) {
         return modelMapper.map(paziente, PazienteDTO.class);
     }
@@ -245,6 +260,63 @@ public class PazienteService {
                 .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
         return convertToDTO(paziente);
+    }
+
+    /**
+     * Ricerca e restituisce il paziente per email
+     * @param email email di ricerca
+     * @return il DTO del paziente
+     */
+    public PazienteDTO getPazienteByEmail(String email) {
+        PazienteEntity paziente = pazienteRepository.findByEmail(email)
+                .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+        return convertToDTO(paziente);
+    }
+
+    /**
+     * Ricerca e restituisce i pazienti per nome e cognome
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @return lista dei pazienti filtrati per nome e cognome
+     */
+    public List<PazienteDTO> getPazientiByNomeAndCognome(String nome, String cognome) {
+        return pazienteRepository.searchByNomeAndCognome(nome, cognome)
+                .stream()
+                .filter(paziente -> paziente.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce i pazienti per nome e cognome e id del medico (foreign key medicoId in paziente)
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @param medicoId id del medico
+     * @return lista di pazienti filtrati per nome, cognome, id del medico
+     */
+    public List<PazienteDTO> getPazientiByNomeAndCognomeAndMedicoId(String nome, String cognome, Long medicoId) {
+        return pazienteRepository.searchPazientiByNomeAndCognomeAndMedicoId(nome, cognome, medicoId)
+                .stream()
+                .filter(paziente -> paziente.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce i pazienti per nome e cognome e id del segretario
+     * le due tabelle hanno in comune l'id del medico (foreign key)
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @param segretarioId id del segretario
+     * @return lista di pazienti filtrati per nome, cognome, id del segretario
+     */
+    public List<PazienteDTO> getPazientiByNomeAndCognomeAndSegretarioId(String nome, String cognome, Long segretarioId) {
+        return pazienteRepository.searchPazientiByNomeAndCognomeAndSegretarioId(nome, cognome, segretarioId)
+                .stream()
+                .filter(paziente -> paziente.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
 }

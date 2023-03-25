@@ -1,6 +1,5 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.dto.MedicoDTO;
 import co.develhope.team1studiomedico.dto.PazienteCreateDTO;
 import co.develhope.team1studiomedico.dto.PazienteDTO;
 import co.develhope.team1studiomedico.dto.ResponseDataSuccessDTO;
@@ -166,6 +165,52 @@ public class PazienteController {
     @GetMapping("/prenotazione/{prenotazioneId}")
     public PazienteDTO getPazienteByPrenotazioneId(@PathVariable Long prenotazioneId) {
         return pazienteService.getPazienteByPrenotazioneId(prenotazioneId);
+    }
+
+    /**
+     * Ricerca e restituisce il paziente per email
+     * @param email email di ricerca
+     * @return il DTO del paziente
+     */
+    @GetMapping("/email/{email}")
+    public PazienteDTO getPazienteByEmail(@PathVariable String email) {
+        return pazienteService.getPazienteByEmail(email);
+    }
+
+    /**
+     * Ricerca e restituisce i pazienti per nome e cognome
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @return lista dei pazienti filtrati per nome e cognome
+     */
+    @GetMapping("/nome/{nome}/cognome/{cognome}")
+    public List<PazienteDTO> getPazientiByNomeAndCognome(@PathVariable String nome, @PathVariable String cognome) {
+        return pazienteService.getPazientiByNomeAndCognome(nome, cognome);
+    }
+
+    /**
+     * Ricerca e restituisce i pazienti per nome e cognome e id del medico (foreign key medicoId in paziente)
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @param medicoId id del medico
+     * @return lista di pazienti filtrati per nome, cognome, id del medico
+     */
+    @GetMapping("/nome/{nome}/cognome/{cognome}/medico/{medicoId}")
+    public List<PazienteDTO> getPazientiByNomeAndCognomeAndMedicoId(@PathVariable String nome, @PathVariable String cognome, @PathVariable Long medicoId) {
+        return pazienteService.getPazientiByNomeAndCognomeAndMedicoId(nome, cognome, medicoId);
+    }
+
+    /**
+     * Ricerca e restituisce i pazienti per nome e cognome e id del segretario
+     * le due tabelle hanno in comune l'id del medico (foreign key)
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @param segretarioId id del segretario
+     * @return lista di pazienti filtrati per nome, cognome, id del segretario
+     */
+    @GetMapping("/nome/{nome}/cognome/{cognome}/segretario/{segretarioId}")
+    public List<PazienteDTO> getPazientiByNomeAndCognomeAndSegretarioId(@PathVariable String nome, @PathVariable String cognome, @PathVariable Long segretarioId) {
+        return pazienteService.getPazientiByNomeAndCognomeAndSegretarioId(nome, cognome, segretarioId);
     }
 
 }

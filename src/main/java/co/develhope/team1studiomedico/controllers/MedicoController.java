@@ -166,4 +166,25 @@ public class MedicoController {
         return medicoService.getMedicoByPrenotazioneId(prenotazioneId);
     }
 
+    /**
+     * Ricerca e restituisce il medico per email
+     * @param email email di ricerca
+     * @return il DTO del medico
+     */
+    @GetMapping("/email/{email}")
+    public MedicoDTO getMedicoByEmail(@PathVariable String email) {
+        return medicoService.getMedicoByEmail(email);
+    }
+
+    /**
+     * Ricerca e restituisce i medici per nome e cognome
+     * @param nome nome utente
+     * @param cognome cognome utente
+     * @return lista dei medici filtrati per nome e cognome
+     */
+    @GetMapping("/nome/{nome}/cognome/{cognome}")
+    public List<MedicoDTO> getMediciByNomeAndCognome(@PathVariable String nome, @PathVariable String cognome) {
+        return medicoService.getMediciByNomeAndCognome(nome, cognome);
+    }
+
 }
