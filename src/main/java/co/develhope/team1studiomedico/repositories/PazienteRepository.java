@@ -75,4 +75,11 @@ public interface PazienteRepository extends PersonaRepository<PazienteEntity> {
             AND s.id = :segretarioId""")
     List<PazienteEntity> searchPazientiByNomeAndCognomeAndSegretarioId(@Param("nome") String nome, @Param("cognome") String cognome, @Param("segretarioId") Long segretarioId);
 
+    /**
+     * Ricerca il paziente a partire dal codice fiscale
+     * @param codiceFiscale codice fiscale di ricerca
+     * @return il paziente
+     */
+    Optional<PazienteEntity> findPazienteByCodiceFiscale(String codiceFiscale);
+
 }

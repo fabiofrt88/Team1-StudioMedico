@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,7 +71,7 @@ public class PrenotazioneService {
      * @return le prenotazioni con record status ACTIVE
      */
     public List<PrenotazioneDTO> getAllPrenotazioni() {
-        return prenotazioneRepository.findByRecordStatus(EntityStatusEnum.ACTIVE)
+        return prenotazioneRepository.findByRecordStatus(EntityStatusEnum.ACTIVE, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -82,7 +83,7 @@ public class PrenotazioneService {
      * @return le prenotazioni cancellate logicamente con record status DELETED.
      */
     public List<PrenotazioneDTO> getAllDeletedPrenotazioni() {
-        return prenotazioneRepository.findByRecordStatus(EntityStatusEnum.DELETED)
+        return prenotazioneRepository.findByRecordStatus(EntityStatusEnum.DELETED, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -219,12 +220,41 @@ public class PrenotazioneService {
     }
 
     /**
+     * Restituisce il numero delle prenotazioni della data considerata
+     * @param dataPrenotazione data di prenotazione
+     * @return il numero delle prenotazioni della data considerata
+     */
+    public Integer countPrenotazioniByDataPrenotazione(LocalDate dataPrenotazione) {
+        return prenotazioneRepository.countPrenotazioniByDataPrenotazione(dataPrenotazione);
+    }
+
+    /**
+     * Restituisce il numero delle prenotazioni della data considerata collegate all'id del medico
+     * @param dataPrenotazione data di prenotazione
+     * @param medicoId id del medico
+     * @return il numero delle prenotazioni della data considerata collegate all'id del medico
+     */
+    public Integer countPrenotazioniByDataPrenotazioneAndMedicoId(LocalDate dataPrenotazione, Long medicoId) {
+        return prenotazioneRepository.countPrenotazioniByDataPrenotazioneAndMedicoId(dataPrenotazione, medicoId);
+    }
+
+    /**
+     * Restituisce il numero delle prenotazioni della data considerata collegate all'id del segretario
+     * @param dataPrenotazione data di prenotazione
+     * @param segretarioId id del segretario
+     * @return il numero delle prenotazioni della data considerata collegate all'id del segretario
+     */
+    public Integer countPrenotazioniByDataPrenotazioneAndSegretarioId(LocalDate dataPrenotazione, Long segretarioId) {
+        return prenotazioneRepository.countPrenotazioniByDataPrenotazioneAndSegretarioId(dataPrenotazione, segretarioId);
+    }
+
+    /**
      * Ricerca e restituisce le prenotazioni a partire dall'id del medico (foreign key medicoId in prenotazione)
      * @param medicoId id del medico
      * @return lista delle prenotazioni filtrate per id medico
      */
     public List<PrenotazioneDTO> getAllPrenotazioniByMedicoId(Long medicoId) {
-        return prenotazioneRepository.findPrenotazioniByMedicoId(medicoId)
+        return prenotazioneRepository.findPrenotazioniByMedicoId(medicoId, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .map(this::convertToDTO)
@@ -237,7 +267,7 @@ public class PrenotazioneService {
      * @return lista delle prenotazioni filtrate per id paziente
      */
     public List<PrenotazioneDTO> getAllPrenotazioniByPazienteId(Long pazienteId) {
-        return prenotazioneRepository.findPrenotazioniByPazienteId(pazienteId)
+        return prenotazioneRepository.findPrenotazioniByPazienteId(pazienteId, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .map(this::convertToDTO)
@@ -264,7 +294,7 @@ public class PrenotazioneService {
      * @return lista delle prenotazioni filtrate per data di prenotazione
      */
     public List<PrenotazioneDTO> getAllPrenotazioniByDataPrenotazione(LocalDate dataPrenotazione) {
-        return prenotazioneRepository.findPrenotazioniByDataPrenotazione(dataPrenotazione)
+        return prenotazioneRepository.findPrenotazioniByDataPrenotazione(dataPrenotazione, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .map(this::convertToDTO)
@@ -278,7 +308,7 @@ public class PrenotazioneService {
      * @return lista delle prenotazioni filtrate per data e ora della prenotazione
      */
     public List<PrenotazioneDTO> getAllPrenotazioniByDataPrenotazioneAndOraPrenotazione(LocalDate dataPrenotazione, LocalTime oraPrenotazione) {
-        return prenotazioneRepository.findPrenotazioniByDataPrenotazioneAndOraPrenotazione(dataPrenotazione, oraPrenotazione)
+        return prenotazioneRepository.findPrenotazioniByDataPrenotazioneAndOraPrenotazione(dataPrenotazione, oraPrenotazione, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .map(this::convertToDTO)
@@ -305,7 +335,7 @@ public class PrenotazioneService {
      * @return lista delle prenotazioni filtrate per stato prenotazione
      */
     public List<PrenotazioneDTO> getAllPrenotazioniByStatoPrenotazione(PrenotazioneStatusEnum statoPrenotazione) {
-        return prenotazioneRepository.findPrenotazioniByStatoPrenotazione(statoPrenotazione)
+        return prenotazioneRepository.findPrenotazioniByStatoPrenotazione(statoPrenotazione, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .map(this::convertToDTO)
@@ -319,7 +349,7 @@ public class PrenotazioneService {
      * @return lista delle prenotazioni filtrate per data di prenotazione e id del medico
      */
     public List<PrenotazioneDTO> getAllPrenotazioniByDataPrenotazioneAndMedicoId(LocalDate dataPrenotazione, Long medicoId) {
-        return prenotazioneRepository.findPrenotazioniByDataPrenotazioneAndMedicoId(dataPrenotazione, medicoId)
+        return prenotazioneRepository.findPrenotazioniByDataPrenotazioneAndMedicoId(dataPrenotazione, medicoId, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .map(this::convertToDTO)
@@ -333,7 +363,7 @@ public class PrenotazioneService {
      * @return lista delle prenotazioni filtrate per data di prenotazione e id del paziente
      */
     public List<PrenotazioneDTO> getAllPrenotazioniByDataPrenotazioneAndPazienteId(LocalDate dataPrenotazione, Long pazienteId) {
-        return prenotazioneRepository.findPrenotazioniByDataPrenotazioneAndPazienteId(dataPrenotazione, pazienteId)
+        return prenotazioneRepository.findPrenotazioniByDataPrenotazioneAndPazienteId(dataPrenotazione, pazienteId, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .map(this::convertToDTO)
@@ -362,7 +392,7 @@ public class PrenotazioneService {
      * @return lista delle prenotazioni filtrate per data, ora della prenotazione e id del medico
      */
     public List<PrenotazioneDTO> getAllPrenotazioniByDataPrenotazioneAndOraPrenotazioneAndMedicoId(LocalDate dataPrenotazione, LocalTime oraPrenotazione, Long medicoId) {
-        return prenotazioneRepository.findPrenotazioniByDataPrenotazioneAndOraPrenotazioneAndMedicoId(dataPrenotazione, oraPrenotazione, medicoId)
+        return prenotazioneRepository.findPrenotazioniByDataPrenotazioneAndOraPrenotazioneAndMedicoId(dataPrenotazione, oraPrenotazione, medicoId, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .map(this::convertToDTO)
@@ -436,7 +466,7 @@ public class PrenotazioneService {
      * @return lista delle prenotazioni filtrate per stato prenotazione e id del medico
      */
     public List<PrenotazioneDTO> getAllPrenotazioniByStatoPrenotazioneAndMedicoId(PrenotazioneStatusEnum statoPrenotazione, Long medicoId) {
-        return prenotazioneRepository.findPrenotazioniByStatoPrenotazioneAndMedicoId(statoPrenotazione, medicoId)
+        return prenotazioneRepository.findPrenotazioniByStatoPrenotazioneAndMedicoId(statoPrenotazione, medicoId, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
                 .stream()
                 .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .map(this::convertToDTO)
@@ -464,7 +494,188 @@ public class PrenotazioneService {
      * @return lista delle prenotazioni filtrate per stato prenotazione e id del paziente
      */
     public List<PrenotazioneDTO> getAllPrenotazioniByStatoPrenotazioneAndPazienteId(PrenotazioneStatusEnum statoPrenotazione, Long pazienteId) {
-        return prenotazioneRepository.findPrenotazioniByStatoPrenotazioneAndPazienteId(statoPrenotazione, pazienteId)
+        return prenotazioneRepository.findPrenotazioniByStatoPrenotazioneAndPazienteId(statoPrenotazione, pazienteId, Sort.by("dataPrenotazione", "oraPrenotazione").ascending())
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per anno (year)
+     * @param year anno (year) di ricerca
+     * @return lista delle prenotazioni filtrate per anno (year)
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniByYear(Integer year) {
+        return prenotazioneRepository.findPrenotazioniByYear(year)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per anno (year) e id del medico
+     * @param year anno (year) di ricerca
+     * @param medicoId id del medico
+     * @return lista delle prenotazioni filtrate per anno (year) e id del medico
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniByYearAndMedicoId(Integer year, Long medicoId) {
+        return prenotazioneRepository.findPrenotazioniByYearAndMedicoId(year, medicoId)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per anno (year) e id del segretario
+     * @param year anno (year) di ricerca
+     * @param segretarioId id del segretario
+     * @return lista delle prenotazioni filtrate per anno (year) e id del segretario
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniByYearAndSegretarioId(Integer year, Long segretarioId) {
+        return prenotazioneRepository.findPrenotazioniByYearAndSegretarioId(year, segretarioId)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per anno (year) e id del paziente
+     * @param year anno (year) di ricerca
+     * @param pazienteId id del paziente
+     * @return lista delle prenotazioni filtrate per anno (year) e id del paziente
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniByYearAndPazienteId(Integer year, Long pazienteId) {
+        return prenotazioneRepository.findPrenotazioniByYearAndPazienteId(year, pazienteId)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month) e anno (year)
+     * @param month mese (month) di ricerca
+     * @param year anno (year) di ricerca
+     * @return lista delle prenotazioni filtrate per mese (month) e anno (year)
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniByMonthAndYear(Integer month, Integer year) {
+        return prenotazioneRepository.findPrenotazioniByMonthAndYear(month, year)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month), anno (year) e id del medico
+     * @param month mese (month) di ricerca
+     * @param year anno (year) di ricerca
+     * @param medicoId id del medico
+     * @return lista delle prenotazioni filtrate per mese (month), anno (year) e id del medico
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniByMonthAndYearAndMedicoId(Integer month, Integer year, Long medicoId) {
+        return prenotazioneRepository.findPrenotazioniByMonthAndYearAndMedicoId(month, year, medicoId)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month), anno (year) e id del segretario
+     * @param month mese (month) di ricerca
+     * @param year anno (year) di ricerca
+     * @param segretarioId id del segretario
+     * @return lista delle prenotazioni filtrate per mese (month), anno (year) e id del segretario
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniByMonthAndYearAndSegretarioId(Integer month, Integer year, Long segretarioId) {
+        return prenotazioneRepository.findPrenotazioniByMonthAndYearAndSegretarioId(month, year, segretarioId)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month), anno (year) e id del paziente
+     * @param month mese (month) di ricerca
+     * @param year anno (year) di ricerca
+     * @param pazienteId id del paziente
+     * @return lista delle prenotazioni filtrate per mese (month), anno (year) e id del paziente
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniByMonthAndYearAndPazienteId(Integer month, Integer year, Long pazienteId) {
+        return prenotazioneRepository.findPrenotazioniByMonthAndYearAndPazienteId(month, year, pazienteId)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month) e anno (year) nell'intervallo di due mesi e due anni considerati
+     * @param fromMonth mese (month) inizio
+     * @param toMonth mese (month) fine
+     * @param fromYear anno (year) inizio
+     * @param toYear anno (year) fine
+     * @return lista delle prenotazioni filtrate nell'intervallo di due mesi e due anni considerati
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniBetweenMonthsAndYears(Integer fromMonth, Integer toMonth, Integer fromYear, Integer toYear) {
+        return prenotazioneRepository.findPrenotazioniBetweenMonthsAndYears(fromMonth, toMonth, fromYear, toYear)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month) e anno (year) nell'intervallo di due mesi e due anni considerati, e id del medico
+     * @param fromMonth mese (month) inizio
+     * @param toMonth mese (month) fine
+     * @param fromYear anno (year) inizio
+     * @param toYear anno (year) fine
+     * @param medicoId id del medico
+     * @return lista delle prenotazioni filtrate nell'intervallo di due mesi e due anni considerati, e id del medico
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniBetweenMonthsAndYearsAndMedicoId(Integer fromMonth, Integer toMonth, Integer fromYear, Integer toYear, Long medicoId) {
+        return prenotazioneRepository.findPrenotazioniBetweenMonthsAndYearsAndMedicoId(fromMonth, toMonth, fromYear, toYear, medicoId)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month) e anno (year) nell'intervallo di due mesi e due anni considerati, e id del segretario
+     * @param fromMonth mese (month) inizio
+     * @param toMonth mese (month) fine
+     * @param fromYear anno (year) inizio
+     * @param toYear anno (year) fine
+     * @param segretarioId id del segretario
+     * @return lista delle prenotazioni filtrate nell'intervallo di due mesi e due anni considerati, e id del segretario
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniBetweenMonthsAndYearsAndSegretarioId(Integer fromMonth, Integer toMonth, Integer fromYear, Integer toYear, Long segretarioId) {
+        return prenotazioneRepository.findPrenotazioniBetweenMonthsAndYearsAndSegretarioId(fromMonth, toMonth, fromYear, toYear, segretarioId)
+                .stream()
+                .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month) e anno (year) nell'intervallo di due mesi e due anni considerati, e id del paziente
+     * @param fromMonth mese (month) inizio
+     * @param toMonth mese (month) fine
+     * @param fromYear anno (year) inizio
+     * @param toYear anno (year) fine
+     * @param pazienteId id del paziente
+     * @return lista delle prenotazioni filtrate nell'intervallo di due mesi e due anni considerati, e id del paziente
+     */
+    public List<PrenotazioneDTO> getAllPrenotazioniBetweenMonthsAndYearsAndPazienteId(Integer fromMonth, Integer toMonth, Integer fromYear, Integer toYear, Long pazienteId) {
+        return prenotazioneRepository.findPrenotazioniBetweenMonthsAndYearsAndPazienteId(fromMonth, toMonth, fromYear, toYear, pazienteId)
                 .stream()
                 .filter(prenotazione -> prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
                 .map(this::convertToDTO)

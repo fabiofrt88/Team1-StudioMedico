@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
+
+import static java.util.Map.entry;
 
 /**
  * PrenotazioneController rappresenta la web API controller delle Prenotazioni,
@@ -136,6 +139,38 @@ public class PrenotazioneController {
         prenotazioneService.restoreAllPrenotazioni();
         logger.warn("Tutte le prenotazioni sono state ripristinate");
         return ResponseEntity.status(200).body("Prenotazioni ripristinate correttamente");
+    }
+
+    /**
+     * Restituisce il numero delle prenotazioni della data considerata
+     * @param dataPrenotazione data di prenotazione
+     * @return il numero delle prenotazioni della data considerata
+     */
+    @GetMapping("/count/data/{dataPrenotazione}")
+    public Map<String, Integer> countPrenotazioniByDataPrenotazione(@PathVariable LocalDate dataPrenotazione) {
+        return Map.ofEntries(entry("count", prenotazioneService.countPrenotazioniByDataPrenotazione(dataPrenotazione)));
+    }
+
+    /**
+     * Restituisce il numero delle prenotazioni della data considerata collegate all'id del medico
+     * @param dataPrenotazione data di prenotazione
+     * @param medicoId id del medico
+     * @return il numero delle prenotazioni della data considerata collegate all'id del medico
+     */
+    @GetMapping("/count/data/{dataPrenotazione}/medico/{medicoId}")
+    public Map<String, Integer> countPrenotazioniByDataPrenotazioneAndMedicoId(@PathVariable LocalDate dataPrenotazione, @PathVariable Long medicoId) {
+        return Map.ofEntries(entry("count", prenotazioneService.countPrenotazioniByDataPrenotazioneAndMedicoId(dataPrenotazione, medicoId)));
+    }
+
+    /**
+     * Restituisce il numero delle prenotazioni della data considerata collegate all'id del segretario
+     * @param dataPrenotazione data di prenotazione
+     * @param segretarioId id del segretario
+     * @return il numero delle prenotazioni della data considerata collegate all'id del segretario
+     */
+    @GetMapping("/count/data/{dataPrenotazione}/segretario/{segretarioId}")
+    public Map<String, Integer> countPrenotazioniByDataPrenotazioneAndSegretarioId(@PathVariable LocalDate dataPrenotazione, @PathVariable Long segretarioId) {
+        return Map.ofEntries(entry("count", prenotazioneService.countPrenotazioniByDataPrenotazioneAndSegretarioId(dataPrenotazione, segretarioId)));
     }
 
     /**
@@ -335,6 +370,151 @@ public class PrenotazioneController {
     @GetMapping("/paziente/{pazienteId}/stato/{statoPrenotazione}")
     public List<PrenotazioneDTO> getAllPrenotazioniByStatoPrenotazioneAndPazienteId(@PathVariable PrenotazioneStatusEnum statoPrenotazione, @PathVariable Long pazienteId) {
         return prenotazioneService.getAllPrenotazioniByStatoPrenotazioneAndPazienteId(statoPrenotazione, pazienteId);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per anno (year)
+     * @param year anno (year) di ricerca
+     * @return lista delle prenotazioni filtrate per anno (year)
+     */
+    @GetMapping("/year/{year}")
+    public List<PrenotazioneDTO> getAllPrenotazioniByYear(@PathVariable Integer year) {
+        return prenotazioneService.getAllPrenotazioniByYear(year);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per anno (year) e id del medico
+     * @param year anno (year) di ricerca
+     * @param medicoId id del medico
+     * @return lista delle prenotazioni filtrate per anno (year) e id del medico
+     */
+    @GetMapping("/year/{year}/medico/{medicoId}")
+    public List<PrenotazioneDTO> getAllPrenotazioniByYearAndMedicoId(@PathVariable Integer year, @PathVariable Long medicoId) {
+        return prenotazioneService.getAllPrenotazioniByYearAndMedicoId(year, medicoId);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per anno (year) e id del segretario
+     * @param year anno (year) di ricerca
+     * @param segretarioId id del segretario
+     * @return lista delle prenotazioni filtrate per anno (year) e id del segretario
+     */
+    @GetMapping("/year/{year}/segretario/{segretarioId}")
+    public List<PrenotazioneDTO> getAllPrenotazioniByYearAndSegretarioId(@PathVariable Integer year, @PathVariable Long segretarioId) {
+        return prenotazioneService.getAllPrenotazioniByYearAndSegretarioId(year, segretarioId);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per anno (year) e id del paziente
+     * @param year anno (year) di ricerca
+     * @param pazienteId id del paziente
+     * @return lista delle prenotazioni filtrate per anno (year) e id del paziente
+     */
+    @GetMapping("/year/{year}/paziente/{pazienteId}")
+    public List<PrenotazioneDTO> getAllPrenotazioniByYearAndPazienteId(@PathVariable Integer year, @PathVariable Long pazienteId) {
+        return prenotazioneService.getAllPrenotazioniByYearAndPazienteId(year, pazienteId);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month) e anno (year)
+     * @param month mese (month) di ricerca
+     * @param year anno (year) di ricerca
+     * @return lista delle prenotazioni filtrate per mese (month) e anno (year)
+     */
+    @GetMapping("/month/{month}/year/{year}")
+    public List<PrenotazioneDTO> getAllPrenotazioniByMonthAndYear(@PathVariable Integer month, @PathVariable Integer year) {
+        return prenotazioneService.getAllPrenotazioniByMonthAndYear(month, year);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month), anno (year) e id del medico
+     * @param month mese (month) di ricerca
+     * @param year anno (year) di ricerca
+     * @param medicoId id del medico
+     * @return lista delle prenotazioni filtrate per mese (month), anno (year) e id del medico
+     */
+    @GetMapping("/month/{month}/year/{year}/medico/{medicoId}")
+    public List<PrenotazioneDTO> getAllPrenotazioniByMonthAndYearAndMedicoId(@PathVariable Integer month, @PathVariable Integer year, @PathVariable Long medicoId) {
+        return prenotazioneService.getAllPrenotazioniByMonthAndYearAndMedicoId(month, year, medicoId);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month), anno (year) e id del segretario
+     * @param month mese (month) di ricerca
+     * @param year anno (year) di ricerca
+     * @param segretarioId id del segretario
+     * @return lista delle prenotazioni filtrate per mese (month), anno (year) e id del segretario
+     */
+    @GetMapping("/month/{month}/year/{year}/segretario/{segretarioId}")
+    public List<PrenotazioneDTO> getAllPrenotazioniByMonthAndYearAndSegretarioId(@PathVariable Integer month, @PathVariable Integer year, @PathVariable Long segretarioId) {
+        return prenotazioneService.getAllPrenotazioniByMonthAndYearAndSegretarioId(month, year, segretarioId);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month), anno (year) e id del paziente
+     * @param month mese (month) di ricerca
+     * @param year anno (year) di ricerca
+     * @param pazienteId id del paziente
+     * @return lista delle prenotazioni filtrate per mese (month), anno (year) e id del paziente
+     */
+    @GetMapping("/month/{month}/year/{year}/paziente/{pazienteId}")
+    public List<PrenotazioneDTO> getAllPrenotazioniByMonthAndYearAndPazienteId(@PathVariable Integer month, @PathVariable Integer year, @PathVariable Long pazienteId) {
+        return prenotazioneService.getAllPrenotazioniByMonthAndYearAndPazienteId(month, year, pazienteId);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month) e anno (year) nell'intervallo di due mesi e due anni considerati
+     * @param fromMonth mese (month) inizio
+     * @param toMonth mese (month) fine
+     * @param fromYear anno (year) inizio
+     * @param toYear anno (year) fine
+     * @return lista delle prenotazioni filtrate nell'intervallo di due mesi e due anni considerati
+     */
+    @GetMapping("/month/{fromMonth}/{toMonth}/year/{fromYear}/{toYear}")
+    public List<PrenotazioneDTO> getAllPrenotazioniBetweenMonthsAndYears(@PathVariable Integer fromMonth, @PathVariable Integer toMonth, @PathVariable Integer fromYear, @PathVariable Integer toYear) {
+        return prenotazioneService.getAllPrenotazioniBetweenMonthsAndYears(fromMonth, toMonth, fromYear, toYear);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month) e anno (year) nell'intervallo di due mesi e due anni considerati, e id del medico
+     * @param fromMonth mese (month) inizio
+     * @param toMonth mese (month) fine
+     * @param fromYear anno (year) inizio
+     * @param toYear anno (year) fine
+     * @param medicoId id del medico
+     * @return lista delle prenotazioni filtrate nell'intervallo di due mesi e due anni considerati, e id del medico
+     */
+    @GetMapping("/month/{fromMonth}/{toMonth}/year/{fromYear}/{toYear}/medico/{medicoId}")
+    public List<PrenotazioneDTO> getAllPrenotazioniBetweenMonthsAndYearsAndMedicoId(@PathVariable Integer fromMonth, @PathVariable Integer toMonth, @PathVariable Integer fromYear, @PathVariable Integer toYear, @PathVariable Long medicoId) {
+        return prenotazioneService.getAllPrenotazioniBetweenMonthsAndYearsAndMedicoId(fromMonth, toMonth, fromYear, toYear, medicoId);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month) e anno (year) nell'intervallo di due mesi e due anni considerati, e id del segretario
+     * @param fromMonth mese (month) inizio
+     * @param toMonth mese (month) fine
+     * @param fromYear anno (year) inizio
+     * @param toYear anno (year) fine
+     * @param segretarioId id del segretario
+     * @return lista delle prenotazioni filtrate nell'intervallo di due mesi e due anni considerati, e id del segretario
+     */
+    @GetMapping("/month/{fromMonth}/{toMonth}/year/{fromYear}/{toYear}/segretario/{segretarioId}")
+    public List<PrenotazioneDTO> getAllPrenotazioniBetweenMonthsAndYearsAndSegretarioId(@PathVariable Integer fromMonth, @PathVariable Integer toMonth, @PathVariable Integer fromYear, @PathVariable Integer toYear, @PathVariable Long segretarioId) {
+        return prenotazioneService.getAllPrenotazioniBetweenMonthsAndYearsAndSegretarioId(fromMonth, toMonth, fromYear, toYear, segretarioId);
+    }
+
+    /**
+     * Ricerca e restituisce le prenotazioni per mese (month) e anno (year) nell'intervallo di due mesi e due anni considerati, e id del paziente
+     * @param fromMonth mese (month) inizio
+     * @param toMonth mese (month) fine
+     * @param fromYear anno (year) inizio
+     * @param toYear anno (year) fine
+     * @param pazienteId id del paziente
+     * @return lista delle prenotazioni filtrate nell'intervallo di due mesi e due anni considerati, e id del paziente
+     */
+    @GetMapping("/month/{fromMonth}/{toMonth}/year/{fromYear}/{toYear}/paziente/{pazienteId}")
+    public List<PrenotazioneDTO> getAllPrenotazioniBetweenMonthsAndYearsAndPazienteId(@PathVariable Integer fromMonth, @PathVariable Integer toMonth, @PathVariable Integer fromYear, @PathVariable Integer toYear, @PathVariable Long pazienteId) {
+        return prenotazioneService.getAllPrenotazioniBetweenMonthsAndYearsAndPazienteId(fromMonth, toMonth, fromYear, toYear, pazienteId);
     }
 
 }

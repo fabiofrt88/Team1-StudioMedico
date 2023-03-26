@@ -178,6 +178,16 @@ public class PazienteController {
     }
 
     /**
+     * Ricerca e restituisce il paziente a partire dal codice fiscale
+     * @param codiceFiscale codice fiscale di ricerca
+     * @return il DTO del paziente
+     */
+    @GetMapping("/codice-fiscale/{codiceFiscale}")
+    public PazienteDTO getPazienteByCodiceFiscale(@PathVariable String codiceFiscale) {
+        return pazienteService.getPazienteByCodiceFiscale(codiceFiscale);
+    }
+
+    /**
      * Ricerca e restituisce i pazienti per nome e cognome
      * @param nome nome utente
      * @param cognome cognome utente

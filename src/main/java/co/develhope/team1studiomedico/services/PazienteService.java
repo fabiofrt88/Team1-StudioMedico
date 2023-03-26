@@ -275,6 +275,18 @@ public class PazienteService {
     }
 
     /**
+     * Ricerca e restituisce il paziente a partire dal codice fiscale
+     * @param codiceFiscale codice fiscale di ricerca
+     * @return il DTO del paziente
+     */
+    public PazienteDTO getPazienteByCodiceFiscale(String codiceFiscale) {
+        PazienteEntity paziente = pazienteRepository.findPazienteByCodiceFiscale(codiceFiscale)
+                .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
+                .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+        return convertToDTO(paziente);
+    }
+
+    /**
      * Ricerca e restituisce i pazienti per nome e cognome
      * @param nome nome utente
      * @param cognome cognome utente
