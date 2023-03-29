@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,9 @@ public class PrenotazioneController {
     @Autowired
     private PrenotazioneService prenotazioneService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     private static final Logger logger = LoggerFactory.getLogger(PrenotazioneController.class);
 
     /**
@@ -44,7 +49,8 @@ public class PrenotazioneController {
     public ResponseEntity createPrenotazione(@Valid @RequestBody PrenotazioneCreateDTO prenotazioneCreateDTO) {
         PrenotazioneDTO prenotazioneDTO = prenotazioneService.createPrenotazione(prenotazioneCreateDTO);
         logger.info("Una nuova prenotazione con id {} è stata registrata", prenotazioneDTO.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Prenotazione creata correttamente", prenotazioneDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>(messageSource.getMessage("prenotazione.controller.create",
+                null, LocaleContextHolder.getLocale()), prenotazioneDTO));
     }
 
     /**
@@ -88,7 +94,8 @@ public class PrenotazioneController {
     @PutMapping("/edit/{id}")
     public ResponseEntity updatePrenotazioneById(@Valid @RequestBody PrenotazioneDTO prenotazioneEdit, @PathVariable Long id) {
         PrenotazioneDTO prenotazioneDTO = prenotazioneService.updatePrenotazioneById(prenotazioneEdit, id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Prenotazione con id + " + id + " modificata correttamente", prenotazioneDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>(messageSource.getMessage("prenotazione.controller.update",
+                new Object[]{id}, LocaleContextHolder.getLocale()), prenotazioneDTO));
     }
 
     /**
@@ -100,7 +107,8 @@ public class PrenotazioneController {
     public ResponseEntity<String> deleteAllPrenotazioni() {
         prenotazioneService.deleteAllPrenotazioni();
         logger.warn("Tutte le prenotazioni sono state cancellate");
-        return ResponseEntity.status(200).body("Prenotazioni cancellate correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("prenotazione.controller.deleteAllPrenotazioni",
+                null, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -113,7 +121,8 @@ public class PrenotazioneController {
     public ResponseEntity<String> deletePrenotazioneById(@PathVariable Long id) {
         prenotazioneService.deletePrenotazioneById(id);
         logger.info("Prenotazione con id {} è stata cancellata", id);
-        return ResponseEntity.status(200).body("Prenotazione con id + " + id + " cancellata correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("prenotazione.controller.delete",
+                new Object[]{id}, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -126,7 +135,8 @@ public class PrenotazioneController {
     public ResponseEntity<String> restorePrenotazioneById(@PathVariable Long id){
         prenotazioneService.restorePrenotazioneById(id);
         logger.info("Prenotazione con id {} è stata ripristinata", id);
-        return ResponseEntity.status(200).body("Prenotazione con id + " + id + " ripristinata correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("prenotazione.controller.restore",
+                new Object[]{id}, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -138,7 +148,8 @@ public class PrenotazioneController {
     public ResponseEntity<String> restoreAllPrenotazioni() {
         prenotazioneService.restoreAllPrenotazioni();
         logger.warn("Tutte le prenotazioni sono state ripristinate");
-        return ResponseEntity.status(200).body("Prenotazioni ripristinate correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("prenotazione.controller.restoreAllPrenotazioni",
+                null, LocaleContextHolder.getLocale()));
     }
 
     /**

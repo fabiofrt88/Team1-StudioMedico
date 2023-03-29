@@ -5,6 +5,10 @@ import co.develhope.team1studiomedico.dto.ResponseValidationErrorDTO;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
@@ -29,6 +33,9 @@ import java.util.*;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @Autowired
+    private MessageSource messageSource;
 
     /**
      * Metodo che gestisce le eccezioni EntityNotFoundException
@@ -80,7 +87,9 @@ public class GlobalExceptionHandler {
         System.out.println(e.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseErrorDTO(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Internal Server Error - null object", request.getRequestURI()));
+                        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                        messageSource.getMessage("error.handleNullPointerException.exception", null, LocaleContextHolder.getLocale()),
+                        request.getRequestURI()));
     }
 
     /**
@@ -94,7 +103,9 @@ public class GlobalExceptionHandler {
         if(e instanceof DataIntegrityViolationException) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseErrorDTO(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                            HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), "Database persistence statement error", request.getRequestURI()));
+                            HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+                            messageSource.getMessage("error.handleDataIntegrityViolationException.exception", null, LocaleContextHolder.getLocale()),
+                            request.getRequestURI()));
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseErrorDTO(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -119,7 +130,22 @@ public class GlobalExceptionHandler {
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ResponseValidationErrorDTO(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
-                        HttpStatus.BAD_REQUEST.getReasonPhrase(), "Field validation failed", request.getRequestURI(), errors));
+                        HttpStatus.BAD_REQUEST.getReasonPhrase(),
+                        messageSource.getMessage("error.handleBeanValidationExceptions.exception", null, LocaleContextHolder.getLocale()),
+                        request.getRequestURI(), errors));
+    }
+
+    /**
+     * Metodo che gestisce le eccezioni NoSuchMessageException
+     * @param e oggetto eccezione di tipo NoSuchMessageException
+     * @return response con status di errore 500
+     */
+    @ExceptionHandler(NoSuchMessageException.class)
+    public ResponseEntity handleNoSuchMessageException(NoSuchMessageException e, HttpServletRequest request) {
+        System.out.println(e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseErrorDTO(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                        HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), e.getMessage(), request.getRequestURI()));
     }
 
 }

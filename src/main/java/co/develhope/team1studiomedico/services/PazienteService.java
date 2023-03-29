@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,9 @@ public class PazienteService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private MessageSource messageSource;
 
     private static final Logger logger = LoggerFactory.getLogger(PazienteService.class);
 
@@ -93,7 +98,8 @@ public class PazienteService {
     public PazienteDTO getPazienteById(Long id) {
         PazienteEntity paziente = pazienteRepository.findById(id)
                 .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.paziente.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(paziente);
     }
 
@@ -107,7 +113,8 @@ public class PazienteService {
     public PazienteDTO updatePazienteById(@NotNull PazienteDTO pazienteEdit, Long id) {
         PazienteEntity paziente = pazienteRepository.findById(id)
                 .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.paziente.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
 
         if(pazienteEdit.getNome() != null) {
             paziente.setNome(pazienteEdit.getNome());
@@ -140,10 +147,12 @@ public class PazienteService {
         try {
             logger.info("Inizio processo deletePazienteById in PazienteService");
             PazienteEntity paziente = pazienteRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Paziente non trovata"));
+                    .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.paziente.notFound.exception",
+                            null, LocaleContextHolder.getLocale())));
 
             if(paziente.getRecordStatus().equals(EntityStatusEnum.DELETED)) {
-                throw new EntityStatusException("Paziente già cancellato");
+                throw new EntityStatusException(messageSource.getMessage("error.paziente.status.deleted.exception",
+                        null, LocaleContextHolder.getLocale()));
             }
             pazienteRepository.softDeleteById(id);
         } finally {
@@ -172,10 +181,12 @@ public class PazienteService {
         try {
             logger.info("Inizio processo restorePazienteById in PazienteService");
             PazienteEntity paziente = pazienteRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+                    .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.paziente.notFound.exception",
+                            null, LocaleContextHolder.getLocale())));
 
             if(paziente.getRecordStatus().equals(EntityStatusEnum.ACTIVE)) {
-                throw new EntityStatusException("Paziente già attivo");
+                throw new EntityStatusException(messageSource.getMessage("error.paziente.status.active.exception",
+                        null, LocaleContextHolder.getLocale()));
             }
             pazienteRepository.restoreById(id);
         } finally {
@@ -258,7 +269,8 @@ public class PazienteService {
     public PazienteDTO getPazienteByPrenotazioneId(Long prenotazioneId) {
         PazienteEntity paziente = pazienteRepository.findPazienteByPrenotazioneId(prenotazioneId)
                 .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.paziente.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(paziente);
     }
 
@@ -270,7 +282,8 @@ public class PazienteService {
     public PazienteDTO getPazienteByEmail(String email) {
         PazienteEntity paziente = pazienteRepository.findByEmail(email)
                 .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.paziente.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(paziente);
     }
 
@@ -282,7 +295,8 @@ public class PazienteService {
     public PazienteDTO getPazienteByCodiceFiscale(String codiceFiscale) {
         PazienteEntity paziente = pazienteRepository.findPazienteByCodiceFiscale(codiceFiscale)
                 .filter(pazienteEntity -> pazienteEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Paziente non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.paziente.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(paziente);
     }
 

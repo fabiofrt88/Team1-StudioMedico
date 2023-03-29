@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,9 @@ public class PazienteController {
     @Autowired
     private PazienteService pazienteService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     private static final Logger logger = LoggerFactory.getLogger(PazienteController.class);
 
     /**
@@ -38,7 +43,8 @@ public class PazienteController {
     public ResponseEntity createPaziente(@Valid @RequestBody PazienteCreateDTO pazienteCreateDTO) {
         PazienteDTO pazienteDTO = pazienteService.createPaziente(pazienteCreateDTO);
         logger.info("Un nuovo paziente con id {} è stato registrato", pazienteDTO.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Paziente creato correttamente", pazienteDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>(messageSource.getMessage("paziente.controller.create",
+                null, LocaleContextHolder.getLocale()), pazienteDTO));
     }
 
     /**
@@ -82,7 +88,8 @@ public class PazienteController {
     @PutMapping("/edit/{id}")
     public ResponseEntity updatePazienteById(@Valid @RequestBody PazienteDTO pazienteEdit, @PathVariable Long id) {
         PazienteDTO pazienteDTO = pazienteService.updatePazienteById(pazienteEdit, id);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Paziente con id + " + id + " modificato correttamente", pazienteDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>(messageSource.getMessage("paziente.controller.update",
+                new Object[]{id}, LocaleContextHolder.getLocale()), pazienteDTO));
     }
 
     /**
@@ -94,7 +101,8 @@ public class PazienteController {
     public ResponseEntity<String> deleteAllPazienti() {
         pazienteService.deleteAllPazienti();
         logger.warn("Tutti i pazienti sono stati cancellati");
-        return ResponseEntity.status(200).body("Pazienti cancellati correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("paziente.controller.deleteAllPazienti",
+                null, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -107,7 +115,8 @@ public class PazienteController {
     public ResponseEntity<String> deletePazienteById(@PathVariable Long id) {
         pazienteService.deletePazienteById(id);
         logger.info("Paziente con id {} è stato cancellato", id);
-        return ResponseEntity.status(200).body("Paziente con id + " + id + " cancellato correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("paziente.controller.delete",
+                new Object[]{id}, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -120,7 +129,8 @@ public class PazienteController {
     public ResponseEntity<String> restorePazienteById(@PathVariable Long id) {
         pazienteService.restorePazienteById(id);
         logger.info("Paziente con id {} è stato ripristinato", id);
-        return ResponseEntity.status(200).body("Paziente con id + " + id + " ripristinato correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("paziente.controller.restore",
+                new Object[]{id}, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -132,7 +142,8 @@ public class PazienteController {
     public ResponseEntity<String> restoreAllPazienti() {
         pazienteService.restoreAllPazienti();
         logger.warn("Tutti i pazienti sono stati ripristinati");
-        return ResponseEntity.status(200).body("Pazienti ripristinati correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("paziente.controller.restoreAllPazienti",
+                null, LocaleContextHolder.getLocale()));
     }
 
     /**

@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,9 @@ public class SegretarioService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private MessageSource messageSource;
 
     private static final Logger logger = LoggerFactory.getLogger(SegretarioService.class);
 
@@ -93,7 +98,8 @@ public class SegretarioService {
     public SegretarioDTO getSegretarioById(Long id) {
         SegretarioEntity segretario = segretarioRepository.findById(id)
                 .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.segretario.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(segretario);
     }
 
@@ -107,7 +113,8 @@ public class SegretarioService {
     public SegretarioDTO updateSegretarioById(@NotNull SegretarioDTO segretarioEdit, Long id) {
         SegretarioEntity segretario = segretarioRepository.findById(id)
                 .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.segretario.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
 
         if(segretarioEdit.getNome() != null) {
             segretario.setNome(segretarioEdit.getNome());
@@ -134,10 +141,12 @@ public class SegretarioService {
         try {
             logger.info("Inizio processo deleteSegretarioById in SegretarioService");
             SegretarioEntity segretario = segretarioRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+                    .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.segretario.notFound.exception",
+                            null, LocaleContextHolder.getLocale())));
 
             if(segretario.getRecordStatus().equals(EntityStatusEnum.DELETED)) {
-                throw new EntityStatusException("Segretario già cancellato");
+                throw new EntityStatusException(messageSource.getMessage("error.segretario.status.deleted.exception",
+                        null, LocaleContextHolder.getLocale()));
             }
             segretarioRepository.softDeleteById(id);
         } finally {
@@ -166,10 +175,12 @@ public class SegretarioService {
         try {
             logger.info("Inizio processo restoreSegretarioById in SegretarioService");
             SegretarioEntity segretario = segretarioRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+                    .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.segretario.notFound.exception",
+                            null, LocaleContextHolder.getLocale())));
 
             if(segretario.getRecordStatus().equals(EntityStatusEnum.ACTIVE)) {
-                throw new EntityStatusException("Segretario già attivo");
+                throw new EntityStatusException(messageSource.getMessage("error.segretario.status.active.exception",
+                        null, LocaleContextHolder.getLocale()));
             }
             segretarioRepository.restoreById(id);
         } finally {
@@ -224,7 +235,8 @@ public class SegretarioService {
     public SegretarioDTO getSegretarioByMedicoId(Long medicoId) {
         SegretarioEntity segretario = segretarioRepository.findSegretarioByMedicoId(medicoId)
                 .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.segretario.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(segretario);
     }
 
@@ -234,10 +246,11 @@ public class SegretarioService {
      * @param pazienteId id del paziente
      * @return il DTO del segretario
      */
-    public SegretarioDTO getSegretarioPazienteId(Long pazienteId) {
+    public SegretarioDTO getSegretarioByPazienteId(Long pazienteId) {
         SegretarioEntity segretario = segretarioRepository.findSegretarioByPazienteId(pazienteId)
                 .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.segretario.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(segretario);
     }
 
@@ -250,7 +263,8 @@ public class SegretarioService {
     public SegretarioDTO getSegretarioByPrenotazioneId(Long prenotazioneId) {
         SegretarioEntity segretario = segretarioRepository.findSegretarioByPrenotazioneId(prenotazioneId)
                 .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.segretario.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(segretario);
     }
 
@@ -262,7 +276,8 @@ public class SegretarioService {
     public SegretarioDTO getSegretarioByEmail(String email) {
         SegretarioEntity segretario = segretarioRepository.findByEmail(email)
                 .filter(segretarioEntity -> segretarioEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Segretario non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.segretario.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(segretario);
     }
 

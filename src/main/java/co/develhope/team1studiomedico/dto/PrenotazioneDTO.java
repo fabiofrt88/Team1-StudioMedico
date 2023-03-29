@@ -18,9 +18,10 @@ public class PrenotazioneDTO {
     private Long id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime bookedAt;
-    @FutureOrPresent(message = "data prenotazione non valida: deve essere diversa da una data passata")
+    @FutureOrPresent(message = "{input.validation.dataPrenotazione.futureOrPresent}")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataPrenotazione;
+    @FutureOrPresent(message = "{input.validation.oraPrenotazione.futureOrPresent}")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime oraPrenotazione;
     private PrenotazioneStatusEnum statoPrenotazione;

@@ -15,6 +15,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,9 @@ public class PrenotazioneService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private MessageSource messageSource;
 
     private static final Logger logger = LoggerFactory.getLogger(PrenotazioneService.class);
 
@@ -98,7 +103,8 @@ public class PrenotazioneService {
     public PrenotazioneDTO getPrenotazioneById(Long id) {
         PrenotazioneEntity prenotazione = prenotazioneRepository.findById(id)
                 .filter(prenotazioneEntity -> prenotazioneEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Prenotazione non trovata"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.prenotazione.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(prenotazione);
 
     }
@@ -113,7 +119,8 @@ public class PrenotazioneService {
     public PrenotazioneDTO updatePrenotazioneById(@NotNull PrenotazioneDTO prenotazioneEdit, Long id) {
         PrenotazioneEntity prenotazione = prenotazioneRepository.findById(id)
                 .filter(prenotazioneEntity -> prenotazioneEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Prenotazione non trovata"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.prenotazione.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
 
         if(prenotazioneEdit.getDataPrenotazione() != null) {
             prenotazione.setDataPrenotazione(prenotazioneEdit.getDataPrenotazione());
@@ -137,10 +144,12 @@ public class PrenotazioneService {
         try {
             logger.info("Inizio processo deletePrenotazioneById in PrenotazioneService");
             PrenotazioneEntity prenotazione = prenotazioneRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Prenotazione non trovata"));
+                    .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.prenotazione.notFound.exception",
+                            null, LocaleContextHolder.getLocale())));
 
             if(prenotazione.getRecordStatus().equals(EntityStatusEnum.DELETED)) {
-                throw new EntityStatusException("Prenotazione già cancellata");
+                throw new EntityStatusException(messageSource.getMessage("error.prenotazione.status.deleted.exception",
+                        null, LocaleContextHolder.getLocale()));
             }
             prenotazioneRepository.softDeleteById(id);
         } finally {
@@ -169,10 +178,12 @@ public class PrenotazioneService {
         try {
             logger.info("Inizio processo restorePrenotazioneById in PrenotazioneService");
             PrenotazioneEntity prenotazione = prenotazioneRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Prenotazione non trovata"));
+                    .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.prenotazione.notFound.exception",
+                            null, LocaleContextHolder.getLocale())));
 
             if(prenotazione.getRecordStatus().equals(EntityStatusEnum.ACTIVE)) {
-                throw new EntityStatusException("Prenotazione già attiva");
+                throw new EntityStatusException(messageSource.getMessage("error.prenotazione.status.active.exception",
+                        null, LocaleContextHolder.getLocale()));
             }
             prenotazioneRepository.restoreById(id);
         } finally {

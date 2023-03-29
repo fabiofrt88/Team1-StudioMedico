@@ -14,14 +14,15 @@ import java.time.LocalTime;
 public class PrenotazioneCreateDTO {
 
     private final Long id;
-    @NotNull(message = "il campo data prenotazione è obbligatorio")
-    @FutureOrPresent(message = "data prenotazione non valida: deve essere diversa da una data passata")
+    @NotNull(message = "{input.validation.dataPrenotazione.notNull}")
+    @FutureOrPresent(message = "{input.validation.dataPrenotazione.futureOrPresent}")
     private final LocalDate dataPrenotazione;
-    @NotNull(message = "il campo ora prenotazione è obbligatorio")
+    @NotNull(message = "{input.validation.oraPrenotazione.notNull}")
+    @FutureOrPresent(message = "{input.validation.oraPrenotazione.futureOrPresent}")
     private final LocalTime oraPrenotazione;
-    @NotNull(message = "il campo foreign key medicoId è obbligatorio")
+    @NotNull(message = "{input.validation.medicoId.notNull}")
     private final Long medicoId;
-    @NotNull(message = "il campo foreign key pazienteId è obbligatorio")
+    @NotNull(message = "{input.validation.pazienteId.notNull}")
     private final Long pazienteId;
 
     /**

@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +38,9 @@ public class MedicoService {
 
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private MessageSource messageSource;
 
     private static final Logger logger = LoggerFactory.getLogger(MedicoService.class);
 
@@ -93,7 +98,8 @@ public class MedicoService {
     public MedicoDTO getMedicoById(Long id) {
          MedicoEntity medico = medicoRepository.findById(id)
                  .filter(medicoEntity -> medicoEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                 .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
+                 .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.medico.notFound.exception",
+                         null, LocaleContextHolder.getLocale())));
          return convertToDTO(medico);
     }
 
@@ -107,7 +113,8 @@ public class MedicoService {
     public MedicoDTO updateMedicoById(@NotNull MedicoDTO medicoEdit, Long id) {
         MedicoEntity medico = medicoRepository.findById(id)
                 .filter(medicoEntity -> medicoEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.medico.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
 
         if(medicoEdit.getNome() != null) {
             medico.setNome(medicoEdit.getNome());
@@ -134,10 +141,12 @@ public class MedicoService {
         try {
             logger.info("Inizio processo deleteMedicoById in MedicoService");
             MedicoEntity medico = medicoRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
+                    .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.medico.notFound.exception",
+                            null, LocaleContextHolder.getLocale())));
 
             if(medico.getRecordStatus().equals(EntityStatusEnum.DELETED)) {
-                throw new EntityStatusException("Medico già cancellato");
+                throw new EntityStatusException(messageSource.getMessage("error.medico.status.deleted.exception",
+                        null, LocaleContextHolder.getLocale()));
             }
             medicoRepository.softDeleteById(id);
         } finally {
@@ -166,10 +175,12 @@ public class MedicoService {
         try {
             logger.info("Inizio processo restoreMedicoById in MedicoService");
             MedicoEntity medico = medicoRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
+                    .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.medico.notFound.exception",
+                            null, LocaleContextHolder.getLocale())));
 
             if(medico.getRecordStatus().equals(EntityStatusEnum.ACTIVE)) {
-                throw new EntityStatusException("Medico già attivo");
+                throw new EntityStatusException(messageSource.getMessage("error.medico.status.active.exception",
+                        null, LocaleContextHolder.getLocale()));
             }
             medicoRepository.restoreById(id);
         } finally {
@@ -225,7 +236,8 @@ public class MedicoService {
     public MedicoDTO getMedicoBySegretarioId(Long segretarioId) {
         MedicoEntity medico = medicoRepository.findMedicoBySegretarioId(segretarioId)
                 .filter(medicoEntity -> medicoEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.medico.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(medico);
     }
 
@@ -237,7 +249,8 @@ public class MedicoService {
     public MedicoDTO getMedicoByPazienteId(Long pazienteId) {
         MedicoEntity medico = medicoRepository.findMedicoByPazienteId(pazienteId)
                 .filter(medicoEntity -> medicoEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.medico.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(medico);
     }
 
@@ -250,7 +263,8 @@ public class MedicoService {
     public MedicoDTO getMedicoByPrenotazioneId(Long prenotazioneId) {
         MedicoEntity medico = medicoRepository.findMedicoByPrenotazioneId(prenotazioneId)
                 .filter(medicoEntity -> medicoEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.medico.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(medico);
     }
 
@@ -262,7 +276,8 @@ public class MedicoService {
     public MedicoDTO getMedicoByEmail(String email) {
         MedicoEntity medico = medicoRepository.findByEmail(email)
                 .filter(medicoEntity -> medicoEntity.getRecordStatus().equals(EntityStatusEnum.ACTIVE))
-                .orElseThrow(() -> new EntityNotFoundException("Medico non trovato"));
+                .orElseThrow(() -> new EntityNotFoundException(messageSource.getMessage("error.medico.notFound.exception",
+                        null, LocaleContextHolder.getLocale())));
         return convertToDTO(medico);
     }
 

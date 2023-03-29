@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +28,9 @@ public class MedicoController {
     @Autowired
     private MedicoService medicoService;
 
+    @Autowired
+    private MessageSource messageSource;
+
     private static final Logger logger = LoggerFactory.getLogger(MedicoController.class);
 
     /**
@@ -38,7 +43,8 @@ public class MedicoController {
     public ResponseEntity createMedico(@Valid @RequestBody MedicoCreateDTO medicoCreateDTO) {
         MedicoDTO medicoDTO = medicoService.createMedico(medicoCreateDTO);
         logger.info("Un nuovo medico con id {} è stato registrato", medicoDTO.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Medico creato correttamente", medicoDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>(messageSource.getMessage("medico.controller.create",
+                null, LocaleContextHolder.getLocale()), medicoDTO));
     }
 
     /**
@@ -82,7 +88,8 @@ public class MedicoController {
     @PutMapping("/edit/{id}")
     public ResponseEntity updateMedicoById(@Valid @RequestBody MedicoDTO medicoEdit, @PathVariable Long id) {
         MedicoDTO medicoDTO = medicoService.updateMedicoById(medicoEdit, id);
-        return ResponseEntity.status(200).body(new ResponseDataSuccessDTO<>("Medico con id " + id + " modificato correttamente", medicoDTO));
+        return ResponseEntity.status(200).body(new ResponseDataSuccessDTO<>(messageSource.getMessage("medico.controller.update",
+                new Object[]{id}, LocaleContextHolder.getLocale()), medicoDTO));
     }
 
     /**
@@ -94,7 +101,8 @@ public class MedicoController {
     public ResponseEntity<String> deleteAllMedici() {
         medicoService.deleteAllMedici();
         logger.warn("Tutti i medici sono stati cancellati");
-        return ResponseEntity.status(200).body("Medici cancellati correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("medico.controller.deleteAllMedici",
+                null, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -107,7 +115,8 @@ public class MedicoController {
     public ResponseEntity<String> deleteMedicoById(@PathVariable Long id) {
         medicoService.deleteMedicoById(id);
         logger.info("Medico con id {} è stato cancellato", id);
-        return ResponseEntity.status(200).body("Medico con id " + id + " cancellato correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("medico.controller.delete",
+                new Object[]{id}, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -120,7 +129,8 @@ public class MedicoController {
     public ResponseEntity<String> restoreMedicoById(@PathVariable Long id) {
         medicoService.restoreMedicoById(id);
         logger.info("Medico con id {} è stato ripristinato", id);
-        return ResponseEntity.status(200).body("Medico con id " + id + " ripristinato correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("medico.controller.restore",
+                new Object[]{id}, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -132,7 +142,8 @@ public class MedicoController {
     public ResponseEntity<String> restoreAllMedici() {
         medicoService.restoreAllMedici();
         logger.warn("Tutti i medici sono stati ripristinati");
-        return ResponseEntity.status(200).body("Medici ripristinati correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("medico.controller.restoreAllMedici",
+                null, LocaleContextHolder.getLocale()));
     }
 
     /**

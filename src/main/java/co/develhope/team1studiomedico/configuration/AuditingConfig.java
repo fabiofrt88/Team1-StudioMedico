@@ -1,5 +1,6 @@
-package co.develhope.team1studiomedico.entities.auditing;
+package co.develhope.team1studiomedico.configuration;
 
+import co.develhope.team1studiomedico.entities.auditing.SpringSecurityAuditorAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;

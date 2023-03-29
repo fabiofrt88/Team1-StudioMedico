@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +30,7 @@ public class SegretarioController {
     private SegretarioService segretarioService;
 
     @Autowired
-    private PazienteService pazienteService;
+    private MessageSource messageSource;
 
     private static final Logger logger = LoggerFactory.getLogger(SegretarioController.class);
 
@@ -42,7 +44,8 @@ public class SegretarioController {
     public ResponseEntity createSegretario(@Valid @RequestBody SegretarioCreateDTO segretarioCreateDTO) {
         SegretarioDTO segretarioDTO = segretarioService.createSegretario(segretarioCreateDTO);
         logger.info("Un nuovo segretario con id {} è stato registrato", segretarioDTO.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>("Segretario creato correttamente", segretarioDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new ResponseDataSuccessDTO<>(messageSource.getMessage("segretario.controller.create",
+                null, LocaleContextHolder.getLocale()), segretarioDTO));
     }
 
     /**
@@ -86,7 +89,8 @@ public class SegretarioController {
     @PutMapping("/edit/{id}")
     public ResponseEntity updateSegretarioById(@Valid @RequestBody SegretarioDTO segretarioEdit, @PathVariable Long id) {
         SegretarioDTO segretarioDTO = segretarioService.updateSegretarioById(segretarioEdit, id);
-        return ResponseEntity.status(200).body(new ResponseDataSuccessDTO<>("Segretario con id + " + id + " modificato correttamente", segretarioDTO));
+        return ResponseEntity.status(200).body(new ResponseDataSuccessDTO<>(messageSource.getMessage("segretario.controller.update",
+                new Object[]{id}, LocaleContextHolder.getLocale()), segretarioDTO));
     }
 
     /**
@@ -98,7 +102,8 @@ public class SegretarioController {
     public ResponseEntity<String> deleteAllSegretari() {
         segretarioService.deleteAllSegretari();
         logger.warn("Tutti i segretari sono stati cancellati");
-        return ResponseEntity.status(200).body("Segretari cancellati correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("segretario.controller.deleteAllSegretari",
+                null, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -111,7 +116,8 @@ public class SegretarioController {
     public ResponseEntity<String> deleteSegretarioById(@PathVariable Long id) {
         segretarioService.deleteSegretarioById(id);
         logger.info("Segretario con id {} è stato cancellato", id);
-        return ResponseEntity.status(200).body("Segretario con id + " + id + " cancellato correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("segretario.controller.delete",
+                new Object[]{id}, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -124,7 +130,8 @@ public class SegretarioController {
     public ResponseEntity<String> restoreSegretarioById(@PathVariable Long id) {
         segretarioService.restoreSegretarioById(id);
         logger.info("Segretario con id {} è stato ripristinato", id);
-        return ResponseEntity.status(200).body("Segretario con id + " + id + " ripristinato correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("segretario.controller.restore",
+                new Object[]{id}, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -136,7 +143,8 @@ public class SegretarioController {
     public ResponseEntity<String> restoreAllSegretari() {
         segretarioService.restoreAllSegretari();
         logger.warn("Tutti i segretari sono stati ripristinati");
-        return ResponseEntity.status(200).body("Segretari ripristinati correttamente");
+        return ResponseEntity.status(200).body(messageSource.getMessage("segretario.controller.restoreAllSegretari",
+                null, LocaleContextHolder.getLocale()));
     }
 
     /**
@@ -157,7 +165,7 @@ public class SegretarioController {
      */
     @GetMapping("/paziente/{pazienteId}")
     public SegretarioDTO getSegretarioByPazienteId(@PathVariable Long pazienteId) {
-        return segretarioService.getSegretarioPazienteId(pazienteId);
+        return segretarioService.getSegretarioByPazienteId(pazienteId);
     }
 
     /**
