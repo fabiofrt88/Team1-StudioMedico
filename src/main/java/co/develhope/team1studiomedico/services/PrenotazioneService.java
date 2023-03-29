@@ -1,7 +1,7 @@
 package co.develhope.team1studiomedico.services;
 
-import co.develhope.team1studiomedico.dto.PrenotazioneCreateDTO;
-import co.develhope.team1studiomedico.dto.PrenotazioneDTO;
+import co.develhope.team1studiomedico.dto.prenotazione.PrenotazioneCreateDTO;
+import co.develhope.team1studiomedico.dto.prenotazione.PrenotazioneDTO;
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.PrenotazioneEntity;
 import co.develhope.team1studiomedico.entities.PrenotazioneStatusEnum;

@@ -1,9 +1,8 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.dto.ResponseDataSuccessDTO;
-import co.develhope.team1studiomedico.dto.SegretarioCreateDTO;
-import co.develhope.team1studiomedico.dto.SegretarioDTO;
-import co.develhope.team1studiomedico.services.PazienteService;
+import co.develhope.team1studiomedico.dto.success.ResponseDataSuccessDTO;
+import co.develhope.team1studiomedico.dto.segretario.SegretarioCreateDTO;
+import co.develhope.team1studiomedico.dto.segretario.SegretarioDTO;
 import co.develhope.team1studiomedico.services.SegretarioService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;

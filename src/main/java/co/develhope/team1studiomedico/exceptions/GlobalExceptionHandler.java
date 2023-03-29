@@ -1,7 +1,7 @@
 package co.develhope.team1studiomedico.exceptions;
 
-import co.develhope.team1studiomedico.dto.ResponseErrorDTO;
-import co.develhope.team1studiomedico.dto.ResponseValidationErrorDTO;
+import co.develhope.team1studiomedico.dto.error.ResponseErrorDTO;
+import co.develhope.team1studiomedico.dto.error.ResponseValidationErrorDTO;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,5 +1,12 @@
 co.develhope.team1studiomedico
+co.develhope.team1studiomedico.configuration
 co.develhope.team1studiomedico.controllers
+co.develhope.team1studiomedico.dto.error
+co.develhope.team1studiomedico.dto.medico
+co.develhope.team1studiomedico.dto.paziente
+co.develhope.team1studiomedico.dto.prenotazione
+co.develhope.team1studiomedico.dto.segretario
+co.develhope.team1studiomedico.dto.success
 co.develhope.team1studiomedico.entities
 co.develhope.team1studiomedico.entities.auditing
 co.develhope.team1studiomedico.entities.utils

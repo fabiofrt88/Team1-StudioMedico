@@ -1,7 +1,7 @@
 package co.develhope.team1studiomedico.services;
 
-import co.develhope.team1studiomedico.dto.PazienteCreateDTO;
-import co.develhope.team1studiomedico.dto.PazienteDTO;
+import co.develhope.team1studiomedico.dto.paziente.PazienteCreateDTO;
+import co.develhope.team1studiomedico.dto.paziente.PazienteDTO;
 import co.develhope.team1studiomedico.entities.EntityStatusEnum;
 import co.develhope.team1studiomedico.entities.PazienteEntity;
 import co.develhope.team1studiomedico.exceptions.EntityStatusException;

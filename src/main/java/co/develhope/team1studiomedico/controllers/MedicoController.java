@@ -1,8 +1,8 @@
 package co.develhope.team1studiomedico.controllers;
 
-import co.develhope.team1studiomedico.dto.MedicoCreateDTO;
-import co.develhope.team1studiomedico.dto.MedicoDTO;
-import co.develhope.team1studiomedico.dto.ResponseDataSuccessDTO;
+import co.develhope.team1studiomedico.dto.medico.MedicoCreateDTO;
+import co.develhope.team1studiomedico.dto.medico.MedicoDTO;
+import co.develhope.team1studiomedico.dto.success.ResponseDataSuccessDTO;
 import co.develhope.team1studiomedico.services.MedicoService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
