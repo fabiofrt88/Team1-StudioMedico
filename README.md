@@ -57,3 +57,17 @@ previste inoltre la cancellazione logica, il ripristino e le attività di auditi
  * **Apache Tomcat**, web server open source, piattaforma software di esecuzione di applicazioni web 
  * **Database MySQL**, sistema RDBMS per la progettazione di database relazionali; 
  * **Swagger**, tool per la documentazione, test e collaudo delle API REST
+
+## Modello logico
+
+Il modello logico rappresenta un’ulteriore specializzazione del modello entità - relazione
+(ERD), è un diagramma orientato ai dati che caratterizzano le entità e ai vincoli di relazione
+![modello-logico](modello-logico.svg)
+
+Il modello logico relazionale che si ottiene è quindi il seguente:
+
+* **medico**(id, nome, cognome, email, telefono)
+* **segretario**(id, nome, cognome, email, telefono, medico_id*)
+* **paziente**(id, nome, cognome, email, telefono, codice_fiscale, medico_id*)
+* **prenotazione**(id, bookedAt, data_prenotazione, ora_prenotazione, stato_prenotazione, paziente_id*, medico_id*)
+
