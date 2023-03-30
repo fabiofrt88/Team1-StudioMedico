@@ -28,7 +28,7 @@ import static java.util.Map.entry;
  * elabora le response sulla base delle relative request del client
  */
 @RestController
-@RequestMapping("/prenotazione")
+@RequestMapping("/prenotazioni")
 public class PrenotazioneController {
 
     @Autowired

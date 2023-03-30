@@ -22,7 +22,7 @@ import java.util.List;
  * elabora le response sulla base delle relative request del client
  */
 @RestController
-@RequestMapping("/segretario")
+@RequestMapping("/segretari")
 public class SegretarioController {
 
     @Autowired
