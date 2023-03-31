@@ -23,7 +23,6 @@ public class PrenotazioneDTO {
     @FutureOrPresent(message = "{input.validation.dataPrenotazione.futureOrPresent}")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate dataPrenotazione;
-    @FutureOrPresent(message = "{input.validation.oraPrenotazione.futureOrPresent}")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     private LocalTime oraPrenotazione;
     private PrenotazioneStatusEnum statoPrenotazione;

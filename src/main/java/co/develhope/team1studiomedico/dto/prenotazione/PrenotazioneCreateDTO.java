@@ -18,7 +18,6 @@ public class PrenotazioneCreateDTO {
     @FutureOrPresent(message = "{input.validation.dataPrenotazione.futureOrPresent}")
     private final LocalDate dataPrenotazione;
     @NotNull(message = "{input.validation.oraPrenotazione.notNull}")
-    @FutureOrPresent(message = "{input.validation.oraPrenotazione.futureOrPresent}")
     private final LocalTime oraPrenotazione;
     @NotNull(message = "{input.validation.medicoId.notNull}")
     private final Long medicoId;
